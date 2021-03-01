@@ -17,11 +17,13 @@ class Base
         return $this->_instance;
     }
 
-    public function loadData($id)
+    public function loadData($id = null, $field = '')
     {   
-        $id = (int) $id;
-        if (empty($id)) return [];
-        return $this->getInstance()->where($this->_primaryKey, $id)->find();
+        if (empty($id)) {
+            return $this->getInstance()->where($this->_primaryKey, $id)->field($field)->find();
+        } else {
+            return $this->getInstance()->field($field)->get();
+        }
     }
 
     public function updateDataById($id, $data)
