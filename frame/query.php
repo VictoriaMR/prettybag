@@ -30,7 +30,7 @@ Class Query
 
 	public function where($columns, $operator = null, $value = null)
 	{
-		if (empty($columns)) return $this
+		if (empty($columns)) return $this;
 
 		//简单处理 where条件
 		if (is_array($columns)) {
@@ -49,6 +49,11 @@ Class Query
 			$this->_where[] = [$columns, $operator, $value];
 		}
 		return $this;
+	}
+
+	public function whereIn($column, $value = [])
+	{
+		return $this->where($column, 'IN', $value);
 	}
 
 	public function field($columns)

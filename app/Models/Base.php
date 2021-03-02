@@ -40,18 +40,6 @@ class Base
         return $this->getInstance()->where($this->_primaryKey, $id)->delete();
     }
 
-    public function insertGetId(array $data)
-    {
-        if (empty($data)) return false;
-        return $this->getInstance()->insertGetId($data);
-    }
-
-    public function insert(array $data)
-    {
-        if (empty($data)) return false;
-        return $this->getInstance()->insert($data);
-    }
-
     public function getCount(array $where = []) 
     {
         return $this->getInstance()->where($where)->count();
@@ -71,5 +59,10 @@ class Base
             'page_total' => ceil($total / $pagesize),
             'list' => $list,
         ];
+    }
+
+    public function __call($func, $arg)
+    {
+        return $this->getInstance()->$func(...$arg);
     }
 }

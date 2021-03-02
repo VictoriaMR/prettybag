@@ -1,6 +1,6 @@
 <?php 
 
-namespace app\Services;
+namespace App\Services;
 
 use App\Services\Base as BaseService;
 use App\Models\Language;
@@ -22,16 +22,14 @@ class LanguageService extends BaseService
             'name' => $data['name'],
             'sort' => $data['sort'] ?? 0,
         ];
-        $model = make('App\Models\Language');
-        return $model->create($data);
+        return make('App\Models\Language')->create($data);
 	}
 
     public function getInfo($code = '')
     {
-    	$model = make('App\Models\Language');
-    	$info = $model->getInfo('code, name');
+    	$info = make('App\Models\Language')->getInfo('code, name');
     	if (!empty($info)) {
-    		$info = array_column($info, 'name', 'code');
+    		$info = array_column($info, null, 'code');
     	}
     	if (empty($code)) {
     		return $info;
