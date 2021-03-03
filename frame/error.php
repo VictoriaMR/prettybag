@@ -41,13 +41,15 @@ class Error
 		if (!isCli()) {
 			\frame\Debug::runlog($message);
 			if (env('APP_DEBUG')) {
+				echo 'File: '.$file.'<br />';
+				echo 'Line: '.$line.'<br />';
+				echo 'Error Message: '.$message.'<br />';
 				echo 'Uri: '.($_SERVER['REQUEST_METHOD'] ?? '').' '.($_SERVER['HTTP_HOST'] ?? '').' '.($_SERVER['REQUEST_URI'] ?? '').'<br />';
 				echo 'Index: '.implode('/', \Router::$_route).'<br />';
 				echo 'Param: '.json_encode(input()).'<br />';
-				echo 'File: '.$file.'<br />';
-				echo 'Line: '.$line.'<br />';
+			} else {
+				echo 'Error Message: '.$message.'<br />';
 			}
-			echo 'Error Message: '.$message.'<br />';
 		}
 		exit();
 	}

@@ -133,3 +133,11 @@ function getIp()
     }
     return '';
 }
+function filterUrlStr($str)
+{
+    if (empty($str)) return '';
+    $str = preg_replace('/[^-A-Za-z0-9 ]/', '', $str);
+    $str = preg_replace('/( ){2,}/', ' ', $str);
+    $str = str_replace(' ', '-', $str);
+    return strtolower($str);
+}

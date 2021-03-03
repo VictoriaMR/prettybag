@@ -227,9 +227,8 @@ Class Query
 				throw new \Exception($conn->error, 1);
 			}
 		}
-		$conn->close();
 		$this->clear();
-		return $returnData ?? false;
+		return $returnData ?? [];
 	}
 
 	private function clear()

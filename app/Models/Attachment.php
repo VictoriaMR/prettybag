@@ -7,10 +7,10 @@ use App\Models\Base as BaseModel;
 class Attachment extends BaseModel
 {
 	//表名
-    protected $table = 'attachment';
+    protected $_table = 'attachment';
 
     //主键
-    protected $primaryKey = 'attach_id';
+    protected $_primaryKey = 'attach_id';
 
     public function create($data)
     {
@@ -27,7 +27,7 @@ class Attachment extends BaseModel
     public function getAttachmentByName($name)
     {
     	if (empty($name)) return false;
-        return $this->getInfoByWhere(['name' => $name])->find();
+        return $this->getInfoByWhere(['name' => $name]);
     }
 
     public function isExist($name)

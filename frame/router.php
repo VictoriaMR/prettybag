@@ -8,7 +8,7 @@ final class Router
 		$pathInfo = trim($_SERVER['REQUEST_URI'], DS);
 		if (empty($pathInfo)) {
 			self::$_route = [
-				'class' => APP_TEMPLATE_TYPE,
+				'class' => ucfirst(APP_TEMPLATE_TYPE),
 				'path' => 'Index',
 				'func' => 'index',
 			];
@@ -16,12 +16,12 @@ final class Router
 			$pathInfo = explode(DS, explode('?', $pathInfo)[0]);
 			if (empty($pathInfo[0])) {
 				self::$_route = [
-					'class' => APP_TEMPLATE_TYPE,
+					'class' => ucfirst(APP_TEMPLATE_TYPE),
 					'path' => 'Index',
 					'func' => 'index',
 				];
 			} else {
-		        self::$_route['class'] = APP_TEMPLATE_TYPE;
+		        self::$_route['class'] = ucfirst(APP_TEMPLATE_TYPE);
 		        switch (count($pathInfo)) {
 		        	case 0:
 		        		self::$_route['path'] = 'Index';

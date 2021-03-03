@@ -7,12 +7,16 @@ use frame\Session;
 class VerifyToken
 {
     protected static $except = [
-        'admin/login/index' => true,
+        'admin' => [
+            'login' => true,
+            'common' => true,
+            'product' => true,
+        ],
     ];
 
     public static function handle($request)
     {
-        if (self::inExceptArray(implode(DS, $request))) {
+        if (self::inExceptArray($request)) {
             return true;
         }
         switch ($request['class']) {
@@ -22,7 +26,7 @@ class VerifyToken
         }
         //检查登录状态
         if (!empty($loginKey) && empty(Session::get($loginKey))) {
-            Session::set('admin_callback_url', $_SERVER['REQUEST_URI'].(empty($_SERVER['QUERY_STRING']) ? '' : '?'.$_SERVER['QUERY_STRING']));
+            Session::set('admin_callback_url', rtrim($_SERVER['REQUEST_URI'].'?'.$_SERVER['QUERY_STRING']), '?');
             redirect(url('login'));
         }
         return true;
@@ -30,6 +34,14 @@ class VerifyToken
 
     private static function inExceptArray($route)
     {
-        return self::$except[$route] ?? false;
+        $class = strtolower($route['class']);
+        if (empty(self::$except[$class])) {
+            return true;
+        }
+        $path = strtolower($route['path']);
+        if ((self::$except[$class][$path] ?? false)) {
+            return true;
+        }
+        return self::$except[$class][$path.'/'.$route['func']] ?? false;
     }
 }
