@@ -20,9 +20,9 @@ class Base
     public function loadData($id = null, $field = '')
     {   
         if (empty($id)) {
-            return $this->getInstance()->where($this->_primaryKey, $id)->field($field)->find();
-        } else {
             return $this->getInstance()->field($field)->get();
+        } else {
+            return $this->getInstance()->where($this->_primaryKey, $id)->field($field)->find();
         }
     }
 

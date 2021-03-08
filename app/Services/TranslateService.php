@@ -16,6 +16,9 @@ class TranslateService extends BaseService
 		if (empty(env('BAIDU_APPID')) || empty(env('BAIDU_SECRET_KEY'))) {
 			return false;
 		}
+		if ($to == $from) {
+			return $text;
+		}
 		$salt = time();
 		$data = [
 			'q' => $text,
@@ -25,13 +28,13 @@ class TranslateService extends BaseService
 			'salt' => $salt,
 			'sign' => md5(env('BAIDU_APPID').$text.$salt.env('BAIDU_SECRET_KEY')),
 		];
-		$request = $http_url.'?'.http_build_query($data);
+		$request = $this->http_url.'?'.http_build_query($data);
 		for ($i = 0; $i < 5; $i ++) {
 			$translateStr = \frame\Http::get($request);
 			if ($translateStr !== false) {
 				$translateStr = json_decode($translateStr, true);
 				if (!empty($translateStr['trans_result'])) {
-					return trim($translateStr['trans_result']['dst']);
+					return trim($translateStr['trans_result'][0]['dst']);
 				}
 			}
 		}

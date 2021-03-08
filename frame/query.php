@@ -97,8 +97,15 @@ Class Query
 
 		$fields = array_keys($data[0]);
 		$data = array_map(function($value){
+			foreach ($value as $k => $v) {
+				if (!is_numeric($v) && is_string($v)) {
+					$value[$k] = addslashes($v);
+				}
+			}
 			return "'".implode("', '", $value)."'";
 		}, $data);
+		// if ($this->_table == 'product_introduce')
+		// 	dd($data);
 		$sql = sprintf('INSERT INTO %s (`%s`) VALUES %s', $this->_table, implode('`, `', $fields), '(' . implode('), (', $data).')');
 		return $this->getQuery($sql);
 	}
@@ -196,7 +203,11 @@ Class Query
 	private function getQuery($sql = '', $params = [])
 	{
 		if (env('APP_DEBUG')) {
-			$GLOBALS['exec_sql'][] = sprintf(str_replace('?', '%s', $sql), ...$params);
+			if (empty($params)) {
+				$GLOBALS['exec_sql'][] = $sql;
+			} else {
+				$GLOBALS['exec_sql'][] = sprintf(str_replace('?', '%s', $sql), ...$params);
+			}
 		}
 		$conn = \frame\Connection::getInstance($this->_connect, $this->_database);
 		if (!empty($params)) {
@@ -249,8 +260,12 @@ Class Query
 	{
 		$typeStr = '';
 		foreach ($this->_param as $key => $value) {
-			if (is_numeric($value)) $typeStr .= 'd';
-			else $typeStr .= 's';
+			if (is_numeric($value)) {
+				$typeStr .= 'd';
+			} else {
+				$this->_param[$key] = addslashes($value);
+				$typeStr .= 's';
+			}
 		}
 		return $typeStr;
 	}

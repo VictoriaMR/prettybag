@@ -4,12 +4,12 @@ namespace App\Models;
 
 use App\Models\Base as BaseModel;
 
-class ProductAttribute extends BaseModel
+class Attrvalue extends BaseModel
 {
     //表名
-    protected $_table = 'product_attribute';
+    protected $_table = 'attrvalue';
     //主键
-    protected $_primaryKey = 'pa_id';
+    protected $_primaryKey = 'attv_id';
 
     public function getInfo($fields)
     {

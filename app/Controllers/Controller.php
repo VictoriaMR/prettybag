@@ -31,4 +31,9 @@ class Controller
         }
         $this->result('10000', [], ['message' => $message]);
     }
+
+    protected function getTime()
+    {
+        return date('Y-m-d H:i:s');
+    }
 }

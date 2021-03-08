@@ -13,4 +13,10 @@ class Str
         }
         return $key;
     }
+
+    public static function getUniqueName()
+    {
+    	list($usec, $sec) = explode(" ", microtime());
+    	return str_replace('.', '', $sec + $usec).self::random(6);
+    }
 }

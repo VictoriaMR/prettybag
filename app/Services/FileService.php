@@ -4,7 +4,7 @@ namespace App\Services;
 
 class FileService
 {
-    const FILE_TYPE = ['avatar', 'product', 'banner'];
+    const FILE_TYPE = ['avatar', 'product', 'banner', 'introduce'];
     const FILE_ACCEPT = ['jpg', 'jpeg', 'png'];
     const FILE_COMPERSS = ['jpg', 'jpeg', 'png'];
     const MAX_OFFSET = 1200;
@@ -103,42 +103,46 @@ class FileService
         return $returnData;
     }
 
-    public function uploadUrlImage($url, $cate)
+    public function uploadUrlImage($url, $cate, $thumb = true)
     {
         if (!in_array($cate, self::FILE_TYPE)) return false;
-
-        $name = md5_file($url);
-        $attachmentService = make('App\Services\AttachmentService');
-        $info = $attachmentService->getAttachmentByName($name);
-        if (!empty($info)) {
-            return $info;
-        }
-
-        $path = ROOT_PATH . env('FILE_CENTER') . DS . $cate . DS;
-        //创建目录
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
+        //生成临时文件
         $ext = pathinfo($url, PATHINFO_EXTENSION);
-        $file = $path . $name . '.' . $ext;
-        //存入文件
-        file_put_contents($file, file_get_contents($url));
-        $data = [
-            'name' => $name,
-            'type' => $ext,
-            'cate' => $cate,
-            'size' => filesize($file),
-        ];
-        $attachId = $attachmentService->create($data);
-        $data['attach_id'] = $attachId;
-
-        //图片缩略
-        $imageService = make('App\Services\ImageService');
-        $thumb = ['600', '400', '200', '100'];
-        foreach ($thumb as $value) {
-            $to = $path . $value . DS . $name . '.' . $ext;
-            $imageService->thumbImage($file, $to, $value, $value);
+        $tempName = ROOT_PATH.env('FILE_CENTER').DS.\frame\Str::getUniqueName().'.'.$ext;
+        if (file_put_contents($tempName, file_get_contents($url))) {
+            $name = md5_file($tempName);
+            $attachmentService = make('App\Services\AttachmentService');
+            $data = $attachmentService->getAttachmentByName($name);
+            if (empty($data)) {
+                $path = ROOT_PATH . env('FILE_CENTER') . DS . $cate . DS;
+                //创建目录
+                if (!is_dir($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $file = $path . $name . '.' . $ext;
+                //存入压缩文件
+                $imageService = make('App\Services\ImageService');
+                $imageService->compressImg($tempName, $file);
+                $data = [
+                    'name' => $name,
+                    'type' => $ext,
+                    'cate' => $cate,
+                    'size' => filesize($file),
+                ];
+                $attachId = $attachmentService->create($data);
+                $data['attach_id'] = $attachId;
+                //图片缩略
+                if ($thumb) {
+                    $thumb = ['600', '400', '200'];
+                    foreach ($thumb as $value) {
+                        $to = $path . $value . DS . $name . '.' . $ext;
+                        $imageService->thumbImage($file, $to, $value, $value);
+                    }
+                }
+            }
+            unlink($tempName);
+            return $data;
         }
-        return $data;
+        return false;
     }
 }
