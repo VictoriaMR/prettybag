@@ -20,6 +20,7 @@ class Attachment extends BaseModel
 		  	'type' => $data['type'],
 		  	'cate' => $data['cate'],
             'size' => $data['size'] ?? 0,
+            'add_time' => $this->getTime(),
     	];
     	return $this->insertGetId($insert);
     }
@@ -43,7 +44,7 @@ class Attachment extends BaseModel
         if (!is_array($idArr))
             $idArr = [(int) $idArr];
 
-        return $this->whereIn($this->primaryKey, $idArr)
+        return $this->whereIn($this->_primaryKey, $idArr)
                     ->field('attach_id, name, type, cate')
                     ->get();
     }

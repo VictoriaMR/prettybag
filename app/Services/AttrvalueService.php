@@ -11,80 +11,69 @@ class AttrvalueService extends BaseService
 {
 	const CACHE_KEY = 'PRODUCT_ATTRVALUE_CACHE';
 
-	public function create(array $data)
-	{
-		if (empty($data['name'])) {
-			return false;
-		}
-        $data['name'] = trim($data['name']);
-        $translateService = make('App\Services\TranslateService');
-        $name = $translateService->getTranslate($data['name']);
-        $info = $this->getInfoByName($name);
-        if (!empty($info)) {
-            return $info['attv_id'];
+	public function addNotExist($nameZh)
+    {
+        if (empty($nameZh)) {
+            return false;
         }
-        $insert = [
-            'name' => $name,
-            'sort' => $data['sort'] ?? 0,
+        $nameZh = trim($nameZh);
+        $translateService = make('App\Services\TranslateService');
+        $nameEn = $translateService->getTranslate($nameZh);
+        if (empty($nameEn)) $nameEn = $nameZh;
+        $nameEn = ucfirst($nameEn);
+        $info = $this->getInfoByName($nameEn);
+        if (!empty($info)) {
+            $info['name_zh'] = $nameZh;
+            return $info;
+        }
+        $data = [
+            'name' => $nameEn,
+            'sort' => 0,
         ];
-        $attvId = make('App\Models\Attrvalue')->create($insert);
+        $attvId = make('App\Models\Attrvalue')->create($data);
+        $data['attv_id'] = $attvId;
+        $data['name_zh'] = $nameZh;
         //设置多语言
         $attrLanModel = make('App\Models\AttrvalueLanguage');
         $lanList = make('App\Services\LanguageService')->getInfoCache();
         foreach ($lanList as $key => $value) {
             if ($value['code'] == 'en') continue;
-            if ($value['code'] == 'zh') {
-                $name = $data['name'];
+            if ($value['code'] != 'zh') {
+                $name = $nameZh;
             } else {
-                $name = $translateService->getTranslate($data['name'], $value['code']);
+                $name = $translateService->getTranslate($nameZh, $value['code']);
             }
             $insert = [
-            	'attv_id' => $attvId,
-            	'lan_id' => $value['lan_id'],
-            	'name' => $name,
+                'attv_id' => $attvId,
+                'lan_id' => $value['lan_id'],
+                'name' => $name,
             ];
             $attrLanModel->create($insert);
         }
-        return $attvId;
-	}
+        return $data;
+    }
 
     public function getInfoByName($name)
     {
         return make('App\Models\Attrvalue')->getInfoByWhere(['name' => $name]);
     }
 
-    protected function getCacheKey()
+    public function getInfo($attvId=null, $lanId=null)
     {
-        return self::CACHE_KEY;
-    }
-
-    public function getInfo($attvId = null)
-    {
-        $info = make('App\Models\Attrvalue')->getInfo('attv_id, name');
-        if (!empty($info)) {
-            $info = array_column($info, null, 'attv_id');
-        }
         if (empty($attvId)) {
-            return $info;
+            return false;
         }
-        return $info[$attvId] ?? [];
-    }
-
-    public function getInfoCache($attvId = null)
-    {
-        $info = redis()->get($this->getCacheKey());
-        if (empty($info)) {
-            $info = $this->getInfo();
-            redis()->set($this->getCacheKey(), $info, -1);
+        if (!is_array($attvId)) {
+            $attvId = [$attvId];
         }
-        if (empty($attvId)) {
-            return $info;
+        $info = make('App\Models\Attrvalue')->whereIn('attv_id', $attvId)->field('attv_id, name')->get();
+        if ($lanId > 0 && $lanId != env('DEFAULT_LANGUAGE_ID')) {
+            $tempData = make('App\Models\AttrvalueLanguage')->whereIn('attv_id', $attvId)->where('lan_id', $lanId)->field('attv_id, name')->get();
+            $tempData = array_column($tempData, 'name', 'attv_id');
+            foreach ($info as $key => $value) {
+                $info[$key]['name'] = $tempData[$value['attv_id']];
+            }
         }
-        return $info[$attvId] ?? '';
-    }
-
-    public function deleteCache()
-    {
-        return redis()->delete($this->getCacheKey());
+        return $info;
     }
 }

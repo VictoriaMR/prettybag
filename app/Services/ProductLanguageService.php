@@ -6,7 +6,7 @@ use App\Services\Base as BaseService;
 use App\Models\ProductLanguage;
 
 /**
- * 	产品类
+ * 	产品语言类
  */
 class ProductLanguageService extends BaseService
 {
@@ -26,5 +26,18 @@ class ProductLanguageService extends BaseService
 		} else {
 			return $this->baseModel->create($data);
 		}
+	}
+
+	public function getText($spuId, $skuId, $lanId)
+	{
+		return $this->baseModel->getInfoByWhere(['spu_id'=>(int)$spuId, 'sku_id'=>(int)$skuId, 'lan_id'=>(int)$lanId], 'name')['name'] ?? '';
+	}
+
+	public function getTextArr($spuId, $skuId, $lanId)
+	{
+		if (!is_array($skuId)) {
+			$skuId = [(int) $skuId];
+		}
+		return $this->baseModel->where(['spu_id'=>(int)$spuId, 'sku_id'=>['in', $skuId], 'lan_id'=>(int)$lanId], 'name')->get();
 	}
 }

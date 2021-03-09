@@ -14,7 +14,6 @@ class ProductController extends Controller
 	public function create()
 	{
 		$data = ipost();
-		// echo json_encode($data);exit();
 		if (empty($data['form_crawer'])) {
 			$this->error('no data to create!');
 		}
@@ -28,22 +27,29 @@ class ProductController extends Controller
 		$fileService = make('App\Services\FileService');
 		//Spu图片
 		$spuImageArr = [];
+		$firstImage = [];
 		foreach ($data['form_crawer']['pdt_picture'] as $key => $value) {
 			$url = $this->filterUrl($value);
 			$spuImageArr[$url] = $fileService->uploadUrlImage($url, 'product');
+			if ($key == 0) {
+				$firstImage = $spuImageArr[$url];
+			}
 		}
 		$spuImageArr = array_filter($spuImageArr);
 		if (empty($spuImageArr)) {
 			$this->error('product spu image empty!');
 		}
 		//价格合集
+		foreach ($data['form_crawer']['sku'] as $key => $value) {
+			$data['form_crawer']['sku'][$key]['price'] = $value['price'] + rand(250, 300);
+		}
 		$priceArr = array_column($data['form_crawer']['sku'], 'price');
 		$spuNameEn = $translateService->getTranslate($data['form_crawer']['name']);
 		$insert = [
 			'cate_id' => (int)$data['form_page']['bc_product_category'],
 			'status' => 1,
-			'avatar' => $spuImageArr[0]['cate'].DS.$spuImageArr[0]['name'].'.'.$spuImageArr[0]['type'],
-			'min_price' => min($priceArr) + 250,
+			'avatar' => $firstImage['cate'].DS.$firstImage['name'].'.'.$firstImage['type'],
+			'min_price' => min($priceArr),
 			'name' => $spuNameEn,
 			'add_time' => $this->getTime(),
 		];
@@ -118,28 +124,83 @@ class ProductController extends Controller
 		$attributeService = make('App\Services\AttributeService');
 		$attrvalueService = make('App\Services\AttrvalueService');
 		foreach ($data['form_crawer']['attr'] as $key => $value) {
-			$attr[$value['attrName']] = $attributeService->create(['name' => $value['attrName']]);
+			$attr[$value['attrName']] = $attributeService->addNotExist($value['attrName']);
 			foreach ($value['attrValue'] as $k => $v) {
-				$attv[$v['name']] = $attrvalueService->create(['name' => $v['name']]);
+				$attv[$v['name']] = $attrvalueService->addNotExist($v['name']);
 			}
 		}
-		print_r($attr);
-		dd($attv);
-
 		//sku
+		$skuService = make('App\Services\ProductSkuService');
 		foreach ($data['form_crawer']['sku'] as $key => $value) {
+			$nameZhStr = $nameEnStr = '';
+			//sku 属性
+			foreach ($value['pvs'] as $k => $v) {
+				$nameZhStr .= ' '.$v['text'];
+				$nameEnStr .= ' '.$attv[$v['text']]['name'];
+			}
 			$insert = [
 				'spu_id' => $spuId,
 				'status' => $value['stock'] > 0 ? 1 : 0,
 				'stock' => $value['stock'],
 				'price' => $value['price'],
+				'name' => $spuNameEn.' - '.trim($nameEnStr),
+				'origin_price' => round($value['price'] / ((10 - rand(5, 9)) / 10), 2),
+				'add_time' => $this->getTime(),
 			];
+			$skuId = $skuService->create($insert);
+			//多语言
+			foreach ($lanArr as $k => $v) {
+				if ($v['code'] == 'en') continue;
+				if ($v['code'] != 'zh') {
+					$name = $translateService->getTranslate($data['form_crawer']['name'].' - '.trim($nameZhStr));
+				} else {
+					$name = $data['form_crawer']['name'].' - '.trim($nameZhStr);
+				}
+				$insert = [
+					'spu_id' => $spuId,
+					'sku_id' => $skuId,
+					'lan_id' => $v['lan_id'],
+					'name' => $name,
+				];
+				$productLanguageService->create($insert);
+			}
+			//sku图片
+			if (!empty($value['sku_img'])) {
+				if (empty($spuImageArr[$value['sku_img']])) {
+					$spuImageArr[$value['sku_img']] = $fileService->uploadUrlImage($value['sku_img'], 'product');
+				}
+				$insert = [
+					'sku_id' => $skuId,
+					'attach_id' => $spuImageArr[$value['sku_img']]['attach_id'],
+					'sort' => 1,
+				];
+				$skuService->addImage($insert);
+			}
+			//属性关联
+			$insert = [];
+			$count = 1;
+			foreach ($value['pvs'] as $k => $v) {
+				if (empty($v['img'])) {
+					$attachId = 0;
+				} else {
+					if (empty($spuImageArr[$v['img']])) {
+						$spuImageArr[$v['img']] = $fileService->uploadUrlImage($v['img'], 'product');
+					}
+					$attachId = $spuImageArr[$v['img']]['attach_id'];
+				}
+				$insert[] = [
+					'sku_id' => $skuId,
+					'attr_id' => $attr[$k]['attr_id'],
+					'attv_id' => $attv[$v['text']]['attv_id'],
+					'attach_id' => $attachId,
+					'sort' => $count++,
+				];
+			}
+			if (!empty($insert)) {
+				$skuService->addAttributeRelation($insert);
+			}
 		}
-
-
-		dd($lanArr);
-		$spuLanguageService = make('');
-		dd($insertsku);
+		$this->success();
 	}
 
 	protected function filterUrl($url)

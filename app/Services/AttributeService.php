@@ -11,32 +11,37 @@ class AttributeService extends BaseService
 {
 	const CACHE_KEY = 'PRODUCT_ATTRIBUTE_CACHE';
 
-	public function create(array $data)
+	public function addNotExist($nameZh)
 	{
-		if (empty($data['name'])) {
+		if (empty($nameZh)) {
 			return false;
 		}
-        $data['name'] = trim($data['name']);
+        $nameZh = trim($nameZh);
         $translateService = make('App\Services\TranslateService');
-        $name = $translateService->getTranslate($data['name']);
-        $info = $this->getInfoByName($name);
+        $nameEn = $translateService->getTranslate($nameZh);
+        if (empty($nameEn)) $nameEn = $nameZh;
+        $nameEn = ucfirst($nameEn);
+        $info = $this->getInfoByName($nameEn);
         if (!empty($info)) {
-            return $info['attr_id'];
+            $info['name_zh'] = $nameZh;
+            return $info;
         }
-        $insert = [
-            'name' => $name,
-            'sort' => $data['sort'] ?? 0,
+        $data = [
+            'name' => $nameEn,
+            'sort' => 0,
         ];
-        $attrId = make('App\Models\Attribute')->create($insert);
+        $attrId = make('App\Models\Attribute')->create($data);
+        $data['attr_id'] = $attrId;
+        $data['name_zh'] = $nameZh;
         //设置多语言
         $attrLanModel = make('App\Models\AttributeLanguage');
         $lanList = make('App\Services\LanguageService')->getInfoCache();
         foreach ($lanList as $key => $value) {
             if ($value['code'] == 'en') continue;
-            if ($value['code'] == 'zh') {
-                $name = $data['name'];
+            if ($value['code'] != 'zh') {
+                $name = $nameZh;
             } else {
-                $name = $translateService->getTranslate($data['name'], $value['code']);
+                $name = $translateService->getTranslate($nameZh, $value['code']);
             }
             $insert = [
             	'attr_id' => $attrId,
@@ -45,7 +50,7 @@ class AttributeService extends BaseService
             ];
             $attrLanModel->create($insert);
         }
-        return $attrId;
+        return $data;
 	}
 
     public function getInfoByName($name)
@@ -53,38 +58,22 @@ class AttributeService extends BaseService
         return make('App\Models\Attribute')->getInfoByWhere(['name' => $name]);
     }
 
-    protected function getCacheKey()
+    public function getInfo($attrId=null, $lanId=null)
     {
-        return self::CACHE_KEY;
-    }
-
-    public function getInfo($attrId = null)
-    {
-        $info = make('App\Models\Attribute')->getInfo('attr_id, name');
-        if (!empty($info)) {
-            $info = array_column($info, null, 'attr_id');
-        }
         if (empty($attrId)) {
-            return $info;
+            return false;
         }
-        return $info[$attrId] ?? [];
-    }
-
-    public function getInfoCache($attrId = null)
-    {
-        $info = redis()->get($this->getCacheKey());
-        if (empty($info)) {
-            $info = $this->getInfo();
-            redis()->set($this->getCacheKey(), $info, -1);
+        if (!is_array($attrId)) {
+            $attrId = [$attrId];
         }
-        if (empty($attrId)) {
-            return $info;
+        $info = make('App\Models\Attribute')->whereIn('attr_id', $attrId)->field('attr_id, name')->get();
+        if ($lanId > 0 && $lanId != env('DEFAULT_LANGUAGE_ID')) {
+            $tempData = make('App\Models\AttributeLanguage')->whereIn('attr_id', $attrId)->where('lan_id', $lanId)->field('attr_id, name')->get();
+            $tempData = array_column($tempData, 'name', 'attr_id');
+            foreach ($info as $key => $value) {
+                $info[$key]['name'] = $tempData[$value['attr_id']];
+            }
         }
-        return $info[$attrId] ?? '';
-    }
-
-    public function deleteCache()
-    {
-        return redis()->delete($this->getCacheKey());
+        return $info;
     }
 }

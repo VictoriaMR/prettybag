@@ -24,16 +24,16 @@ class LanguageService extends BaseService
         return make('App\Models\Language')->create($data);
 	}
 
-    public function getInfo($code = '')
+    public function getInfo($lanId = '')
     {
     	$info = make('App\Models\Language')->getInfo();
     	if (!empty($info)) {
-    		$info = array_column($info, null, 'code');
+    		$info = array_column($info, null, 'lan_id');
     	}
-    	if (empty($code)) {
+    	if (empty($lanId)) {
     		return $info;
     	}
-    	return $info[$code] ?? [];
+    	return $info[$lanId] ?? [];
     }
 
     protected function getCacheKey()
@@ -41,21 +41,36 @@ class LanguageService extends BaseService
     	return self::CACHE_KEY;
     }
 
-    public function getInfoCache($code = '')
+    public function getInfoCache($lanId = '')
     {
     	$info = redis()->get($this->getCacheKey());
     	if (empty($info)) {
     		$info = $this->getInfo();
     		redis()->set($this->getCacheKey(), $info, -1);
     	}
-    	if (empty($code)) {
+    	if (empty($lanId)) {
     		return $info;
     	}
-    	return $info[$code] ?? '';
+    	return $info[$lanId] ?? '';
     }
 
     public function deleteCache()
     {
     	return redis()->delete($this->getCacheKey());
+    }
+
+    public function priceFormat($price, $lanId)
+    {
+        if ($price <= 0) {
+            return [
+                'price' => 0,
+                'symbol' => '',
+            ];
+        }
+        $info = $this->getInfoCache($lanId);
+        return [
+            'price' => sprintf('%.2f', $price * $info['rate']),
+            'symbol' => $info['symbol'],
+        ];
     }
 }

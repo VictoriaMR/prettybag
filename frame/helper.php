@@ -116,7 +116,7 @@ function siteUrl($url = '')
 function mediaUrl($url = '', $type='')
 {
     if (strpos($url, 'http') === false && strpos($url, 'https') === false) {
-        return env('FILE_CENTER_DOMAIN').DS.$url;
+        return env('FILE_CENTER_DOMAIN').$url;
     }
     return $url;
 }
@@ -133,11 +133,19 @@ function getIp()
     }
     return '';
 }
-function filterUrlStr($str)
+function filterUrl($str, $c='', $id='', $page='')
 {
     if (empty($str)) return '';
     $str = preg_replace('/[^-A-Za-z0-9 ]/', '', $str);
     $str = preg_replace('/( ){2,}/', ' ', $str);
     $str = str_replace(' ', '-', $str);
-    return strtolower($str);
+    $str = str_replace(['---', '--'], '-', $str);
+    $str = strtolower($str);
+    if (!empty($c)) {
+        $str .= '-'.$c.'-'.$id;
+    } 
+    if (!empty($page)) {
+        $str .= '-p'.$page;
+    }
+    return env('APP_DOMAIN').$str.'.html';
 }

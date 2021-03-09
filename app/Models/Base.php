@@ -45,7 +45,7 @@ class Base
         return $this->getInstance()->where($where)->count();
     }
 
-    public function getInfoByWhere(array $where = [], array $fields = [])
+    public function getInfoByWhere(array $where = [], $fields = [])
     {
         return $this->getInstance()->where($where)->field($fields)->find();
     }
@@ -59,6 +59,11 @@ class Base
             'page_total' => ceil($total / $pagesize),
             'list' => $list,
         ];
+    }
+
+    public function getTime()
+    {
+        return date('Y-m-d H:i:s');
     }
 
     public function __call($func, $arg)

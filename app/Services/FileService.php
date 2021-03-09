@@ -135,7 +135,7 @@ class FileService
                 if ($thumb) {
                     $thumb = ['600', '400', '200'];
                     foreach ($thumb as $value) {
-                        $to = $path . $value . DS . $name . '.' . $ext;
+                        $to = $path . $name . DS . $value . '.' . $ext;
                         $imageService->thumbImage($file, $to, $value, $value);
                     }
                 }

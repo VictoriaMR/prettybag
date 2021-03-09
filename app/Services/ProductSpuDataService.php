@@ -21,7 +21,7 @@ class ProductSpuDataService extends BaseService
 
 	public function create(array $data)
 	{
-		
+		return $this->baseModel->insert($data);
 	}
 
 	public function isExist($siteId, $itemId)

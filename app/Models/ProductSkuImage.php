@@ -4,19 +4,19 @@ namespace App\Models;
 
 use App\Models\Base as BaseModel;
 
-class ProductIntroduce extends BaseModel
+class ProductSkuImage extends BaseModel
 {
     //表名
-    protected $_table = 'product_introduce';
+    protected $_table = 'product_sku_image';
 
     public function create(array $data) 
     {
     	return $this->insert($data);
     }
 
-    public function getInfoBySpuId($spuId)
+    public function getInfoBySkuId($skuId)
     {
-        $info = $this->where(['spu_id'=>(int)$spuId])->field('attach_id')->orderBy('sort', 'asc')->get();
+        $info = $this->where(['sku_id'=>(int)$skuId])->field('attach_id')->get();
         if (empty($info)) {
             return [];
         }

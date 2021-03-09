@@ -56,6 +56,19 @@ Class Query
 		return $this->where($column, 'IN', $value);
 	}
 
+	public function orderBy($columns, $operator = null)
+	{
+		if (is_array($columns)) {
+			foreach ($columns as $key => $value) {
+				$this->_orderBy = $key.' '. strtoupper($value).', ';
+			}
+		} else {
+			$this->_orderBy = $columns.' '. strtoupper($operator).', ';
+		}
+		$this->_orderBy = trim($this->_orderBy);
+		return $this;
+	}
+
 	public function field($columns)
 	{
 		if (empty($columns)) return $this;
@@ -104,8 +117,6 @@ Class Query
 			}
 			return "'".implode("', '", $value)."'";
 		}, $data);
-		// if ($this->_table == 'product_introduce')
-		// 	dd($data);
 		$sql = sprintf('INSERT INTO %s (`%s`) VALUES %s', $this->_table, implode('`, `', $fields), '(' . implode('), (', $data).')');
 		return $this->getQuery($sql);
 	}
@@ -139,7 +150,7 @@ Class Query
 			$sql .= ' GROUP BY ' . $this->_groupBy;
 		}
 		if (!empty($this->_orderBy)) {
-			$sql .= ' ORDER BY ' . $this->_orderBy;
+			$sql .= ' ORDER BY ' . rtrim($this->_orderBy, ',');
 		}
 		if ($this->_offset !== null) {
 			$sql .= ' LIMIT ' . (int) $this->_offset;
@@ -176,7 +187,7 @@ Class Query
 					case 'IN':
 						if (!is_array($value)) $value = explode(',', $value);
 						$inStr = '';
-						foreach ($value as $invalue) {
+						foreach ($value as $inkey => $invalue) {
 							if ($inkey > 0) {
 								$inStr .= ', ';
 							}
@@ -222,7 +233,7 @@ Class Query
 			    $stmt->free_result();
 			    $stmt->close();
 			} else {
-				throw new \Exception($conn->error, 1);
+				throw new \Exception($conn->error .$sql, 1);
 			}
 		} else {
 			if ($stmt = $conn->query($sql)) {

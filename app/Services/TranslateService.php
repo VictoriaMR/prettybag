@@ -33,7 +33,7 @@ class TranslateService extends BaseService
 			$translateStr = \frame\Http::get($request);
 			if ($translateStr !== false) {
 				$translateStr = json_decode($translateStr, true);
-				if (!empty($translateStr['trans_result'])) {
+				if (!empty($translateStr['trans_result'][0]['dst'])) {
 					return trim($translateStr['trans_result'][0]['dst']);
 				}
 			}
