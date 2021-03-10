@@ -36,4 +36,9 @@ class Controller
     {
         return date('Y-m-d H:i:s');
     }
+
+    protected function assign($name, $value = null)
+    {
+        return assign($name, $value);
+    }
 }

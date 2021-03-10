@@ -11,9 +11,17 @@ class ProductController extends Controller
 	{	
 		$spuId = iget('spu_id');
 		$skuId = iget('sku_id');
+		if (!empty($skuId)) {
+			$spuId = make('App\Services\ProductSkuService')->getSpuId($skuId);
+		}
 		if (!empty($spuId)) {
 			$spuInfo = make('App\Services\ProductSpuService')->getInfoCache($spuId);
-			dd($spuInfo);
+			if (!empty($spuInfo) && !empty($skuId)) {
+				$skuInfo = $spuInfo['sku'][$skuId] ?? [];
+			}
 		}
+		$this->assign('spuInfo', $spuInfo ?? []);
+		$this->assign('skuInfo', $skuInfo ?? []);
+		return view();
 	}
 }

@@ -59,4 +59,10 @@ class ProductSkuService extends BaseService
 		}
 		return make('App\Models\ProductSku')->where(['spu_id'=>$spuId, 'status' => 1])->get();
 	}
+
+	public function getSpuId($skuId)
+	{
+		$info = make('App\Models\ProductSku')->loadData($skuId, 'spu_id');
+		return $info['spu_id'] ?? 0;
+	}
 }
