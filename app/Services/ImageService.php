@@ -35,7 +35,6 @@ class ImageService
 		    $linecolor = imagecolorallocate($image, rand(80, 220), rand(80, 220),rand(80, 220));
 		    //设置线，两点一线
 		    imageline($image, rand(1, $width - 1), rand(1, $height - 1), rand(1, $width - 1), rand(1, $height - 1), $linecolor);
-
 	    }
 	    //加入干扰象素
 	    for ($i = 0; $i < 300; $i++) {

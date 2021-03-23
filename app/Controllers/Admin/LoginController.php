@@ -18,11 +18,11 @@ class LoginController extends Controller
 
 	public function loginCode()
 	{
-		$imageService = make('App/Services/Common/ImageService');
+		$imageService = make('App/Services/ImageService');
 		$service = make('App/Services/Base');
 		$code = $service->getSalt();
 		Session::set('admin_login_code', $code);
-		$imageService->verifyCode($code);
+		$imageService->verifyCode($code, 80, 38);
 	    exit();
 	}
 
