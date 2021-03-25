@@ -122,13 +122,13 @@ function mediaUrl($url = '', $type='')
 }
 function getIp()
 {
-    if (!empty($_SERVER['HTTP_CLIENT_IP']) && strcasecmp($_SERVER['HTTP_CLIENT_IP'], 'unknown')) {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         return $_SERVER['HTTP_CLIENT_IP'];
     }
-    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && strcasecmp($_SERVER['HTTP_X_FORWARDED_FOR'], 'unknown')) {
+    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         return $_SERVER['HTTP_X_FORWARDED_FOR'];
     }
-    if (!empty($_SERVER['REMOTE_ADDR']) && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
+    if (!empty($_SERVER['REMOTE_ADDR'])) {
         return $_SERVER['REMOTE_ADDR'];
     }
     return '';
@@ -141,9 +141,7 @@ function filterUrl($str, $c='', $id='', $page='')
     $str = str_replace(' ', '-', $str);
     $str = str_replace(['---', '--'], '-', $str);
     $str = strtolower($str);
-    if (!empty($c)) {
-        $str .= '-'.$c.'-'.$id;
-    } 
+    $str .= '-'.$c.'-'.$id;
     if (!empty($page)) {
         $str .= '-p'.$page;
     }

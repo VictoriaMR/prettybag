@@ -144,7 +144,7 @@ Class Query
 		$this->analyzeWhere();
 		$sql = sprintf('SELECT %s FROM `%s`', !empty($this->_columns) ? implode(', ', $this->_columns) : '*', $this->_table ?? '');
 		if (!empty($this->_whereString)) {
-			$sql .= ' WHERE 1=1 ' . $this->_whereString;
+			$sql .= ' WHERE ' . Ltrim($this->_whereString, 'AND');
 		}
 		if (!empty($this->_groupBy)) {
 			$sql .= ' GROUP BY ' . $this->_groupBy;
@@ -208,6 +208,7 @@ Class Query
 				$this->_whereString .= ' )';
 			}
 		}
+		$this->_whereString = trim($this->_whereString);
 		return true;
 	}
 

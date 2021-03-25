@@ -11,7 +11,7 @@ class Html
     {
         $matchPath = '';
         if (env('APP_VIEW_MATCH')) {
-            $matchPath = (ismobile() ? 'mobile' : 'computer') . DS;
+            $matchPath = (isMobile() ? 'mobile' : 'computer') . DS;
         }
         if (empty($name)) {
             $_route = \Router::$_route;
@@ -30,7 +30,7 @@ class Html
     {
         $matchPath = '';
         if (env('APP_VIEW_MATCH')) {
-            $matchPath = (ismobile() ? 'mobile' : 'computer') . DS;
+            $matchPath = (isMobile() ? 'mobile' : 'computer') . DS;
         }
         if (empty($name)) {
             $_route = \Router::$_route;
@@ -47,13 +47,11 @@ class Html
 
     public static function getCss()
     {
-        if (empty(self::$_CSS)) return [];
-        return array_unique(self::$_CSS);
+        return self::$_CSS;
     }
 
     public static function getJs()
     {
-        if (empty(self::$_JS)) return [];
-        return array_unique(self::$_JS);
+        return self::$_JS;
     }
 }

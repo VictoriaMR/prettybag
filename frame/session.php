@@ -22,7 +22,7 @@ class Session
 		$temp = explode('_', $name);
 		$data = $_SESSION[$temp[0]] ?? null;
 		if (count($temp) > 1) {
-			return $data[str_replace($temp[0].'_', '', $name)] ?? [];
+			return $data[str_replace($temp[0].'_', '', $name)] ?? null;
 		} else {
 			return $data;
 		}

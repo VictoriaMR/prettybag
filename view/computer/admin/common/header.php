@@ -2,21 +2,21 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $title ?? '';?></title>
+    <title>管理后台<?php echo empty($_title) ? '' : '-'.$_title;?></title>
     <meta name="renderer" content="webkit|ie-comp|ie-stand">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/common', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/bootstrap', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/datepicker', 'css');?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('icon', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/space', 'css');?>">
     <?php foreach (\frame\Html::getCss() as $value) { ?>
     <link rel="stylesheet" type="text/css" href="<?php echo $value;?>">
     <?php }?>
     <script type="text/javascript" src="<?php echo staticUrl('jquery', 'js');?>"></script>
     <script type="text/javascript" src="<?php echo staticUrl('common', 'js');?>"></script>
+    <script type="text/javascript" src="<?php echo staticUrl('button', 'js');?>"></script>
     <?php foreach (\frame\Html::getJs() as $value) { ?>
     <script type="text/javascript" src="<?php echo $value;?>"></script>
     <?php }?>

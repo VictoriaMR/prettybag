@@ -43,7 +43,7 @@ class MemberService extends BaseService
 		return $result;
 	}
 
-	public function login($mobile, $password, $type = 1)
+	public function login($mobile, $password, $type = 'home')
 	{
 		if (empty($mobile) || empty($password)) return false;
 
@@ -60,18 +60,7 @@ class MemberService extends BaseService
 				'avatar' => $info['avatar'],
 				'salt' => $info['salt'],
 			];
-			switch ($type) {
-				case 1:
-					$key = 'home';
-					break;
-				case 3:
-					$key = 'proxy';
-					break;
-				case 5:
-					$key = 'admin';
-					break;
-			}
-			return \frame\Session::set($key, $data);
+			return \frame\Session::set($type, $data);
 		}
 		return false;
 	}
@@ -88,7 +77,15 @@ class MemberService extends BaseService
 
 	public function getInfoByMobile($mobile)
 	{
-		return $this->baseModel->getInfoByMobile($mobile);
+		$info = $this->baseModel->getInfoByMobile($mobile);
+		if (!empty($info)) {
+        	if (empty($info['avatar'])) {
+        		$info['avatar'] = $this->getDefaultAvatar($info['mem_id']);
+        	} else {
+        		$info['avatar'] = mediaUrl($info['avatar']);
+        	}
+        }
+        return $info;
 	}
 
     public function getInfo($userId)
@@ -118,9 +115,9 @@ class MemberService extends BaseService
     public function getDefaultAvatar($userId, $male = true)
     {
     	if ($male) {
-    		return siteUrl('image/Common/male.jpg');
+    		return siteUrl('image/common/male.jpg');
     	} else {
-    		return siteUrl('image/Common/female.jpg');
+    		return siteUrl('image/common/female.jpg');
     	}
     }
 

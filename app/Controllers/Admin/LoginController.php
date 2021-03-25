@@ -13,14 +13,14 @@ class LoginController extends Controller
 		Html::addCss();
 		Html::addJs();
 		Session::set('admin', []);
+		$this->assign('_title', '登录');
 		return view();
 	}
 
 	public function loginCode()
 	{
 		$imageService = make('App/Services/ImageService');
-		$service = make('App/Services/Base');
-		$code = $service->getSalt();
+		$code = make('App/Services/Base')->getSalt();
 		Session::set('admin_login_code', $code);
 		$imageService->verifyCode($code, 80, 38);
 	    exit();
@@ -39,11 +39,10 @@ class LoginController extends Controller
 			return $this->result(10000, [], ['message' => '验证码错误!']);
 		}
 		$memberService = make('App/Services/Admin/MemberService');
-		$result = $memberService->login($phone, $password, $memberService::constant('TYPE_MEMBER_ADMIN'));
+		$result = $memberService->login($phone, $password, 'admin');
 
 		if ($result) {
-
-	        $logService = \App::make('App\Services\Logger\AdminLogService');
+	        $logService = \App::make('App\Services\Admin\LogService');
 			$data = [
 	            'mem_id' => Session::get('admin_mem_id'),
 	            'remark' => '登录管理后台',
@@ -55,4 +54,29 @@ class LoginController extends Controller
 			$this->result(10000, $result, ['message' => '账号或者密码不匹配!']);
 		}
 	}
+
+	public function checkCode()
+	{
+		$code = ipost('code', '');
+		if (empty($code)) {
+			return $this->result(10000, [], ['message' => '验证码格式错误!']);
+		}
+		if (strtolower($code) != strtolower(Session::get('admin_login_code'))) {
+			return $this->result(10000, [], ['message' => '验证码错误!']);
+		}
+		$this->result(200, '', ['message' => '验证码正确!']);
+	}
+
+	public function logout()
+	{
+		Session::set('admin');
+		redirect(url('login'));
+	}
+
+	public function  signature()
+    {
+    	$text = !empty(Session::get('admin_name')) ? Session::get('admin_name') : '管理后台';
+        make('App/Services/ImageService')->text(ROOT_PATH.'admin/image/computer/signature.png', $text, 12, 30, 10, 80, [235, 235, 235]);
+        exit();
+    }
 }

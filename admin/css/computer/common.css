@@ -1,5 +1,5 @@
 *{margin:0;padding:0;box-sizing:border-box}
-body,button,input,select,textarea{font:14px/1.5 Microsoft YaHei,tahoma,arial,Hiragino Sans GB,\\5B8B\4F53,sans-serif;color:#3c3c3c}
+body,button,input,select,textarea{font:13px Microsoft YaHei,tahoma,arial,Hiragino Sans GB,\\5B8B\4F53,sans-serif;color:#3c3c3c}
 ul,ol{list-style:none}
 a{text-decoration:none;color:#3c3c3c}
 a:hover{text-decoration:none}
@@ -42,4 +42,8 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 .f26{font-size:26px}
 .f28{font-size:28px}
 .f30{font-size:30px}
-.orange{color:orange}
+.co,.orange{color:orange}
+.cf{color:#ffffff}
+.cr,.red{color:#e7502b}
+.c5f{color:#5f5f5f}
+.e1{overflow:hidden;white-space:normal;word-break:break-all;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}

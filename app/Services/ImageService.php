@@ -4,6 +4,8 @@ namespace App\Services;
 
 class ImageService
 {
+	const FONTFILE = ROOT_PATH . 'public' . DS . 'font' . DS . 'fzht.ttf';
+
 	public function verifyCode($code, $width = 80, $height = 40)
 	{
 		if (empty($code)) return false;
@@ -14,7 +16,6 @@ class ImageService
     	$bgcolor = imagecolorallocate($image, 255, 255, 255);
     	imagefill($image, 0, 0, $bgcolor);
 
-    	$fontfile = ROOT_PATH . 'public' . DS . 'font' . DS . 'simhei.ttf';
     	// 生成随机码
     	$len = strlen($code);
     	for ($i = 0; $i < $len; $i++) {
@@ -27,7 +28,7 @@ class ImageService
 		    //随机码高度
 		    $y = rand($fontsize, $height - 5);
 		    //填充当前字符入画布
-		    imagettftext($image, $fontsize, rand(0, 30), $x, $y, $fontcolor, $fontfile, $code[$i]);
+		    imagettftext($image, $fontsize, rand(0, 30), $x, $y, $fontcolor, self::FONTFILE, $code[$i]);
     	}
     	//加入干扰线
 	    for($i = 0; $i < 4; $i++) {
@@ -50,6 +51,25 @@ class ImageService
 		imagedestroy($image);
 		return true;
 	}
+
+	public function text($src, $text, $font_size, $angle, $x, $y, $colorRGB= [255,255,255], $alpha = 0, $fontfile = '')
+    {
+    	if (!is_file($src)) {
+    		return false;
+    	}
+    	$imgHandler = imagecreatefrompng($src);
+        if(empty($fontfile)){
+            $fontfile = self::FONTFILE;
+        }
+        $color = imagecolorallocatealpha($imgHandler,$colorRGB[0],$colorRGB[1],$colorRGB[2],$alpha);
+        imagettftext($imgHandler,$font_size, $angle, $x, $y, $color, $fontfile, $text);
+        header('Content-Type: image/png');
+		//生成png图片
+		imagepng($imgHandler);
+		//销毁$imgHandler
+		imagedestroy($imgHandler);
+		return true;
+    }
 
 	public function compressImg($src, $moveto = '', $percent = 1)
 	{

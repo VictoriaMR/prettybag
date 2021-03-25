@@ -63,7 +63,11 @@ class App
         if (is_file($file)) {
 			require_once $file;
         } else {
-			throw new \Exception($abstract.' was not exist!', 1);
+            if (env('APP_DEBUG')) {
+                throw new \Exception($abstract.' was not exist!', 1);
+            } else {
+                redirect(url());
+            }
         }
 		return Container::getInstance()->autoload($abstract);
     }
