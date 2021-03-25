@@ -28,9 +28,9 @@ class LoginController extends Controller
 
 	public function login() 
 	{
-		$phone = ipost('phone', '');
-		$code = ipost('code', '');
-		$password = ipost('password', '');
+		$phone = trim(ipost('phone', ''));
+		$code = trim(ipost('code', ''));
+		$password = trim(ipost('password', ''));
 
 		if (empty($phone) || empty($code) || empty($password)) {
 			return $this->result(10000, [], ['message' => '输入错误!']);

@@ -18,11 +18,38 @@
 					<div class="toggle open" data-title="菜单切换开关">
 						<span class="glyphicon glyphicon-align-justify"></span>
 					</div>
+					<div class="nav-content">
+						<ul>
+							<li data-title="概览" data-to="about-view">
+								<span class="glyphicon glyphicon-eye-open"></span>
+								<span class="ml6">概览</span>
+							</li>
+							<li data-title="管理人员" data-to="guanliyuan">
+								<span class="glyphicon glyphicon-object-align-left"></span>
+								<span class="ml6">管理人员</span>
+							</li>
+							<li data-title="系统设置">
+								<span class="glyphicon glyphicon-cog"></span>
+								<span class="ml6">系统设置</span>
+							</li>
+						</ul>
+					</div>
 				</div>
 				<div class="left-two">
 					<div class="title">
 						<span class="text block c5f e1">页面标题</span>
-						<span class="glyphicon glyphicon-backward"></span>
+						<span class="glyphicon glyphicon-backward" title="收起"></span>
+					</div>
+					<div class="nav-son-content">
+						<div class="item" data-for="guanliyuan">
+							<ul>
+								<li data-src="<?php echo url('member/memberList');?>" class="selected">
+									<span class="glyphicon glyphicon-user"></span>
+									<span class="ml6">人员列表</span>
+									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('member/memberList');?>"></a>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>

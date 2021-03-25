@@ -33,6 +33,15 @@ var INDEX = {
 			$('#index-page .person .info').hide();
 			$('#index-page .content-right').css({'transition': '0.1s', 'width': 'calc(100% - 40px)'});
 		});
+		//选择点击
+		$('#index-page .left-content .nav-content li').on('click', function(){
+			if ($(this).hasClass('select')) return false;
+			$(this).addClass('select').siblings().removeClass('select');
+			$('#index-page .left-two .item li').removeClass('select');
+			$('#index-page .left-two .nav-son-content .item').hide();
+			$('#index-page .left-two .nav-son-content [data-for="'+$(this).data('to')+'"]').show();
+			$('#index-page .left-two .title .text').text($(this).data('title'));
+		});
 		this.initPage();
 	},
 	initPage:function() {

@@ -11,7 +11,7 @@
 	<div class="clear"></div>
 	<form class="relative" style="padding-top: 50px;">
 		<div id="login-error" class="hidden">
-			<i class="iconfont icon-bang left orange"></i>
+			<span class="glyphicon glyphicon-warning-sign left orange"></span>
 			<div id="login-error-msg" class="left ml4">请输入帐户名</div>
 		</div>
 		<div>
