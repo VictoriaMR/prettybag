@@ -102,7 +102,7 @@ class IndexController extends Controller
         $data = [];
         $data['memory_total'] = sprintf('%.2f', ($memData[0] + ($swapData[0] ?? 0)) / 1024);
         $data['memory_used'] = sprintf('%.2f', ($memData[1] + ($swapData[1] ?? 0)) / 1024);
-		$data['memory_free_rate'] = sprintf('%.2f', $data['memory_free'] / $data['memory_total'] * 100).'%';
+		$data['memory_free_rate'] = sprintf('%.2f', ($data['memory_total'] - $data['memory_used']) / $data['memory_total'] * 100).'%';
 		$data['loadpercentage'] = sys_getloadavg()[0] ?? 0;
     }
 }
