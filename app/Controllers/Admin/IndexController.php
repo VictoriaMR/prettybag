@@ -95,10 +95,10 @@ class IndexController extends Controller
     protected function sys_linux()
     {
         $str = shell_exec('free');
-        $str = explode('Mem:', $str)[1];
+        $str = preg_replace('/\s(?=\s)/', '\\1', explode('Mem:', $str)[1]);
         $data = explode('Swap:', $str);
-        $memData = explode(' ', preg_replace('/\s(?=\s)/', '\\1',trim($data[0])));
-        $swapData = explode(' ', preg_replace('/\s(?=\s)/', '\\1',trim($data[1])));
+        $memData = explode(' ', trim($data[0]));
+        $swapData = explode(' ', trim($data[1]));
         $data = [];
         $data['memory_total'] = sprintf('%.2f', ($memData[0] + ($swapData[0] ?? 0)) / 1024);
         $data['memory_used'] = sprintf('%.2f', ($memData[1] + ($swapData[1] ?? 0)) / 1024);
