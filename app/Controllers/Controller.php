@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 class Controller 
 {
+    protected $_nav = [];
+    
 	protected function result($code, $data=[], $options=[])
     {
        $data = [

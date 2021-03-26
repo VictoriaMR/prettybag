@@ -25,7 +25,7 @@ class Kernal
 
     private function execCommand($cmd)
     {
-        if (stripos(php_uname(), 'windows') === false) {
+        if (isWin()) {
             exec($cmd);
         } else {
             pclose(popen('start /B '.$cmd, 'r')); 

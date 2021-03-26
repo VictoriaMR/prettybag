@@ -19,10 +19,12 @@ class LogService extends BaseService
     {
     	if (empty($data)) return false;
     	$temp = [
-    		'ip' => getIp(),
-    		'agent' => $_SERVER['HTTP_USER_AGENT'],
-    		'create_at' => $this->getTime(),
-    	];
+            'ip' => getIp(),
+            'browser' => getBrowser(),
+            'system' => getSystem(),
+            'agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            'create_at' => $this->getTime(),
+        ];
     	$data = array_merge($temp, $data);
     	return $this->baseModel->insert($data);
     }

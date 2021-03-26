@@ -42,7 +42,14 @@ var INDEX = {
 			$('#index-page .left-two .nav-son-content [data-for="'+$(this).data('to')+'"]').show();
 			$('#index-page .left-two .title .text').text($(this).data('title'));
 		});
+		$('#index-page .left-content .nav-son-content li').on('click', function(){
+			$(this).addClass('select').siblings().removeClass('select');
+			var src = $(this).data('src');
+			$('#href-to-iframe').attr('src', src);
+		});
 		this.initPage();
+		$('#index-page .left-content .nav-content li').eq(0).trigger('click');
+		$('#index-page .left-content .nav-son-content .item:visible li').eq(0).trigger('click');
 	},
 	initPage:function() {
 		var status = localStorage.getItem('toggle_status');

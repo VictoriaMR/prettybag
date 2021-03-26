@@ -16,7 +16,7 @@ final class Router
 				self::$_route['path'] = 'Index';
 				self::$_route['func'] = 'index';
 			} else {
-				if (APP_TEMPLATE_TYPE == 'home') {
+				if (APP_TEMPLATE_TYPE == 'home' && strpos($pathInfo[0], '.html') !== false) {
 					//设置默认语言
 					if (empty(\frame\Session::get('home_language_id'))) {
 						\frame\Session::set('home_language_id', 1);

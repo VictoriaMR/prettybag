@@ -25,3 +25,12 @@
 <script type="text/javascript">
 var URI = "<?php echo env('APP_DOMAIN');?>";
 </script>
+<?php if (!empty($_nav)) {?>
+<div id="header-nav" class="container-fluid">
+    <div class="nav">
+        <span><?php echo implode(' &gt; ', $_nav);?></span>
+        <a href="<?php echo url();?>" class="glyphicon glyphicon-repeat ml12" title="重新加载"></a>
+        <a href="<?php echo url();?>" target="_blank" class="glyphicon glyphicon-link ml12" title="新页面打开"></a>
+    </div>
+</div>
+<?php } ?>

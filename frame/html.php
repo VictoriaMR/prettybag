@@ -15,14 +15,9 @@ class Html
         }
         if (empty($name)) {
             $_route = \Router::$_route;
-            $name = lcfirst($_route['path']) . DS . $_route['func'];
-        } else {
-            if (false === strrpos($name, DS)) {
-                $_route = \Router::$_route;
-                $name = lcfirst($_route['path']) . DS . $_route['func'];
-            }
+            $name = $matchPath . lcfirst($_route['path']) . DS . $_route['func'];
         }
-        self::$_CSS[] = env('APP_DOMAIN') . 'css' . DS . $matchPath . $name . '.css';
+        self::$_CSS[] = env('APP_DOMAIN') . 'css' . DS . $name . '.css';
         return true;
     }
 
@@ -34,14 +29,9 @@ class Html
         }
         if (empty($name)) {
             $_route = \Router::$_route;
-            $name = lcfirst($_route['path']) . DS . $_route['func'];
-        } else {
-            if (false === strrpos($name, DS)) {
-                $_route = \Router::$_route;
-                $name = lcfirst($_route['path']) . DS . $_route['func'];
-            }
+            $name = $matchPath . lcfirst($_route['path']) . DS . $_route['func'];
         }
-        self::$_JS[] = env('APP_DOMAIN') . 'js' . DS . $matchPath . $name . '.js';
+        self::$_JS[] = env('APP_DOMAIN') . 'js' . DS . $name . '.js';
         return true;
     }
 

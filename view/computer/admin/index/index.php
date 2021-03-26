@@ -24,7 +24,7 @@
 								<span class="glyphicon glyphicon-eye-open"></span>
 								<span class="ml6">概览</span>
 							</li>
-							<li data-title="管理人员" data-to="guanliyuan">
+							<li data-title="管理人员" data-to="guanliyuan" data-src="<?php echo url('member/memberList');?>">
 								<span class="glyphicon glyphicon-object-align-left"></span>
 								<span class="ml6">管理人员</span>
 							</li>
@@ -41,6 +41,15 @@
 						<span class="glyphicon glyphicon-backward" title="收起"></span>
 					</div>
 					<div class="nav-son-content">
+						<div class="item" data-for="about-view">
+							<ul>
+								<li data-src="<?php echo url('index/statInfo');?>" class="selected">
+									<span class="glyphicon glyphicon-user"></span>
+									<span class="ml6">全部概览</span>
+									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('index/statInfo');?>"></a>
+								</li>
+							</ul>
+						</div>
 						<div class="item" data-for="guanliyuan">
 							<ul>
 								<li data-src="<?php echo url('member/memberList');?>" class="selected">
@@ -55,7 +64,7 @@
 			</div>
 		</div>
 		<div class="content-right" style="background: transparent url(<?php echo url('login/signature');?>) repeat;">
-			<iframe src="<?php echo url('index/statInfo');?>" width="100%" marginwidth="0" height="100%" marginheight="0" align="top" scrolling="Yes" frameborder="0" hspace="0" vspace="0"></iframe>
+			<iframe src="javascript:;" id="href-to-iframe" width="100%" marginwidth="0" height="100%" marginheight="0" align="top" scrolling="Yes" frameborder="0" hspace="0" vspace="0"></iframe>
 		</div>
 		<div class="claer"></div>
 	</div>

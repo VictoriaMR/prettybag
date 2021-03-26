@@ -15,6 +15,7 @@ Class Query
 	private $_orderBy;
 	private $_offset;
 	private $_limit;
+	private $_sql;
 
 	public function __construct($connect, $table) 
 	{
@@ -60,12 +61,19 @@ Class Query
 	{
 		if (is_array($columns)) {
 			foreach ($columns as $key => $value) {
-				$this->_orderBy = $key.' '. strtoupper($value).', ';
+				$this->_orderBy = '`'.$key.'` '. strtoupper($value).', ';
 			}
 		} else {
-			$this->_orderBy = $columns.' '. strtoupper($operator).', ';
+			$this->_orderBy = '`'.$columns.'` '. strtoupper($operator).', ';
 		}
 		$this->_orderBy = trim($this->_orderBy);
+		return $this;
+	}
+
+	public function groupBy($columns)
+	{
+		$columns = array_map('trim', explode(',', $columns));
+		$this->_groupBy = '`'.implode(',`', $columns).'`';
 		return $this;
 	}
 
@@ -130,6 +138,12 @@ Class Query
 		return $result[0]['last_insert_id'] ?? 0;
 	}
 
+	public function setSql($sql) 
+	{
+		$this->_sql = $sql;
+		return $this;
+	}
+
 	private function getResult()
 	{
 		return $this->getQuery($this->getSql(), $this->_param);
@@ -140,25 +154,28 @@ Class Query
 		if (empty($this->_table)) {
 			throw new \Exception('MySQL SELECT QUERY, table not exist!', 1);
 		}
+		if (!empty($this->_sql)) {
+			return $this->_sql;
+		}
 		//解析条件
 		$this->analyzeWhere();
-		$sql = sprintf('SELECT %s FROM `%s`', !empty($this->_columns) ? implode(', ', $this->_columns) : '*', $this->_table ?? '');
+		$this->_sql = sprintf('SELECT %s FROM `%s`', !empty($this->_columns) ? implode(', ', $this->_columns) : '*', $this->_table ?? '');
 		if (!empty($this->_whereString)) {
-			$sql .= ' WHERE ' . Ltrim($this->_whereString, 'AND');
+			$this->_sql .= ' WHERE ' . Ltrim($this->_whereString, 'AND');
 		}
 		if (!empty($this->_groupBy)) {
-			$sql .= ' GROUP BY ' . $this->_groupBy;
+			$this->_sql .= ' GROUP BY ' . $this->_groupBy;
 		}
 		if (!empty($this->_orderBy)) {
-			$sql .= ' ORDER BY ' . rtrim($this->_orderBy, ',');
+			$this->_sql .= ' ORDER BY ' . rtrim($this->_orderBy, ',');
 		}
 		if ($this->_offset !== null) {
-			$sql .= ' LIMIT ' . (int) $this->_offset;
+			$this->_sql .= ' LIMIT ' . (int) $this->_offset;
 		}
 		if ($this->_limit !== null ) {
-			$sql .= ',' . (int) $this->_limit;
+			$this->_sql .= ',' . (int) $this->_limit;
 		}
-		return $sql;
+		return $this->_sql;
 	}
 
 	private function analyzeWhere()
@@ -265,6 +282,7 @@ Class Query
 		$this->_orderBy = '';
 		$this->_offset = null;
 		$this->_limit = null;
+		$this->_sql = null;
 		return true;
 	}
 

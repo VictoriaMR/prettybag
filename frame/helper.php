@@ -46,6 +46,10 @@ function isJson($string)
     $string = json_decode($string, true); 
     return json_last_error() == JSON_ERROR_NONE ? $string : false;
 }
+function isWin()
+{
+    return strpos(php_uname(), 'Windows') !== false;
+}
 function config($name = '') 
 {
     if (empty($name)) return $GLOBALS;
@@ -146,4 +150,55 @@ function filterUrl($str, $c='', $id='', $page='')
         $str .= '-p'.$page;
     }
     return env('APP_DOMAIN').$str.'.html';
+}
+function mysqlVersion()
+{
+    $result = \frame\Connection::getInstance()->query('SELECT version() AS version')->fetch_assoc();
+    return $result['version'] ?? '';
+}
+function getBrowser($agent='')
+{
+    if (empty($agent)) {
+        $agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    }
+    if (empty($agent)) {
+        return '未知设备';
+    } else {
+        if (preg_match('/MSIE/i', $agent)) {
+            return 'MSIE';
+        } elseif (preg_match('/Firefox/i', $agent)) {
+            return 'Firefox';
+        } elseif (preg_match('/Chrome/i', $agent)) {
+            return 'Chrome';
+        } elseif (preg_match('/Safari/i', $agent)) {
+            return 'Safari';
+        } elseif (preg_match('/Opera/i', $agent)) {
+            return 'Opera';
+        } else {
+            return 'Other';
+        }
+    }
+}
+function getSystem($agent = '')
+{
+    if (empty($agent)) {
+        $agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    }
+    if (empty($agent)) {
+        return '未知操作系统';
+    } else {
+        if (preg_match('/win/i', $agent)) {
+            return 'Windows';
+        } elseif (preg_match('/mac/i', $agent)) {
+            return 'MAC';
+        } elseif (preg_match('/linux/i', $agent)) {
+            return 'Linux';
+        } elseif (preg_match('/unix/i', $agent)) {
+            return 'Unix';
+        } elseif (preg_match('/bsd/i', $agent)) {
+            return 'BSD';
+        } else {
+            return 'Other';
+        }
+    }
 }
