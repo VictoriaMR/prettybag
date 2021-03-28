@@ -1,6 +1,6 @@
 <?php $this->load('common/header');?>
 <div class="container-fluid">
-	<div class="w50 left">
+	<div class="w50 left pr10 mt10">
 		<p class="boxTitle">网站基本信息</p>
 		<table width="100%" border="0" cellspacing="0" cellpadding="7" class="table">
 			<tbody>
@@ -73,8 +73,70 @@
 			</tbody>
     	</table>
 	</div>
-	<div class="w50 left">
-		
+	<div class="w50 left pl10 mt10">
+		<p class="boxTitle">服务器信息</p>
+		<table width="100%" border="0" cellspacing="0" cellpadding="7" class="table">
+			<tbody>
+				<?php if (!empty($cpuInfo['Name'])) {?>
+				<tr>
+					<td width="130">CPU信息</td>
+					<td>
+						<strong><?php echo $cpuInfo['Name'];?></strong>
+					</td>
+				</tr>
+				<?php } ?>
+				<?php if (!empty($cpuInfo['NumberOfCores'])) {?>
+				<tr>
+					<td width="130">CPU核数</td>
+					<td>
+						<strong><?php echo $cpuInfo['NumberOfCores'];?>核</strong>
+					</td>
+				</tr>
+				<?php } ?>
+				<tr>
+					<td width="130">CPU使用</td>
+					<td>
+						<strong id="loadpercentage">0%</strong>
+					</td>
+				</tr>
+				<tr>
+					<td width="130">内存总量</td>
+					<td>
+						<strong id="memory_total">0M</strong>
+					</td>
+				</tr>
+				<tr>
+					<td width="130">内存使用</td>
+					<td>
+						<strong id="memory_used">0M</strong>
+					</td>
+				</tr>
+				<tr>
+					<td width="130">内存剩余</td>
+					<td>
+						<strong id="memory_free">0M</strong>
+					</td>
+				</tr>
+				<tr>
+					<td width="130">磁盘总量</td>
+					<td>
+						<strong id="disk_total_space">0M</strong>
+					</td>
+				</tr>
+				<tr>
+					<td width="130">磁盘使用</td>
+					<td>
+						<strong id="disk_used_space">0M</strong>
+					</td>
+				</tr>
+				<tr>
+					<td width="130">磁盘剩余</td>
+					<td>
+						<strong id="disk_free_space">0M</strong>
+					</td>
+				</tr>
+			</tbody>
+    	</table>
 	</div>
 	<div class="clear"></div>
 </div>
