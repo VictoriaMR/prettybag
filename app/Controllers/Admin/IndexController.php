@@ -25,9 +25,16 @@ class IndexController extends Controller
 
 	public function statInfo()
 	{
+        Html::addCss();
+        Html::addJs();
         Html::addJs('echarts');
-        //系统信息
-		$systemInfo = $this->getSystemInfo();
+        if (isPost()) {
+            $opn = ipost('opn');
+            if (in_array($opn, ['getSystemInfo'])) {
+                $this->$opn();
+            }
+            $this->error('非法请求');
+        }
         $logService = make('App/Services/LoggerService');
         //浏览设备统计
         $viewAgentInfo = $logService->getStats('browser');
@@ -37,7 +44,6 @@ class IndexController extends Controller
 		$this->_nav[] = '全部概览';
 		$this->assign('_title', '统计信息');
 		$this->assign('_nav', $this->_nav);
-        $this->assign('systemInfo', $systemInfo);
         $this->assign('viewAgentInfo', $viewAgentInfo);
         $this->assign('viewerInfo', $viewerInfo);
 
@@ -64,10 +70,9 @@ class IndexController extends Controller
         $returnData['upload_max_filesize'] = get_cfg_var('upload_max_filesize'); //最大上传限制
         $returnData['memory_limit'] = get_cfg_var('memory_limit'); //最大内存限制
         $returnData['processor_identifier'] = $_SERVER['PROCESSOR_IDENTIFIER'] ?? ''; //服务器cpu 数
-        $returnData['disk_used_rate'] = sprintf('%.2f', 1 - disk_free_space('/') / disk_total_space('/')) * 100 . '%'; //磁盘使用情况
+        $returnData['disk_used_rate'] = sprintf('%.2f', 1 - disk_free_space('/') / disk_total_space('/')) * 100; //磁盘使用情况
         $returnData['disk_free_space'] = sprintf('%.2f', disk_free_space('/') / 1024 / 1024); 
-
-        return $returnData;
+        $this->success($returnData);
     }
 
     protected function sys_windows()
@@ -77,7 +82,7 @@ class IndexController extends Controller
     	//cmd Cpu 使用
     	$cmd = 'wmic cpu get loadpercentage';
     	exec($cmd, $out);
-    	$data['loadpercentage'] = ($out[1] ?? 0).'%';
+    	$data['loadpercentage'] = ($out[1] ?? 0);
     	//内存总量
     	$out = [];
     	$cmd = 'wmic ComputerSystem get TotalPhysicalMemory';
@@ -88,7 +93,7 @@ class IndexController extends Controller
     	exec($cmd, $out);
     	$data['memory_used'] = sprintf('%.2f', ($out[1] ?? 0) / 1024);
     	$data['memory_free'] = sprintf('%.2f', ($data['memory_total'] - $data['memory_used']));
-    	$data['memory_free_rate'] = sprintf('%.2f', $data['memory_free'] / $data['memory_total'] * 100).'%';
+    	$data['memory_free_rate'] = sprintf('%.2f', $data['memory_free'] / $data['memory_total'] * 100);
     	return $data;
 	}
 
@@ -102,7 +107,7 @@ class IndexController extends Controller
         $data = [];
         $data['memory_total'] = sprintf('%.2f', ($memData[0] + ($swapData[0] ?? 0)) / 1024);
         $data['memory_used'] = sprintf('%.2f', ($memData[1] + ($swapData[1] ?? 0)) / 1024);
-		$data['memory_free_rate'] = sprintf('%.2f', ($data['memory_total'] - $data['memory_used']) / $data['memory_total'] * 100).'%';
+		$data['memory_free_rate'] = sprintf('%.2f', ($data['memory_total'] - $data['memory_used']) / $data['memory_total'] * 100);
 		$data['loadpercentage'] = sys_getloadavg()[0] ?? 0;
     }
 }

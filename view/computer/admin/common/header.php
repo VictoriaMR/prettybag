@@ -8,9 +8,9 @@
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/common', 'css');?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/bootstrap', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/datepicker', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/space', 'css');?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('icon', 'css');?>">
     <?php foreach (\frame\Html::getCss() as $value) { ?>
     <link rel="stylesheet" type="text/css" href="<?php echo $value;?>">
     <?php }?>

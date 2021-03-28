@@ -25,7 +25,7 @@
 			<img id="refresh" class="left pointer ml10" height="38" width="80" src="<?php echo url('login/loginCode');?>" onclick="document.getElementById('refresh').src='<?php echo url('login/loginCode');?>'" title="看不清？换一张">
 			<div class="clear"></div>
 		</div>
-		<button id="login-btn" type="button" class="btn btn-primary btn-lg btn-block mt20" data-loading-text="Loading...">登录</button>
+		<button id="login-btn" type="button" class="btn btn-primary mt20" data-loading-text="Loading...">登录</button>
 	</form>
 </div>
 <script type="text/javascript">

@@ -1,5 +1,5 @@
 *{margin:0;padding:0;box-sizing:border-box}
-body,button,input,select,textarea{font:13px Microsoft YaHei,tahoma,arial,Hiragino Sans GB,\\5B8B\4F53,sans-serif;color:#3c3c3c}
+body,button,input,select,textarea{font:13px/1.531 'microsoft yahei',sans-serif;color:#3c3c3c}
 ul,ol{list-style:none}
 a{text-decoration:none;color:#3c3c3c}
 a:hover{text-decoration:none}
@@ -20,13 +20,23 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 ::-webkit-scrollbar-thumb:horizontal:hover{background-color:#3B3B3B}
 ::-webkit-scrollbar-corner:horizontal{background-color:#535353}
 ::-webkit-scrollbar-resizer:horizontal{background-color:#FF6E00}
+.container{padding:0 8px}
+.container-fluid{padding:0 16px}
 .input{height:40px;line-height:38px;width:100%;border:1px solid #f1eeee;padding:0 10px;border-radius:4px;background:#fff}
 .input::placeholder{color:#666666}
 .input:focus{outline:none}
 .left{float:left}
+.hide,.hidden{display:none}
 .right{float:right}
+.w30{widows:30%}
+.w35{width:35%}
 .w50{width:50%}
+.w65{width:65%}
+.w70{width:70%}
 .w100{width:100%}
+@media screen and (max-width:750px ) {
+	.w50 {width:100%}
+}
 .pointer{cursor:pointer}
 .clear{clear:both}
 .relative{position:relative}
@@ -50,8 +60,14 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 .switch_status{background-image:url(/image/computer/switch.png);background-repeat:no-repeat;margin:0px 2px 0px 2px;position:relative;line-height:18px;top:-1px;width:100px;height:22px}
 .switch_status.on{left:-3px}
 .switch_status.off{left:-36px}
-.glyphicon:hover {color:#e7502b}
+.glyphicon:hover{color:#e7502b}
+.table{background-color:#F9F9F9;color:#666666;border-left:1px dotted #CCCCCC;border-top:1px dotted #CCCCCC}
+.table td,.table th{border-right:1px dotted #CCCCCC; border-bottom:1px dotted #CCCCCC;padding:7px}
+.table th {background-color: #EEEEEE}
+.btn{display: block;height:46px;border:none;line-height:46px;font-size:18px;padding:0 16px;width:100%;border-radius:5px;cursor:pointer;font-weight:400}
+.btn:hover,.btn:active{outline:none;border-color:transparent;box-shadow:none}
+.btn.btn-primary{background:#418ada;color:#ffffff}
 #header-nav{margin-top:10px;margin-bottom:15px}
 #header-nav .nav{border-left-width:2px;border-left-style:solid;border-left-color:#e7502b;line-height:20px;padding-left:10px}
-#header-nav .nav a {display: none}
-#header-nav .nav:hover a {display: inline-block}
+#header-nav .nav a{display: none}
+#header-nav .nav:hover a{display: inline-block}

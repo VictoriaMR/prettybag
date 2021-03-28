@@ -50,6 +50,10 @@ function isWin()
 {
     return strpos(php_uname(), 'Windows') !== false;
 }
+function isPost()
+{
+    return ($_SERVER['REQUEST_METHOD'] == 'POST' && (empty($_SERVER['HTTP_REFERER']) || preg_replace('~https?:\/\/([^\:\/]+).*~i', '\\1', $_SERVER['HTTP_REFERER']) == preg_replace('~([^\:]+).*~', '\\1', $_SERVER['HTTP_HOST']))) ? true : false;
+}
 function config($name = '') 
 {
     if (empty($name)) return $GLOBALS;
