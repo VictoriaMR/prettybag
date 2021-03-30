@@ -4,7 +4,8 @@ namespace App\Controllers;
 
 class Controller 
 {
-    protected $_nav = [];
+    protected $_nav;
+    protected $_tag;
     
 	protected function result($code, $data=[], $options=[])
     {
@@ -42,5 +43,14 @@ class Controller
     protected function assign($name, $value = null)
     {
         return assign($name, $value);
+    }
+
+    protected function _init()
+    {
+        $this->assign('_tag', $this->_tag);
+        $this->assign('_nav', $this->_nav);
+        $this->assign('_path', \Router::$_route['path']);
+        $this->assign('_func', \Router::$_route['func']);
+        $this->assign('_title', $this->_tag[\Router::$_route['func']] ?? '');
     }
 }

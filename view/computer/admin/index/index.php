@@ -24,11 +24,11 @@
 								<span class="glyphicon glyphicon-eye-open"></span>
 								<span class="ml6">概览</span>
 							</li>
-							<li data-title="管理人员" data-to="guanliyuan" data-src="<?php echo url('member/memberList');?>">
+							<li data-title="管理人员" data-to="guanliyuan">
 								<span class="glyphicon glyphicon-object-align-left"></span>
 								<span class="ml6">管理人员</span>
 							</li>
-							<li data-title="系统设置">
+							<li data-title="系统设置" data-to="systemInfo">
 								<span class="glyphicon glyphicon-cog"></span>
 								<span class="ml6">系统设置</span>
 							</li>
@@ -56,6 +56,15 @@
 									<span class="glyphicon glyphicon-user"></span>
 									<span class="ml6">人员列表</span>
 									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('member/memberList');?>"></a>
+								</li>
+							</ul>
+						</div>
+						<div class="item" data-for="systemInfo">
+							<ul>
+								<li data-src="<?php echo url('systemInfo');?>" class="selected">
+									<span class="glyphicon glyphicon-cloud"></span>
+									<span class="ml6">服务器信息</span>
+									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('systemInfo');?>"></a>
 								</li>
 							</ul>
 						</div>

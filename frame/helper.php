@@ -117,6 +117,10 @@ function redis($db = 0)
 {
     return \frame\Redis::getInstance($db);
 }
+function db($db=null)
+{
+    return \frame\Connection::getInstance($db);
+}
 function siteUrl($url = '')
 {
     return env('APP_DOMAIN').$url;

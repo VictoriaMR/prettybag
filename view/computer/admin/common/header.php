@@ -8,6 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/common', 'css');?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/bootstrap.min', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/datepicker', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/space', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('icon', 'css');?>">
@@ -22,15 +23,54 @@
     <?php }?>
 </head>
 <body>
+<div id="progressing"></div>
 <script type="text/javascript">
 var URI = "<?php echo env('APP_DOMAIN');?>";
+function progressing(val) {
+    if (document.readyState == 'complete') {
+        val = val + 50;
+        val = val > 100 ? 100 : val;
+    } else {
+        if (val < 80) {
+            val = val + 20;
+        }
+    }
+    $('#progressing').stop(true,true).animate({'width':val+'%'}, 100, function(){
+        if (val >= 100) {
+            $('#progressing').fadeOut(150);
+        } else {
+            progressing(val);
+        }
+    });
+    return true;
+} 
+$(function(){
+    $('#progressing').show();
+    progressing(20);
+    var progressingTimeHandle = null;
+});
 </script>
 <?php if (!empty($_nav)) {?>
 <div id="header-nav" class="container-fluid">
     <div class="nav">
-        <span><?php echo implode(' &gt; ', $_nav);?></span>
+        <span><?php echo $_nav['default'];?></span>
+        <?php if (!empty($_nav[$_func])){?>
+        <span>&gt;<?php echo $_nav[$_func];?></span>
+        <?php } ?>
         <a href="<?php echo url();?>" class="glyphicon glyphicon-repeat ml12" title="重新加载"></a>
         <a href="<?php echo url();?>" target="_blank" class="glyphicon glyphicon-link ml12" title="新页面打开"></a>
     </div>
+</div>
+<?php } ?>
+<?php if (!empty($_tag)) {?>
+<div class="container-fluid" style="margin-bottom: 15px;">
+    <ul class="nav-tabs">
+        <?php foreach ($_tag as $key => $value) {?>
+            <li<?php if($_func == $key) echo ' class="active"';?>>
+                <a href="<?php echo url($_path.'/'.$key);?>"><?php echo $value;?></a>
+            </li>
+        <?php } ?>
+    </ul>
+    <div class="clear"></div>
 </div>
 <?php } ?>

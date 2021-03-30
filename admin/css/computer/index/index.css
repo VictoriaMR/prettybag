@@ -155,8 +155,9 @@
 	color: #e7502b;
 }
 #index-page .left-content .left-two .item .glyphicon-link {
-	margin-top: 11px;
-	margin-right: 5px;
+	position: absolute;
+	top: 11px;
+	right: 5px;
 }
 #index-page .body .content-right {
 	width: calc(100% - 256px);

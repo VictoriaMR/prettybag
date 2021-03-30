@@ -10,7 +10,12 @@ class IndexController extends Controller
 {
 	public function __construct()
 	{
-		$this->_nav[] = '概览';
+        $arr = [
+            'index' => '首页',
+            'statInfo' => '统计信息',
+        ];
+		$this->_nav = array_merge(['default' => '概览'], $arr);
+        $this->_init();
 	}
 
 	public function index()
@@ -19,7 +24,6 @@ class IndexController extends Controller
 		Html::addJs();
 		
 		$this->assign('info', Session::get('admin'));
-		$this->assign('_title', '首页');
 		return view();
 	}
 
@@ -43,9 +47,6 @@ class IndexController extends Controller
 
         $cpuInfo = $this->getCpuInfo();
 
-		$this->_nav[] = '全部概览';
-		$this->assign('_title', '统计信息');
-		$this->assign('_nav', $this->_nav);
         $this->assign('viewAgentInfo', $viewAgentInfo);
         $this->assign('viewerInfo', $viewerInfo);
         $this->assign('cpuInfo', $cpuInfo);
