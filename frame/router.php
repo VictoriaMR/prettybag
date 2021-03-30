@@ -7,21 +7,28 @@ final class Router
 	{
 		$pathInfo = trim($_SERVER['REQUEST_URI'], DS);
 		self::$_route['class'] = ucfirst(APP_TEMPLATE_TYPE);
+		$_GET = [];
 		if (empty($pathInfo)) {
 			self::$_route['path'] = 'Index';
 			self::$_route['func'] = 'index';
 		} else {
-			$pathInfo = explode(DS, explode('?', $pathInfo)[0]);
-			if (empty($pathInfo[0])) {
+			$pathInfo = parse_url($pathInfo);
+			if (!empty($pathInfo['query'])) {
+				foreach (explode('&', $pathInfo['query']) as $chunk) {
+    				$param = explode('=', $chunk);
+    				$_GET[$param[0]] = $param[1] ?? '';
+    			}
+			}
+			if (empty($pathInfo)) {
 				self::$_route['path'] = 'Index';
 				self::$_route['func'] = 'index';
 			} else {
-				if (APP_TEMPLATE_TYPE == 'home' && strpos($pathInfo[0], '.html') !== false) {
+				if (APP_TEMPLATE_TYPE == 'home' && strpos($pathInfo['path'], '.html') !== false) {
 					//设置默认语言
 					if (empty(\frame\Session::get('home_language_id'))) {
 						\frame\Session::set('home_language_id', 1);
 					}
-					$pathInfo = explode('-', rtrim($pathInfo[0], '.html'));
+					$pathInfo = explode('-', rtrim($pathInfo['path'], '.html'));
 					$temp = array_pop($pathInfo);
 					//是页码
 					if (strlen($temp) > 1 && strpos($temp, 'p') === 0) {
@@ -46,6 +53,7 @@ final class Router
 					}
 					self::$_route['func'] = 'index';
 				} else {
+					$pathInfo = explode(DS, $pathInfo['path']);
 			        switch (count($pathInfo)) {
 			        	case 0:
 			        		self::$_route['path'] = 'Index';

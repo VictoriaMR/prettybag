@@ -210,3 +210,7 @@ function getSystem($agent = '')
         }
     }
 }
+function page($size=null, $total=null)
+{
+    return \frame\Paginator::getInstance()->make($size, $total);
+}
