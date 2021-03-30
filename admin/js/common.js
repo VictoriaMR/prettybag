@@ -21,3 +21,13 @@ var VERIFY = {
 		return reg.test(input);
 	}
 };
+$(function(){
+	//选择按钮组点击
+	$('form .btn-group .btn').on('click', function(){
+		var obj = $(this).parents('.row-item').find('input[type="hidden"]');
+		if (obj.length > 0) {
+			obj.val($(this).data('id'));
+			obj.parents('form').eq(0).submit();
+		}
+	});
+})

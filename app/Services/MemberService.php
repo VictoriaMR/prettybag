@@ -130,4 +130,27 @@ class MemberService extends BaseService
     {
         return redis()->foget($this->getInfoCacheKey($userId));
     }
+
+    public function getTotal(array $where)
+    {
+    	return $this->baseModel->where($where)->count();
+    }
+
+    public function getList(array $where, $page=1, $size=20)
+    {
+    	$list = $this->baseModel->where($where)->page($page, $size)->get();
+    	if (!empty($list)) {
+    		foreach ($list as $key => $value) {
+    			unset($value['password']);
+    			if (empty($value['avatar'])) {
+	        		$value['avatar'] = $this->getDefaultAvatar($value['mem_id']);
+	        	} else {
+	        		$value['avatar'] = mediaUrl($value['avatar']);
+	        	}
+	        	$list[$key] = $value;
+    		}
+    	}
+    	return $value;
+    }
+
 }

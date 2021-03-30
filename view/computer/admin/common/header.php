@@ -8,7 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/common', 'css');?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/bootstrap.min', 'css');?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/bootstrap', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/datepicker', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/space', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('icon', 'css');?>">
@@ -64,7 +64,7 @@ $(function(){
 <?php } ?>
 <?php if (!empty($_tag)) {?>
 <div class="container-fluid" style="margin-bottom: 15px;">
-    <ul class="nav-tabs">
+    <ul class="nav nav-tabs">
         <?php foreach ($_tag as $key => $value) {?>
             <li<?php if($_func == $key) echo ' class="active"';?>>
                 <a href="<?php echo url($_path.'/'.$key);?>"><?php echo $value;?></a>

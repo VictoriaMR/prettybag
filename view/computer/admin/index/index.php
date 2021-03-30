@@ -52,10 +52,10 @@
 						</div>
 						<div class="item" data-for="guanliyuan">
 							<ul>
-								<li data-src="<?php echo url('member/memberList');?>" class="selected">
+								<li data-src="<?php echo url('member');?>" class="selected">
 									<span class="glyphicon glyphicon-user"></span>
 									<span class="ml6">人员列表</span>
-									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('member/memberList');?>"></a>
+									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('member');?>"></a>
 								</li>
 							</ul>
 						</div>

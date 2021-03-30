@@ -1,0 +1,5 @@
+var MEMBERLIST = {
+	init: function() {
+		$('')
+	}
+};

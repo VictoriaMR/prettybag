@@ -90,6 +90,15 @@ Class Query
         return $this;
 	}
 
+	public function page($page, $size)
+	{
+		$page = (int) $page;
+		$page = $page > 1 ? $page : 1;
+		$this->_offset = $page - 1;
+		$this->_limit = (int) $size;
+		return $this;
+	}
+
 	public function get()
 	{
 		return $this->getResult();
@@ -170,10 +179,10 @@ Class Query
 			$this->_sql .= ' ORDER BY ' . rtrim($this->_orderBy, ',');
 		}
 		if ($this->_offset !== null) {
-			$this->_sql .= ' LIMIT ' . (int) $this->_offset;
+			$this->_sql .= ' LIMIT ' . $this->_offset;
 		}
 		if ($this->_limit !== null ) {
-			$this->_sql .= ',' . (int) $this->_limit;
+			$this->_sql .= ',' . $this->_limit;
 		}
 		return $this->_sql;
 	}

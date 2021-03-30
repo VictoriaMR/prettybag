@@ -15,7 +15,6 @@ class IndexController extends Controller
             'statInfo' => '统计信息',
         ];
 		$this->_nav = array_merge(['default' => '概览'], $arr);
-        $this->_init();
 	}
 
 	public function index()
@@ -50,7 +49,7 @@ class IndexController extends Controller
         $this->assign('viewAgentInfo', $viewAgentInfo);
         $this->assign('viewerInfo', $viewerInfo);
         $this->assign('cpuInfo', $cpuInfo);
-
+        $this->_init();
 		return view();
 	}
 

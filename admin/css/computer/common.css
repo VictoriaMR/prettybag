@@ -67,9 +67,6 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 .table td,.table th{border-right:1px dotted #CCCCCC; border-bottom:1px dotted #CCCCCC;padding:7px}
 .table.table-border td,.table.table-border th{border-right:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC}
 .table th {background-color: #EEEEEE}
-.btn{display: block;height:46px;border:none;line-height:46px;font-size:18px;padding:0 16px;width:100%;border-radius:5px;cursor:pointer;font-weight:400}
-.btn:hover,.btn:active{outline:none;border-color:transparent;box-shadow:none}
-.btn.btn-primary{background:#418ada;color:#ffffff}
 .col1{width:calc(100% / 12)}
 .col2{width:calc(100% / 6)}
 .col3{width:calc(100% / 4)}

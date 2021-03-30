@@ -125,3 +125,6 @@
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
+.btn{display: block;height:46px;border:none;line-height:46px;font-size:18px;padding:0 16px;width:100%;border-radius:5px;cursor:pointer;font-weight:400}
+.btn:hover,.btn:active{outline:none;border-color:transparent;box-shadow:none}
+.btn.btn-primary{background:#418ada;color:#ffffff}
