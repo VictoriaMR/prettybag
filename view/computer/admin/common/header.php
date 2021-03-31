@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/common', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/bootstrap', 'css');?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/datepicker', 'css');?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/bootstrap-plugin', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/space', 'css');?>">
     <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('icon', 'css');?>">
     <?php foreach (\frame\Html::getCss() as $value) { ?>
@@ -17,7 +17,8 @@
     <?php }?>
     <script type="text/javascript" src="<?php echo staticUrl('jquery', 'js');?>"></script>
     <script type="text/javascript" src="<?php echo staticUrl('common', 'js');?>"></script>
-    <script type="text/javascript" src="<?php echo staticUrl('button', 'js');?>"></script>
+    <script type="text/javascript" src="<?php echo staticUrl('bootstrap', 'js');?>"></script>
+    <script type="text/javascript" src="<?php echo staticUrl('bootstrap-plugin', 'js');?>"></script>
     <?php foreach (\frame\Html::getJs() as $value) { ?>
     <script type="text/javascript" src="<?php echo $value;?>"></script>
     <?php }?>

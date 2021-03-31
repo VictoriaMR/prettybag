@@ -92,9 +92,7 @@ Class Query
 
 	public function page($page, $size)
 	{
-		$page = (int) $page;
-		$page = $page > 1 ? $page : 1;
-		$this->_offset = $page - 1;
+		$this->_offset = ($page - 1) * $size;
 		$this->_limit = (int) $size;
 		return $this;
 	}

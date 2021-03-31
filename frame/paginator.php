@@ -10,7 +10,7 @@ class Paginator
     protected $total = 0;
     protected $current = 1;
     protected $config = [
-            'global' => '<nav><ul class="pagination"><li  class="disabled"><span>总共 {total} 条, {size} 条每页, 共 {totalPage} 页</span></li>{first}{prev}{paging}{next}{last}</ul></nav>',
+            'global' => '<nav><ul class="pagination"><li  class="disabled"><span>合计 {total} 条, 每页 {size} 条, 共 {totalPage} 页</span></li>{first}{prev}{paging}{next}{last}</ul></nav>',
             'first' => [
                 'enabled' => '<li><a href="{url}">{text}</a></li>',
                 'disabled' => '<li  class="disabled"><span>{text}</span></li>',

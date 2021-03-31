@@ -3,9 +3,9 @@ body,button,input,select,textarea{font:13px/1.531 'microsoft yahei',sans-serif;c
 ul,ol{list-style:none}
 a{text-decoration:none;color:#3c3c3c;cursor:pointer}
 a:hover{text-decoration:none}
-img{border:0;max-width:100%;max-height:100%}
-table{border-collapse:collapse;border-spacing:0}
-body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSHADOW-COLOR:#A8C7DD;SCROLLBAR-BASE-COLOR:#000000;SCROLLBAR-HIGHLIGHT-COLOR:#ffffff;SCROLLBAR-SHADOW-COLOR:#ffffff;SCROLLBAR-TRACK-COLOR:#e9f1f7;SCROLLBAR-3DLIGHT-COLOR:#bcd4e5;}
+img{max-width:100%;max-height:100%}
+table{border-collapse:collapse;border-spacing:0;border-bottom:solid 1px #dedede}
+body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSHADOW-COLOR:#A8C7DD;SCROLLBAR-BASE-COLOR:#000000;SCROLLBAR-HIGHLIGHT-COLOR:#ffffff;SCROLLBAR-SHADOW-COLOR:#ffffff;SCROLLBAR-TRACK-COLOR:#e9f1f7;SCROLLBAR-3DLIGHT-COLOR:#bcd4e5}
 ::-webkit-scrollbar{width:7px;height:10px}
 ::-webkit-scrollbar-button:vertical{display:none}
 ::-webkit-scrollbar-track:vertical{background-color:black}
@@ -34,9 +34,10 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 .w65{width:65%}
 .w70{width:70%}
 .w100{width:100%}
-@media screen and (max-width:750px ) {
-	.w50 {width:100%;padding-left:0 !important;padding-right:0 !important}
+@media screen and (max-width:750px ){
+	.w50{width:100%;padding-left:0 !important;padding-right:0 !important}
 }
+.tc{text-align:center}
 .pointer{cursor:pointer}
 .clear{clear:both}
 .relative{position:relative}
@@ -62,18 +63,20 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 .switch_status.on{left:-3px}
 .switch_status.off{left:-36px}
 .glyphicon:hover{color:#e7502b}
-.table{background-color:#F9F9F9;color:#666666;border-left:1px dotted #CCCCCC;border-top:1px dotted #CCCCCC;width:100%}
-.table.table-border{border-left:1px solid #CCCCCC;border-top:1px solid #CCCCCC}
-.table td,.table th{border-right:1px dotted #CCCCCC; border-bottom:1px dotted #CCCCCC;padding:7px}
-.table.table-border td,.table.table-border th{border-right:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC}
-.table th {background-color: #EEEEEE}
-.col1{width:calc(100% / 12)}
-.col2{width:calc(100% / 6)}
-.col3{width:calc(100% / 4)}
-.col4{width:calc(100% / 3)}
-.col6{width:calc(100% / 2)}
+.avatar-hover{position:relative;height:36px;cursor:pointer}
+.avatar-hover img{margin:0px;padding:0px;vertical-align:top;height:36px;width:36px;border-radius:50%;box-sizing:border-box;position:absolute;left:0px;bottom:0px;transition:700ms;max-width:unset;max-height:unset}
+.avatar-hover:hover img{width:120px;height:120px;transition:700ms}
+.centerShow{box-sizing:border-box;box-shadow:0 5px 7px rgb(0 0 0 / 30%);border-radius:5px;width:345px;height:auto;padding:20px;background-color:#f1f1F1;margin-right:auto;margin-left:auto;text-align:left;position:fixed;z-index:99}
+.centerShow .dealbox-title,.centerShow .input-group{margin-bottom:20px}
+.mask{position:fixed;height:100%;width:100%;background:#000;opacity:0.2;left:0;top:0;z-index:66}
+#rightTips{position:fixed;top:4px;right:4px;width:200px;z-index:999}
+#rightTips .info{position:relative;width:100%;padding:12px;border-radius:5px;background-color:#333336;margin-bottom:8px;color:white;word-break:break-all}
+#rightTips .success{color:#3c763d;background-color:#dff0d8;border:1px solid #d6e9c6}
+#rightTips .error{color:#a94442;background-color:#f2dede;border:1px solid #ebccd1}
+#rightTips .info .glyphicon-remove{cursor:pointer;position:absolute;top:4px;right:4px;transition:1s}
+#rightTips .info .glyphicon-remove:hover{transform:rotate(180deg)}
 #progressing{width:1px;height:3px;display:block;background-color:#e7502b;position:absolute;left:0px;top:0px}
 #header-nav{margin-top:10px;margin-bottom:15px}
 #header-nav .nav{border-left-width:2px;border-left-style:solid;border-left-color:#e7502b;line-height:20px;padding-left:10px}
-#header-nav .nav a{display: none}
-#header-nav .nav:hover a{display: inline-block}
+#header-nav .nav a{display:none}
+#header-nav .nav:hover a{display:inline-block}

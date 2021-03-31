@@ -150,7 +150,7 @@ class MemberService extends BaseService
 	        	$list[$key] = $value;
     		}
     	}
-    	return $value;
+    	return $list;
     }
 
 }
