@@ -45,6 +45,9 @@ function successTips(msg) {
 function errorTips(msg) {
 	addRightTips(msg, 'error');
 }
+function isScroll() {
+    return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
+}
 (function($){
 	$.fn.offsetCenter = function(width, height) {
 	    var obj = $(this).find('.centerShow');
@@ -59,7 +62,7 @@ function errorTips(msg) {
 	    } else {
 	        var h = $(window).innerHeight();
 	    }
-	    h = (h / 2) - (h - obj.actual('innerHeight'))/2 + 20;
+	    h = (h / 2) - (h - obj.actual('innerHeight'))/2 - 50;
 	    obj.css('position','fixed');
 	    obj.css('top',h+'px');
 	    obj.css('left',w+'px');
@@ -69,9 +72,25 @@ function errorTips(msg) {
 	            obj.offsetCenter(width, height);
 	        });
 	        obj.find('.close').on('click', function() {
-	            obj.hide();
+	            obj.parent().dealboxHide();
 	        });
 	    }
+	};
+	$.fn.dealboxShow = function(width, height) {
+		var obj = $(this);
+		$('body').css({'overflow': 'hidden'});
+		if (isScroll()) {
+			$('body').css({'padding-right': '6.5px'});
+		}
+		obj.show();
+		return obj;
+	};
+	$.fn.dealboxHide = function(width, height) {
+		var obj = $(this);
+		$('body').css({'overflow': 'auto'});
+		$('body').css({'padding-right': 0});
+		obj.hide();
+		return obj;
 	};
 }(jQuery));
 $(function(){

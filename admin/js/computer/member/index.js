@@ -12,6 +12,12 @@ var MEMBERLIST = {
 	    $('#dealbox .btn.save').on('click', function(){
 	    	
 	    });
+	    //改变状态按钮
+	    $('#data-list .switch_botton').on('click', function(){
+	    	var status = $(this).data('status') == 0 ? 1 : 0;
+	    	$.post(URI+'member', {opn:'modify', mem_id: $(this).parents('tr').data('id'), status: status}, function(res) {
+	    	});
+	    });
 	},
 	initDealbox: function(mem_id, callback) {
 		if (mem_id) {
@@ -38,7 +44,7 @@ var MEMBERLIST = {
 			obj.find('.dealbox-title').text('新增管理员');
 			obj.find('input[name="salt"]').hide();
 		}
-		obj.show();
+		obj.dealboxShow();
 		if (callback) {
 			callback();
 		}

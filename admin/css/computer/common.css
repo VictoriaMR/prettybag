@@ -30,7 +30,7 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 .right{float:right}
 .w30{widows:30%}
 .w35{width:35%}
-.w50{width:50%}
+.w50{width:50% !important}
 .w65{width:65%}
 .w70{width:70%}
 .w100{width:100%}

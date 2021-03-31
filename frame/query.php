@@ -136,6 +136,22 @@ Class Query
 		return $this->getQuery($sql);
 	}
 
+	public function update($data = [])
+	{
+		if (empty($data)) return false;
+		$tempArr = [];
+		foreach ($data as $key => $value) {
+			$tempArr[] = "`".$key."`="."'".$value."'";
+		}
+		$this->analyzeWhere();
+		if (!empty($this->_whereString)){
+			$sql = sprintf('UPDATE %s SET %s WHERE %s', $this->_table, implode(', ', $tempArr), $this->_whereString);
+		} else{
+			$sql = sprintf('UPDATE %s SET %s', $this->_table, implode(', ', $tempArr));
+		}
+		return $this->getQuery($sql, $this->_param);
+	}
+
 	public function insertGetId($data)
 	{
 		$result = $this->insert($data);
@@ -232,7 +248,7 @@ Class Query
 				$this->_whereString .= ' )';
 			}
 		}
-		$this->_whereString = trim($this->_whereString);
+		$this->_whereString = trim(trim(trim($this->_whereString), 'AND'));
 		return true;
 	}
 
@@ -252,9 +268,13 @@ Class Query
 			    $stmt->bind_param($this->analyzeType(), ...$params);
 			    $stmt->execute();
 			    $result = $stmt->get_result();
-		        while ($row = $result->fetch_assoc()) {
-		        	$returnData[] = $row;
-		        }
+			    if (empty($result)) {
+			    	$returnData = $stmt->affected_rows;
+			    } else {
+			        while ($row = $result->fetch_assoc()) {
+			        	$returnData[] = $row;
+			        }
+			    }
 			    $stmt->free_result();
 			    $stmt->close();
 			} else {

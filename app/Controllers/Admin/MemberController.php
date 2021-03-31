@@ -22,13 +22,12 @@ class MemberController extends Controller
 	{
 		if (isPost()) {
 			$opn = ipost('opn');
-			if (in_array($opn, ['getInfo'])) {
+			if (in_array($opn, ['getInfo', 'modify'])) {
 				$this->$opn();
 			}
 		}
 
 		Html::addJs();
-
 		$status = (int) iget('status', -1);
 		$page = (int) iget('page', 1);
 		$size = (int) iget('size', 20);
@@ -64,6 +63,21 @@ class MemberController extends Controller
 		$this->assign('etime', $etime);
 
 		return view();
+	}
+
+	protected function modify()
+	{
+		$memId = (int) ipost('mem_id');
+		$status = (int) ipost('status');
+		if (empty($memId)) {
+			$this->error('账户ID不能为空');
+		}
+		$result = make('App/Services/Admin/MemberService')->updateDataById($memId, ['status' => $status]);
+		if ($result) {
+			$this->success('操作成功');
+		} else {
+			$this->error('操作失败');
+		}
 	}
 
 	protected function getInfo()

@@ -32,7 +32,7 @@
 		</div>
 		<div class="clear"></div>
 	</form>
-	<table class="table table-hover mt20">
+	<table class="table table-hover mt20" id="data-list">
         <tbody>
 	        <tr>
 	            <th class="col-md-1">ID</th>
@@ -54,7 +54,7 @@
         	</tr>
         	<?php } else {?>
         	<?php foreach ($list as $key => $value) { ?>
-        	<tr>
+        	<tr data-id="<?php echo $value['mem_id'];?>">
         		<td class="col-md-1"><?php echo $value['mem_id'];?></td>
         		<td class="col-md-1">
         			<div class="avatar-hover">

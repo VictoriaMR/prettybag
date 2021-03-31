@@ -14,18 +14,18 @@
 			<span class="glyphicon glyphicon-warning-sign left orange"></span>
 			<div id="login-error-msg" class="left ml4">请输入帐户名</div>
 		</div>
-		<div>
-			<input type="text" class="input" name="phone" placeholder="请输入手机号码" autocomplete="off">
+		<div class="">
+			<input type="text" class="form-control w100" name="phone" placeholder="请输入手机号码" autocomplete="off">
+		</div>
+		<div class="mt20 ">
+			<input type="password" class="form-control w100" name="password" placeholder="请输入密码" autocomplete="off">
 		</div>
 		<div class="mt20">
-			<input type="password" class="input" name="password" placeholder="请输入密码" autocomplete="off">
-		</div>
-		<div class="mt20">
-			<input type="text" class="input w50 left" name="code" placeholder="验证码" autocomplete="off">
-			<img id="refresh" class="left pointer ml10" height="38" width="80" src="<?php echo url('login/loginCode');?>" onclick="document.getElementById('refresh').src='<?php echo url('login/loginCode');?>'" title="看不清？换一张">
+			<input type="text" class="form-control w50 left" name="code" placeholder="验证码" autocomplete="off">
+			<img id="refresh" class="left pointer ml10" height="34" width="80" src="<?php echo url('login/loginCode');?>" onclick="document.getElementById('refresh').src='<?php echo url('login/loginCode');?>'" title="看不清？换一张">
 			<div class="clear"></div>
 		</div>
-		<button id="login-btn" type="button" class="btn btn-primary mt20" data-loading-text="Loading...">登录</button>
+		<button id="login-btn" type="button" class="btn btn-primary btn-lg w100 mt20">登录</button>
 	</form>
 </div>
 <script type="text/javascript">

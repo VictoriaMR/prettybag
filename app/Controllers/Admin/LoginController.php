@@ -22,7 +22,7 @@ class LoginController extends Controller
 		$imageService = make('App/Services/ImageService');
 		$code = make('App/Services/Base')->getSalt();
 		Session::set('admin_login_code', $code);
-		$imageService->verifyCode($code, 80, 38);
+		$imageService->verifyCode($code, 80, 34);
 	    exit();
 	}
 
