@@ -74,6 +74,9 @@ function isScroll() {
 	        obj.find('.close').on('click', function() {
 	            obj.parent().dealboxHide();
 	        });
+	        obj.parent().find('.mask').on('click', function() {
+	            obj.parent().dealboxHide();
+	        });
 	    }
 	};
 	$.fn.dealboxShow = function(width, height) {
@@ -92,6 +95,17 @@ function isScroll() {
 		obj.hide();
 		return obj;
 	};
+	$.fn.switchBtn = function(status) {
+		var obj = $(this);
+		console.log(status,'status')
+		obj.data('status', status);
+		if (status == 1) {
+			obj.find('.switch_status').removeClass('off').addClass('on');
+		} else {
+			obj.find('.switch_status').removeClass('on').addClass('off');
+		}
+		return obj;
+	}
 }(jQuery));
 $(function(){
 	//选择按钮组点击

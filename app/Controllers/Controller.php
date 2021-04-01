@@ -22,7 +22,11 @@ class Controller
     protected function success($data=[], $options=[])
     {
         if (empty($options['message'])) {
-            $options['message'] = 'success';
+            if (!is_array($data)) {
+                $options['message'] = $data;
+            } else {
+                $options['message'] = 'success';
+            }
         }
         $this->result('200', $data, $options);
     }

@@ -12,11 +12,11 @@
 		<div class="col-md-12 pt10">
 			<div class="form-group mt10 mr20">
 				<label for="short_name">手机号:</label>
-				<input type="text" class="form-control" name="phone" value="<?php echo $phone;?>" placeholder="手机号码">
+				<input type="text" class="form-control" name="phone" value="<?php echo $phone;?>" placeholder="手机号码" autocomplete="off">
 			</div>
 			<div class="mr20 form-group mt10">
 				<label for="contact">名称:</label>
-				<input type="text" class="form-control" name="name" value="<?php echo $name;?>" placeholder="名称关键字">
+				<input type="text" class="form-control" name="name" value="<?php echo $name;?>" placeholder="名称关键字" autocomplete="off">
 			</div>
 			<div class="mr20 form-group mt10">
 				<label for="contact">日期:</label>

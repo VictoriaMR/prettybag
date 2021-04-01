@@ -44,7 +44,7 @@ class MemberController extends Controller
 			$where['name,nickname'] = ['like', '%'.$name.'%'];
 		}
 		if (!empty($phone)) {
-			$where['phone'] = ['like', '%'.$phone.'%'];
+			$where['mobile'] = ['like', '%'.$phone.'%'];
 		}
 
 		$memberService = make('App/Services/Admin/MemberService');

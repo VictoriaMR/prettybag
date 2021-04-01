@@ -14,8 +14,15 @@ var MEMBERLIST = {
 	    });
 	    //改变状态按钮
 	    $('#data-list .switch_botton').on('click', function(){
-	    	var status = $(this).data('status') == 0 ? 1 : 0;
+	    	var obj = $(this);
+	    	var status = obj.data('status') == 0 ? 1 : 0;
 	    	$.post(URI+'member', {opn:'modify', mem_id: $(this).parents('tr').data('id'), status: status}, function(res) {
+	    		if (res.code == 200) {
+	    			obj.switchBtn(status);
+					successTips(res.message);
+				} else {
+					errorTips(res.message);
+				}
 	    	});
 	    });
 	},
