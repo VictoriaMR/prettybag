@@ -86,6 +86,9 @@ final class Router
 		if (empty($url)) {
 			$url = lcfirst(self::$_route['path']) . DS . lcfirst(self::$_route['func']);
 		}
+		if (empty($param)) {
+			$param = iget();
+		}
 		if (!empty($param)) {
 			$url .= '?' . http_build_query($param);
 		}

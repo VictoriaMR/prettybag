@@ -22,7 +22,7 @@ class MemberController extends Controller
 	{
 		if (isPost()) {
 			$opn = ipost('opn');
-			if (in_array($opn, ['getInfo', 'modify'])) {
+			if (in_array($opn, ['getInfo', 'modify', 'editInfo'])) {
 				$this->$opn();
 			}
 		}
@@ -92,6 +92,54 @@ class MemberController extends Controller
 		}
 		unset($info['password']);
 		$this->success($info);
+	}
+
+	protected function editInfo()
+	{
+		$mem_id = (int) ipost('mem_id');
+		$name = trim(ipost('name'));
+		$nickname = trim(ipost('nickname'));
+		$mobile = trim(ipost('mobile'));
+		$email = trim(ipost('email'));
+		$status = (int) ipost('status');
+		$password = trim(ipost('password'));
+		$repassword = trim(ipost('repassword'));
+		if (empty($mem_id) && empty($password)) {
+			$this->error('密码不能为空');
+		}
+		if (!empty($password)) {
+			if ($password != $repassword) {
+				$this->error('确认密码不匹配');
+			}
+		}
+		$data = [
+			'status' => $status,
+		];
+		if (!empty($name)) {
+			$data['name'] = $name;
+		}
+		if (!empty($nickname)) {
+			$data['nickname'] = $nickname;
+		}
+		if (!empty($mobile)) {
+			$data['mobile'] = $mobile;
+		}
+		if (!empty($email)) {
+			$data['email'] = $email;
+		}
+		if (!empty($password)) {
+			$data['password'] = $password;
+		}
+		$memberService = make('App/Services/Admin/MemberService');
+		if (empty($mem_id)) {
+			$result = $memberService->create($data);
+		} else {
+			$result = $memberService->updateDataById($mem_id, $data);
+		}
+		if ($result) {
+			$this->success('操作成功');
+		}
+		$this->error('操作失败');
 	}
 
 	public function loginLog()

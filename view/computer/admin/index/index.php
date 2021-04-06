@@ -1,6 +1,10 @@
 <?php $this->load('common/header');?>
 <div id="index-page">
-	<div class="header"></div>
+	<div class="header">
+		<div class="right">
+			<a href="<?php echo url('login/logout');?>" class="glyphicon glyphicon-log-out"></a>
+		</div>
+	</div>
 	<div class="body">
 		<div class="nav-left">
 			<div class="person">

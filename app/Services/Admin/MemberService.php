@@ -21,7 +21,7 @@ class MemberService extends BaseService
 		$data['password'] = password_hash($this->getPasswd($data['password'], $data['salt']), PASSWORD_BCRYPT);
 
 		$data['status'] = 1;
-		$data['create_at'] = time();
+		$data['create_at'] = $this->getTime();
 
 		return $this->baseModel->insertGetId($data);
     }

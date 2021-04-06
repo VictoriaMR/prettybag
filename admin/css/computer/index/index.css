@@ -4,6 +4,12 @@
     margin: 0px;
     background-color: #2b363e;
 }
+#index-page .header .right .glyphicon{
+	font-size: 18px;
+	line-height: 35px;
+	color: #ffffff;
+	margin-right: 16px;
+}
 #index-page .body {
 	width: 100%;
 	height: calc(100vh - 35px);

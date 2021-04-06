@@ -87,40 +87,44 @@
 	<div class="mask"></div>
 	<div class="centerShow">
 	    <form class="form-horizontal">
-	    	<input type="hidden" name="mem_id" value="0">
+	    	<input type="hidden" name="mem_id" class="no_show" value="0">
+	    	<input type="hidden" class="no_replace" name="opn" value="editInfo">
 	        <button type="button" class="close" aria-hidden="true">&times;</button>
 	        <div class="f24 dealbox-title">新增管理员</div>
 	        <div class="input-group">
-	            <div class="input-group-addon"><span>名称:</span></div>
+	            <div class="input-group-addon"><span>名称</span></div>
 	            <input type="text" class="form-control" name="name" required="required" maxlength="30" autocomplete="off">
 	        </div>
 	        <div class="input-group">
-	            <div class="input-group-addon"><span>昵称:</span></div>
+	            <div class="input-group-addon"><span>昵称</span></div>
 	            <input type="text" class="form-control" name="nickname" required="required" maxlength="30" autocomplete="off">
 	        </div>
 	        <div class="input-group">
-	            <div class="input-group-addon"><span>手机号码:</span></div>
+	            <div class="input-group-addon"><span>手机号码</span></div>
 	            <input type="text" class="form-control" name="mobile" required="required" maxlength="11" autocomplete="off">
 	        </div>
 	        <div class="input-group">
-	            <div class="input-group-addon"><span>邮箱:</span></div>
+	            <div class="input-group-addon"><span>邮箱</span></div>
 	            <input type="text" class="form-control" name="email" required="required" maxlength="30" autocomplete="off">
 	        </div>
 	        <div class="input-group">
-	            <div class="input-group-addon"><span>状态:</span></div>
-	            <input type="text" class="form-control" name="status" required="required" maxlength="30">
+	            <div class="input-group-addon"><span>状态</span></div>
+	            <div class="switch_botton ml20" data-status="0">
+                    <div class="switch_status off"></div>
+                </div>
+	            <input type="hidden" name="status" value="0">
 	        </div>
 	        <div class="input-group hidden">
-	            <div class="input-group-addon"><span>盐值:</span></div>
+	            <div class="input-group-addon"><span>盐值</span></div>
 	            <input type="text" class="form-control" readonly="readonly" name="salt">
 	        </div>
 	        <div class="input-group">
-	            <div class="input-group-addon"><span>密码:</span></div>
-	            <input type="password" class="form-control" name="password" required="required" maxlength="30" autocomplete="off">
+	            <div class="input-group-addon"><span>密码</span></div>
+	            <input type="password" class="form-control" name="password" maxlength="30" autocomplete="off">
 	        </div>
 	        <div class="input-group">
-	            <div class="input-group-addon"><span>重复密码:</span></div>
-	            <input type="password" class="form-control" name="repassword" required="required" maxlength="30" autocomplete="off">
+	            <div class="input-group-addon"><span>重复密码</span></div>
+	            <input type="password" class="form-control" name="repassword" maxlength="30" autocomplete="off">
 	        </div>
 	        <button type="button" class="btn btn-primary btn-lg btn-block save">确认</button>
 	    </form>

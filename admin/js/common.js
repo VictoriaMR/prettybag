@@ -21,6 +21,18 @@ var VERIFY = {
 		return reg.test(input);
 	}
 };
+function post(uri, param, callbck) {
+	$.post(uri, param, function(res) {
+		if (res.code == 200) {
+			successTips(res.message)
+			if (callbck) {
+				callbck(res);
+			}
+		} else {
+			errorTips(res.message);
+		}
+	});
+}
 function addRightTips(info, type, delay) {
     if(typeof delay == 'undefined') {
         delay = 5000;
@@ -105,7 +117,20 @@ function isScroll() {
 			obj.find('.switch_status').removeClass('on').addClass('off');
 		}
 		return obj;
-	}
+	};
+	$.fn.formFilter = function() {
+		var obj = $(this);
+		var status = true;
+		obj.find('[required="required"]').each(function(){
+			var val = $(this).val();
+			if (val == '') {
+				errorTips($(this).prev().text()+'不能为空');
+				status = false;
+				return false;
+			}
+		});
+		return status;
+	};
 }(jQuery));
 $(function(){
 	//选择按钮组点击
