@@ -1,7 +1,10 @@
 <?php
-function dd($data = '') 
+function dd(...$arg) 
 {
-	print_r($data);
+    foreach ($arg as $value) {
+	   print_r($value);
+       echo '<br />';
+    }
     exit();
 }
 function vv($data = '') 

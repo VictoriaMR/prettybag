@@ -153,4 +153,20 @@ class MemberService extends BaseService
     	return $list;
     }
 
+    public function getMemIdsByName($name)
+    {
+        if (empty($name)) return [];
+        $list = $this->baseModel->where(['name,nickname'=>['like', '%'.$name.'%']])->field('mem_id')->get();
+        if (empty($list)) return [];
+        return array_unique(array_column($list, 'mem_id'));
+    }
+
+    public function getMemIdsByMobile($mobile)
+    {
+        if (empty($mobile)) return [];
+        $list = $this->baseModel->where(['mobile'=>['like', '%'.$mobile.'%']])->field('mem_id')->get();
+        if (empty($list)) return [];
+        return array_unique(array_column($list, 'mem_id'));
+    }
+
 }

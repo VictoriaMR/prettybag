@@ -39,4 +39,48 @@ class CategoryService extends BaseService
         }
         return $cateId;
 	}
+
+    public function getList()
+    {
+        return make('App\Models\Category')->orderBy('sort', 'asc')->get();
+    }
+
+    public function getListFormat()
+    {
+        $list = $this->getList();
+        if (empty($list)) return [];
+        $list = $this->listFormat($list, 0, 0);
+        $returnData = [];
+        $this->arrayFormat($list, $returnData);
+        return $returnData;
+    }
+
+    protected function listFormat($list, $parentId=0, $lev=0) 
+    {
+        $returnData = [];
+        foreach ($list as $value) {
+            $value['level'] = $lev;
+            if ($value['parent_id'] == $parentId) {
+                $temp = $this->listFormat($list, $value['cate_id'], $value['level'] + 1);
+                if (!empty($temp)) {
+                    $value['son'] = $temp;
+                }
+                $returnData[] = $value;
+            }
+        }
+        return $returnData;
+    }
+
+    protected function arrayFormat($list, &$returnData)
+    {
+        foreach ($list as $value) {
+            $temp = $value;
+            unset($temp['son']);
+            $returnData[] = $temp;
+            if (!empty($value['son'])) {
+                $this->arrayFormat($value['son'], $returnData);
+            }
+        }
+        return true;
+    }
 }

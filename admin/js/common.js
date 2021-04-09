@@ -109,7 +109,6 @@ function isScroll() {
 	};
 	$.fn.switchBtn = function(status) {
 		var obj = $(this);
-		console.log(status,'status')
 		obj.data('status', status);
 		if (status == 1) {
 			obj.find('.switch_status').removeClass('off').addClass('on');

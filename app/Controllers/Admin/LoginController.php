@@ -46,7 +46,7 @@ class LoginController extends Controller
 			$data = [
 	            'mem_id' => Session::get('admin_mem_id'),
 	            'remark' => '登录管理后台',
-	            'type_id' => $logService::constant('TYPE_ID_LOGIN'),
+	            'type_id' => $logService::constant('TYPE_LOGIN'),
 	        ];
 	        $logService->addLog($data);
 			$this->result(200, ['url' => url('index')], ['message' => '登录成功!']);
@@ -69,11 +69,18 @@ class LoginController extends Controller
 
 	public function logout()
 	{
+		$logService = \App::make('App\Services\Admin\LogService');
+		$data = [
+            'mem_id' => Session::get('admin_mem_id'),
+            'remark' => '登出管理后台',
+            'type_id' => $logService::constant('TYPE_LOGOUT'),
+        ];
+        $logService->addLog($data);
 		Session::set('admin');
 		redirect(url('login'));
 	}
 
-	public function  signature()
+	public function signature()
     {
     	$text = !empty(Session::get('admin_name')) ? Session::get('admin_name') : '管理后台';
         make('App/Services/ImageService')->text(ROOT_PATH.'admin/image/computer/signature.png', $text, 12, 30, 10, 80, [235, 235, 235]);

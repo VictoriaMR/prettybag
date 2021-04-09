@@ -11,7 +11,7 @@ class MemberController extends Controller
 	{
         $arr = [
             'index' => '人员列表',
-            'loginLog' => '登录日志',
+            'loginLog' => '日志',
         ];
         $this->_tag = $arr;
 		$this->_nav = array_merge(['default' => '管理人员'], $arr);
@@ -145,19 +145,49 @@ class MemberController extends Controller
 	public function loginLog()
 	{
 		$page = (int) iget('page', 1);
-		$size = (int) iget('size', 20);
+		$size = (int) iget('size', 50);
+		$typeId = iget('type_id');
 		$name = trim(iget('name'));
-		$phone = trim(iget('phone'));
+		$mobile = trim(iget('mobile'));
 		$stime = trim(iget('stime'));
 		$etime = trim(iget('etime'));
 
+		$loggerService = make('App\Services\Admin\LogService');
+		$where = [];
+		if ($typeId >= 0) {
+			$where['type_id'] = (int) $typeId;
+		}
+		$memberService = make('App/Services/Admin/MemberService');
+		if (!empty($name)) {
+			$memIdArr = $memberService->getMemIdsByName($name);
+			if (!empty($memIdArr)) {
+				$where['mem_id'] = ['in', $memIdArr];
+			} else {
+				$where = ['mem_id' => 0];
+			}
+		}
+		if (!empty($mobile)) {
+			$tempArr = $memIdArr ?? [];
+			$memIdArr = $memberService->getMemIdsByMobile($mobile);
+			if (!empty($memIdArr)) {
+				$where['mem_id'] = ['in', array_unique(array_merge($tempArr, $memIdArr))];
+			} else {
+				$where = ['mem_id' => 0];
+			}
+		}
 
+		$total = $loggerService->getTotal($where);
+		if ($total > 0) {
+			$list = $loggerService->getList($where, $page, $size);
+		}
 
+		$this->assign('typeArr', $loggerService->getTypeList());
+		$this->assign('typeId', $typeId);
 		$this->assign('total', $total);
 		$this->assign('list', $list ?? []);
 		$this->assign('size', $size);
 		$this->assign('name', $name);
-		$this->assign('phone', $phone);
+		$this->assign('mobile', $mobile);
 		$this->assign('stime', $stime);
 		$this->assign('etime', $etime);
 

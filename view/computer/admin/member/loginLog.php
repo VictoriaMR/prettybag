@@ -1,10 +1,21 @@
 <?php $this->load('common/header');?>
 <div class="container-fluid">
 	<form action="<?php echo url();?>" class="form-inline">
+		<?php if (!empty($typeArr)) { ?>
+		<div class="row-item">
+			<input type="hidden" name="type_id" value="<?php echo $typeId;?>">
+			<div class="btn-group" role="group">
+				<button type="button" data-id="-1" class="btn <?php echo ($typeId >= 0) ? 'btn-default' : 'btn-primary';?>">全部</button>
+				<?php foreach ($typeArr as $key => $value) { ?>
+				<button type="button" data-id="<?php echo $key;?>" class="btn <?php echo $typeId == $key ? 'btn-primary' : 'btn-default';?>"><?php echo $value;?></button>
+				<?php } ?>
+			</div>
+		</div>
+		<?php }?>
 		<div class="col-md-12 pt10">
 			<div class="form-group mt10 mr20">
 				<label for="short_name">手机号:</label>
-				<input type="text" class="form-control" name="phone" value="<?php echo $phone;?>" placeholder="手机号码">
+				<input type="text" class="form-control" name="mobile" value="<?php echo $mobile;?>" placeholder="手机号码">
 			</div>
 			<div class="mr20 form-group mt10">
 				<label for="contact">名称:</label>
@@ -18,9 +29,6 @@
 			<div class="mr20 form-group mt10">
 				<button class="btn btn-info" type="submit"><i class="glyphicon glyphicon-search"></i> 查询</button>
 			</div>
-			<div class="form-group mt10 right">
-				<button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-plus-sign"></i> 新增人员</button>
-			</div>
 		</div>
 		<div class="clear"></div>
 	</form>
@@ -30,13 +38,12 @@
 	            <th class="col-md-1">ID</th>
 	            <th class="col-md-1">头像</th>
 	            <th class="col-md-1">名称</th>
-	            <th class="col-md-1">昵称</th>
-	            <th class="col-md-1">手机</th>
-	            <th class="col-md-1">状态</th>
-	            <th class="col-md-1">邮箱</th>
-	            <th class="col-md-1">盐值</th>
-	            <th class="col-md-1">添加时间</th>
-	            <th class="col-md-2">操作</th>
+	            <th class="col-md-1">浏览器</th>
+	            <th class="col-md-1">操作系统</th>
+	            <th class="col-md-1">备注</th>
+	            <th class="col-md-1">IP</th>
+	            <th class="col-md-1">时间</th>
+	            <th class="col-md-4">设备详细</th>
 	        </tr>
         	<?php if (empty($list)){ ?>
         	<tr>
@@ -47,27 +54,19 @@
         	<?php } else {?>
         	<?php foreach ($list as $key => $value) { ?>
         	<tr>
-        		<td class="col-md-1"><?php echo $value['mem_id'];?></td>
+        		<td class="col-md-1"><?php echo $value['log_id'];?></td>
         		<td class="col-md-1">
         			<div class="avatar-hover">
         				<img src="<?php echo $value['avatar'];?>">
         			</div>
         		</td>
         		<td class="col-md-1"><?php echo $value['name'];?></td>
-        		<td class="col-md-1"><?php echo $value['nickname'];?></td>
-        		<td class="col-md-1"><?php echo $value['mobile'];?></td>
-        		<td class="col-md-1">
-        			<div class="switch_botton" data-status="<?php echo $value['status'];?>">
-                        <div class="switch_status <?php echo $value['status'] == 1 ? 'on' : 'off';?>"></div>
-                    </div>
-        		</td>
-        		<td class="col-md-1"><?php echo $value['email'];?></td>
-        		<td class="col-md-1"><?php echo $value['salt'];?></td>
+        		<td class="col-md-1"><?php echo $value['browser'];?></td>
+        		<td class="col-md-1"><?php echo $value['system'];?></td>
+        		<td class="col-md-1"><?php echo empty($value['remark']) ? $value['type_text'] : $value['remark'];?></td>
+        		<td class="col-md-1"><?php echo $value['ip'];?></td>
         		<td class="col-md-1"><?php echo $value['create_at'];?></td>
-        		<td class="col-md-2">
-        			<button class="btn btn-primary btn-sm modify" type="button"><i class="glyphicon glyphicon-edit"></i> 修改</button>
-                    <button class="btn btn-danger btn-sm delete" type="button"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-        		</td>
+        		<td class="col-md-4"><?php echo $value['agent'];?></td>
         	</tr>
         	<?php } ?>
         	<?php }?>
@@ -75,9 +74,4 @@
     </table>
 	<?php echo page($size, $total);?>
 </div>
-<script type="text/javascript">
-$(function(){
-	MEMBERLIST.init();
-});
-</script>
 <?php $this->load('common/footer');?>

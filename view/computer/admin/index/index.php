@@ -2,6 +2,8 @@
 <div id="index-page">
 	<div class="header">
 		<div class="right">
+			<a href="" class="glyphicon glyphicon-bell" id="message"></a>
+			<a href="" class="glyphicon glyphicon-cog"></a>
 			<a href="<?php echo url('login/logout');?>" class="glyphicon glyphicon-log-out"></a>
 		</div>
 	</div>
@@ -31,6 +33,10 @@
 							<li data-title="管理人员" data-to="guanliyuan">
 								<span class="glyphicon glyphicon-object-align-left"></span>
 								<span class="ml6">管理人员</span>
+							</li>
+							<li data-title="产品管理" data-to="product">
+								<span class="glyphicon glyphicon-th"></span>
+								<span class="ml6">产品管理</span>
 							</li>
 							<li data-title="系统设置" data-to="systemInfo">
 								<span class="glyphicon glyphicon-cog"></span>
@@ -69,6 +75,15 @@
 									<span class="glyphicon glyphicon-cloud"></span>
 									<span class="ml6">服务器信息</span>
 									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('systemInfo');?>"></a>
+								</li>
+							</ul>
+						</div>
+						<div class="item" data-for="product">
+							<ul>
+								<li data-src="<?php echo url('product/cateList');?>" class="selected">
+									<span class="glyphicon glyphicon-th-list"></span>
+									<span class="ml6">产品分类</span>
+									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('product/cateList');?>"></a>
 								</li>
 							</ul>
 						</div>

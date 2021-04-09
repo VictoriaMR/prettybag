@@ -12,5 +12,7 @@ class Logger extends BaseModel
     protected $_primaryKey = 'log_id';
     //库
     protected $_connect = 'static';
-    const TYPE_ID_LOGIN = 0; //登录登出
+
+    const TYPE_LOGIN = 0; //登录
+    const TYPE_LOGOUT = 1; //登出
 }
