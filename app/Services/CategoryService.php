@@ -40,6 +40,29 @@ class CategoryService extends BaseService
         return $cateId;
 	}
 
+    public function getInfo($cateId)
+    {
+        $cateId = (int) $cateId;
+        if (empty($cateId)) {
+            return [];
+        }
+        $info = make('App\Models\Category')->loadData($cateId);
+        if (empty($info)) {
+            return [];
+        }
+        $info['avatar_format'] = empty($info['avatar']) ? staticUrl('image/common/noimg.png') : mediaUrl($info['avatar']);
+        return $info;
+    }
+
+    public function getLanguage($cateId)
+    {
+        $cateId = (int) $cateId;
+        if (empty($cateId)) {
+            return [];
+        }
+        return make('App\Models\CategoryLanguage')->getInfoByWhere(['cate_id' => $cateId]);
+    }
+
     public function getList()
     {
         return make('App\Models\Category')->orderBy('sort', 'asc')->get();

@@ -231,9 +231,40 @@ class ProductController extends Controller
 
 	public function cateList()
 	{
+		if (isPost()) {
+			$opn = ipost('opn');
+			if (in_array($opn, ['getCateInfo', 'getCateLanguage'])) {
+				$this->$opn();
+			}
+			$this->error('非法请求');
+		}
 		Html::addJs();
 		$list = make('App\Services\CategoryService')->getListFormat();
+		//语言列表
+		$language = make('App\Services\LanguageService')->getInfo();
+
+		$this->assign('language', $language);
 		$this->assign('list', $list);
 		return view();
+	}
+
+	protected function getCateInfo()
+	{
+		$cateId = (int) ipost('cate_id');
+		if (empty($cateId)) {
+			$this->error('ID值不正确');
+		}
+		$info = make('App\Services\CategoryService')->getInfo($cateId);
+		$this->success($info, '');
+	}
+
+	protected function getCateLanguage()
+	{
+		$cateId = (int) ipost('cate_id');
+		if (empty($cateId)) {
+			$this->error('ID值不正确');
+		}
+		$info = make('App\Services\CategoryService')->getLanguage($cateId);
+		$this->success($info, '');
 	}
 }

@@ -24,9 +24,11 @@ var VERIFY = {
 function post(uri, param, callbck) {
 	$.post(uri, param, function(res) {
 		if (res.code == 200) {
-			successTips(res.message)
+			if (res.message) {
+				successTips(res.message)
+			}
 			if (callbck) {
-				callbck(res);
+				callbck(res.data);
 			}
 		} else {
 			errorTips(res.message);
@@ -74,7 +76,7 @@ function isScroll() {
 	    } else {
 	        var h = $(window).innerHeight();
 	    }
-	    h = (h / 2) - (h - obj.actual('innerHeight'))/2 - 50;
+	    h = (h / 2) - (obj.actual('innerHeight') / 2);
 	    obj.css('position','fixed');
 	    obj.css('top',h+'px');
 	    obj.css('left',w+'px');

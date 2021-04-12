@@ -13,7 +13,7 @@ var MEMBERLIST = {
 	    	if (!$(this).parents('form').formFilter()) {
 	    		return false;
 	    	}
-	    	post(URI+'member', $(this).parents('form').serializeArray(), function(res){
+	    	post(URI+'member', $(this).parents('form').serializeArray(), function(data){
 	    		window.location.reload();
 	    	});
 	    });
@@ -27,13 +27,8 @@ var MEMBERLIST = {
 	    $('#data-list .switch_botton').on('click', function(){
 	    	var obj = $(this);
 	    	var status = obj.data('status') == 0 ? 1 : 0;
-	    	$.post(URI+'member', {opn:'modify', mem_id: $(this).parents('tr').data('id'), status: status}, function(res) {
-	    		if (res.code == 200) {
-	    			obj.switchBtn(status);
-					successTips(res.message);
-				} else {
-					errorTips(res.message);
-				}
+	    	post(URI+'member', {opn:'modify', mem_id: $(this).parents('tr').data('id'), status: status}, function(data) {
+	    		obj.switchBtn(status);
 	    	});
 	    });
 	    //修改
@@ -47,12 +42,8 @@ var MEMBERLIST = {
 	},
 	initDealbox: function(mem_id, callback) {
 		if (mem_id) {
-			$.post(URI+'member', {opn:'getInfo', mem_id: mem_id}, function(res) {
-				if (res.code == 200) {
-					MEMBERLIST.dealboxData(res.data, callback);
-				} else {
-					errorTips(res.message);
-				}
+			post(URI+'member', {opn:'getInfo', mem_id: mem_id}, function(data) {
+				MEMBERLIST.dealboxData(data, callback);
 			});
 		} else {
 			MEMBERLIST.dealboxData({}, callback);

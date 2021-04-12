@@ -19,14 +19,17 @@ class Controller
         exit();
     }
 
-    protected function success($data=[], $options=[])
+    protected function success($data=[], $options=null)
     {
-        if (empty($options['message'])) {
-            if (!is_array($data)) {
-                $options['message'] = $data;
+        if (is_array($data)) {
+            if (is_null($options)) {
+                $options = ['message' => 'success'];
             } else {
-                $options['message'] = 'success';
+                $options = ['message' => $options];
             }
+        } else {
+            $options = ['message' => $data];
+            $data = [];
         }
         $this->result('200', $data, $options);
     }

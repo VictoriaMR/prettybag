@@ -6,10 +6,8 @@ var STATINFO = {
 		}, 5000);
 	},
 	getInfo: function() {
-		$.post(URI + 'index/statInfo', {opn: 'getSystemInfo'}, function(res){
-			if (res.code == 200) {
-				STATINFO.initdata(res.data);
-			}
+		post(URI + 'index/statInfo', {opn: 'getSystemInfo'}, function(data){
+			STATINFO.initdata(data);
 		});
 	},
 	initdata: function(data) {
