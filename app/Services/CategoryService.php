@@ -16,10 +16,10 @@ class CategoryService extends BaseService
 		if (empty($data['name'])) {
 			return false;
 		}
-        $data['name'] = trim($data['name']);
+        $name = trim($data['name']);
         $insert = [
-            'parent_id' => $data['parent_id'] ?? '',
-            'name' => $data['name'],
+            'parent_id' => $data['parent_id'] ?? 0,
+            'name' => $name,
             'avatar' => $data['avatar'] ?? '',
             'sort' => $data['sort'] ?? 0,
         ];
@@ -27,13 +27,18 @@ class CategoryService extends BaseService
         //设置多语言
         $cateLanModel = make('App\Models\CategoryLanguage');
         $translateService = make('App\Services\TranslateService');
-        $lanList = make('App\Services\LanguageService')->getInfoCache();
+        $lanList = make('App\Services\LanguageService')->getInfo();
         foreach ($lanList as $key => $value) {
-            if ($value['lan_id'] == env('DEFAULT_LANGUAGE_ID')) continue;
+            if ($value['lan_id'] == env('DEFAULT_LANGUAGE_ID')) {
+                $tempName = $name;
+            } else {
+                $tempName = $translateService->getTranslate($name, $value['tr_code']);
+            }
+            if (empty($tempName)) continue;
             $data = [
             	'cate_id' => $cateId,
             	'lan_id' => $value['lan_id'],
-            	'name' => $translateService->getTranslate($data['name'], $value['code']),
+            	'name' => $tempName,
             ];
             $cateLanModel->create($data);
         }
@@ -60,7 +65,7 @@ class CategoryService extends BaseService
         if (empty($cateId)) {
             return [];
         }
-        return make('App\Models\CategoryLanguage')->getInfoByWhere(['cate_id' => $cateId]);
+        return make('App\Models\CategoryLanguage')->getListByWhere(['cate_id' => $cateId]);
     }
 
     public function getList()
@@ -105,5 +110,20 @@ class CategoryService extends BaseService
             }
         }
         return true;
+    }
+
+    public function setNxLanguage($cateId, $lanId, $name)
+    {
+        if (empty($cateId) || empty($lanId) || empty($name)) {
+            return false;
+        }
+        $model = make('App\Models\CategoryLanguage');
+        $where = ['cate_id'=>$cateId, 'lan_id'=>$lanId];
+        if ($model->getCount()) {
+            return $model->where($where)->update(['name' => $name]);
+        } else {
+            $where['name'] = $name;
+            return $model->insert($where);
+        }
     }
 }

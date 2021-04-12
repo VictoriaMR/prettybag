@@ -22,9 +22,9 @@ var CATEGORYLIST = {
 	    //多语言配置
 	    $('.glyphicon-globe').on('click', function(){
 	    	var id = $(this).data('id');
-	    	post(URI+'product/cateList', {opn: 'getCateLanguage', cate_id: id}, function(data){
+	    	post(URI+'category', {opn: 'getCateLanguage', cate_id: id}, function(data){
 	    		var obj = $('#dealbox-language');
-	    		obj.find('input[name="cate_id"]').val('id');
+	    		obj.find('input[name="cate_id"]').val(id);
 	    		obj.find('table input').val('');
 	    		for (var i in data) {
 	    			obj.find('table input[name="language['+data[i].lan_id+']"]').val(data[i].name);
@@ -32,10 +32,34 @@ var CATEGORYLIST = {
 	    		obj.dealboxShow();
 			});
 	    });
+	    //保存数据
+	    $('#dealbox .save-btn').on('click', function(){
+	    	var name = $('#dealbox form input[name="name"]').val();
+	    	if (name == '') {
+	    		errorTips('名称不能为空');
+	    		return false;
+	    	}
+	    	var obj = $(this);
+	    	obj.button('loading');
+	    	post(URI+'category', $('#dealbox form').serializeArray(), function(){
+	    		window.location.reload();
+	    	});
+	    	obj.button('reset');
+	    });
+	    //保存语言
+	    $('#dealbox-language .save-btn').on('click', function(){
+	    	var obj = $(this);
+	    	obj.button('loading');
+	    	post(URI+'category', $('#dealbox-language form').serializeArray(), function(){
+	    		obj.button('reset');
+	    		$('#dealbox-language').dealboxHide();
+	    	});
+	    	return false;
+	    });
 	},
 	loadData: function(id, callback) {
 		if (id) {
-			post(URI+'product/cateList', {opn: 'getCateInfo', cate_id: id}, function(data){
+			post(URI+'category', {opn: 'getCateInfo', cate_id: id}, function(data){
 				callback(data);
 			});
 		} else {

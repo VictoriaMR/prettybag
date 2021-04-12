@@ -143,7 +143,7 @@ Class Query
 		if (empty($data)) return false;
 		$tempArr = [];
 		foreach ($data as $key => $value) {
-			$tempArr[] = "`".$key."`="."'".$value."'";
+			$tempArr[] = "`".$key."`="."'".addslashes($value)."'";
 		}
 		$this->analyzeWhere();
 		if (!empty($this->_whereString)){

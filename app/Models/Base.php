@@ -50,6 +50,11 @@ class Base
         return $this->getInstance()->where($where)->field($fields)->find();
     }
 
+    public function getListByWhere(array $where = [], $fields = [])
+    {
+        return $this->getInstance()->where($where)->field($fields)->get();
+    }
+
     public function getPaginationList($total = 0, $list = [], $page = 1, $pagesize = 10)
     {
         return [

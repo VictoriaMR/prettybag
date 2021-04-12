@@ -80,10 +80,10 @@
 						</div>
 						<div class="item" data-for="product">
 							<ul>
-								<li data-src="<?php echo url('product/cateList');?>" class="selected">
+								<li data-src="<?php echo url('category');?>" class="selected">
 									<span class="glyphicon glyphicon-th-list"></span>
 									<span class="ml6">产品分类</span>
-									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('product/cateList');?>"></a>
+									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('category');?>"></a>
 								</li>
 							</ul>
 						</div>

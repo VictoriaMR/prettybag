@@ -53,18 +53,19 @@
 	        <button type="button" class="close" aria-hidden="true">&times;</button>
 	        <div class="f24 dealbox-title">品类管理</div>
 	        <input type="hidden" name="cate_id" value="0">
+	        <input type="hidden" name="opn" value="editInfo">
 	        <div class="input-group">
 	            <div class="input-group-addon"><span>名称：</span></div>
-	            <input type="text" class="form-control" name="name">
+	            <input type="text" class="form-control" name="name" autocomplete="off">
 	        </div>
 	        <div class="input-group">
 	            <div class="input-group-addon"><span>图片：</span></div>
 	            <div class="form-category-img" title="点击修改" onclick="document.getElementById('uploadImg').click();">
-	                <img src="<?php echo staticUrl('image/common/noimg.png');?>" alt="" id="preview_pic">
+	                <img src="<?php echo staticUrl('image/common/noimg.png');?>" height="50" width="50" alt="" id="preview_pic">
 	            </div>
 	            <input type="file" name="image" style="display: none" id="uploadImg">
 	        </div>
-	        <button type="submit" class="btn btn-primary btn-lg btn-block">确认</button>
+	        <button type="button" class="btn btn-primary btn-lg w100 save-btn">确认</button>
 	    </form>
 	</div>
 </div>
@@ -76,6 +77,7 @@
 	        <button type="button" class="close" aria-hidden="true">&times;</button>
 	        <div class="f24 dealbox-title">多语言配置</div>
 	        <input type="hidden" name="cate_id" value="0">
+	        <input type="hidden" name="opn" value="editLanguage">
 	        <table class="table table-bordered table-hover">
 	        	<tbody>
 	        		<tr>
@@ -91,14 +93,14 @@
 	        				<span><?php echo $value['name'];?></span>
 	        			</th>
 	        			<td class="p0">
-	        				<input type="text" name="language[<?php echo $value['lan_id'];?>]" class="input">
+	        				<input type="text" name="language[<?php echo $value['lan_id'];?>]" class="input" autocomplete="off">
 	        			</td>
 	        		</tr>
         			<?php } ?>
         			<?php } ?>
 	        	</tbody>
 	        </table>
-	        <button type="submit" class="btn btn-primary btn-lg btn-block mt20">确认</button>
+	        <button type="botton" class="btn btn-primary btn-lg btn-block save-btn mt20">确认</button>
 	    </form>
 	</div>
 </div>
