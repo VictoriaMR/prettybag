@@ -11,6 +11,7 @@ class ProductController extends Controller
 	{
         $arr = [
             'index' => '产品列表',
+            'cateList' => '分类管理',
         ];
 		$this->_nav = array_merge(['default' => '产品管理'], $arr);
 		$this->_init();
@@ -54,13 +55,12 @@ class ProductController extends Controller
 			$data['form_crawer']['sku'][$key]['price'] = $value['price'] + rand(250, 300);
 		}
 		$priceArr = array_column($data['form_crawer']['sku'], 'price');
-		$spuNameEn = $translateService->getTranslate($data['form_crawer']['name']);
 		$insert = [
 			'cate_id' => (int)$data['form_page']['bc_product_category'],
 			'status' => 1,
 			'avatar' => $firstImage['cate'].DS.$firstImage['name'].'.'.$firstImage['type'],
 			'min_price' => min($priceArr),
-			'name' => $spuNameEn,
+			'name' => $data['form_crawer']['name'],
 			'add_time' => $this->getTime(),
 		];
 		$spuService = make('App\Services\ProductSpuService');
@@ -69,12 +69,11 @@ class ProductController extends Controller
 			$this->error('product spu create failed!');
 		}
 		//多语言配置 默认en
-		$lanArr = make('App\Services\LanguageService')->getInfoCache();
+		$lanArr = make('App\Services\LanguageService')->getInfo();
 		$productLanguageService = make('App\Services\ProductLanguageService');
 		foreach ($lanArr as $key => $value) {
-			if ($value['code'] == 'en') continue;
 			if ($value['code'] != 'zh') {
-				$name = $translateService->getTranslate($data['form_crawer']['name']);
+				$name = $translateService->getTranslate($data['form_crawer']['name'], $value['tr_code']);
 			} else {
 				$name = $data['form_crawer']['name'];
 			}
@@ -129,48 +128,46 @@ class ProductController extends Controller
 			$spuService->addIntroduceImage($insert);
 		}
 		//属性组
-		$attr = [];
-		$attv = [];
 		$attributeService = make('App\Services\AttributeService');
 		$attrvalueService = make('App\Services\AttrvalueService');
 		foreach ($data['form_crawer']['attr'] as $key => $value) {
-			$attr[$value['attrName']] = $attributeService->addNotExist($value['attrName']);
+			$attributeService->addNotExist($value['attrName']);
 			foreach ($value['attrValue'] as $k => $v) {
-				$attv[$v['name']] = $attrvalueService->addNotExist($v['name']);
+				$attrvalueService->addNotExist($v['name']);
 			}
 		}
 		//sku
 		$skuService = make('App\Services\ProductSkuService');
 		foreach ($data['form_crawer']['sku'] as $key => $value) {
-			$nameZhStr = $nameEnStr = '';
+			$nameZhStr = '';
 			//sku 属性
 			foreach ($value['pvs'] as $k => $v) {
 				$nameZhStr .= ' '.$v['text'];
-				$nameEnStr .= ' '.$attv[$v['text']]['name'];
 			}
+			$nameZhStr = trim($nameZhStr);
+			$name = trim($data['form_crawer']['name'].(empty($nameEnStr) ? '' : ' - '.$nameEnStr) );
 			$insert = [
 				'spu_id' => $spuId,
 				'status' => $value['stock'] > 0 ? 1 : 0,
 				'stock' => $value['stock'],
 				'price' => $value['price'],
-				'name' => $spuNameEn.' - '.trim($nameEnStr),
+				'name' => $name,
 				'origin_price' => round($value['price'] / ((10 - rand(5, 9)) / 10), 2),
 				'add_time' => $this->getTime(),
 			];
 			$skuId = $skuService->create($insert);
 			//多语言
 			foreach ($lanArr as $k => $v) {
-				if ($v['code'] == 'en') continue;
 				if ($v['code'] != 'zh') {
-					$name = $translateService->getTranslate($data['form_crawer']['name'].' - '.trim($nameZhStr));
+					$tempName = $translateService->getTranslate($name, $v['tr_code']);
 				} else {
-					$name = $data['form_crawer']['name'].' - '.trim($nameZhStr);
+					$tempName = $name;
 				}
 				$insert = [
 					'spu_id' => $spuId,
 					'sku_id' => $skuId,
 					'lan_id' => $v['lan_id'],
-					'name' => $name,
+					'name' => $tempName,
 				];
 				$productLanguageService->create($insert);
 			}

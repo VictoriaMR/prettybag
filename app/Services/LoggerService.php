@@ -25,7 +25,7 @@ class LoggerService extends BaseService
 		$data = [
 			'mem_id' => (int)Session::get(strtolower(\Router::$_route['class']).'_mem_id'),
 			'language' => Session::get('site_language_name'),
-			'is_moblie' => isMobile() ? 1 : 0,
+			'is_moblie' => APP_IS_MOBILE ? 1 : 0,
 			'ip' => getIp(),
 			'path' => $_SERVER['REQUEST_URI'] ?? '',
 			'system' => getSystem(),

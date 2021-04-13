@@ -7,20 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/common', 'css');?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/bootstrap', 'css');?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/bootstrap-plugin', 'css');?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('computer/space', 'css');?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('icon', 'css');?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('static/common.css');?>">
     <?php foreach (\frame\Html::getCss() as $value) { ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo $value;?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo env('APP_DOMAIN').$value;?>">
     <?php }?>
-    <script type="text/javascript" src="<?php echo staticUrl('jquery', 'js');?>"></script>
-    <script type="text/javascript" src="<?php echo staticUrl('common', 'js');?>"></script>
-    <script type="text/javascript" src="<?php echo staticUrl('bootstrap', 'js');?>"></script>
-    <script type="text/javascript" src="<?php echo staticUrl('bootstrap-plugin', 'js');?>"></script>
+    <script type="text/javascript" src="<?php echo staticUrl('static/common.js');?>"></script>
     <?php foreach (\frame\Html::getJs() as $value) { ?>
-    <script type="text/javascript" src="<?php echo $value;?>"></script>
+    <script type="text/javascript" src="<?php echo env('APP_DOMAIN').$value;?>"></script>
     <?php }?>
 </head>
 <body>
@@ -56,7 +49,7 @@ $(function(){
     <div class="nav">
         <span><?php echo $_nav['default'];?></span>
         <?php if (!empty($_nav[$_func])){?>
-        <span>&gt;<?php echo $_nav[$_func];?></span>
+        <span>&gt; <?php echo $_nav[$_func];?></span>
         <?php } ?>
         <a href="<?php echo url();?>" class="glyphicon glyphicon-repeat ml12" title="重新加载"></a>
         <a href="<?php echo url();?>" target="_blank" class="glyphicon glyphicon-link ml12" title="新页面打开"></a>

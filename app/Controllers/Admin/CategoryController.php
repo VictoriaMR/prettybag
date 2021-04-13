@@ -20,7 +20,7 @@ class CategoryController extends Controller
 	{	
 		if (isPost()) {
 			$opn = ipost('opn');
-			if (in_array($opn, ['getCateInfo', 'getCateLanguage', 'editInfo', 'editLanguage'])) {
+			if (in_array($opn, ['getCateInfo', 'getCateLanguage', 'editInfo', 'editLanguage', 'sortCategory'])) {
 				$this->$opn();
 			}
 			$this->error('非法请求');
@@ -33,6 +33,24 @@ class CategoryController extends Controller
 		$this->assign('language', $language);
 		$this->assign('list', $list);
 		return view();
+	}
+
+	protected function sortCategory()
+	{
+		$data = ipost('data');
+		if (empty($data)) {
+			$this->error('数据正确');
+		}
+		$arr = array_keys($data);
+		$services = make('App\Services\CategoryService');
+		$count = 1;
+		foreach ($data as $key => $value) {
+			$services->updateData((int) $key, ['sort'=>$count++]);
+			foreach ($value as $k => $v) {
+				$services->updateData((int) $v, ['sort'=>$k+1]);
+			}
+		}
+		$this->success('排序成功');
 	}
 
 	protected function getCateInfo()
@@ -74,12 +92,14 @@ class CategoryController extends Controller
 	protected function editInfo()
 	{
 		$cateId = (int) ipost('cate_id');
+		$parentId = (int) ipost('parent_id');
 		$name = trim(ipost('name'));
 		$avatar = trim(ipost('avatar'));
 		if (empty($name)) {
 			$this->error('名称不能为空');
 		}
 		$data = [
+			'parent_id' => $parentId,
 			'name' => $name,
 			'avatar' => $avatar,
 		];

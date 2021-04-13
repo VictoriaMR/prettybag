@@ -1,6 +1,5 @@
 var MEMBERLIST = {
 	init: function() {
-		$('#dealbox').offsetCenter();
 	    $('#add-data-btn').on('click', function(){
 	    	var obj = $(this);
 	    	obj.button('loading');

@@ -76,6 +76,11 @@
 									<span class="ml6">服务器信息</span>
 									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('systemInfo');?>"></a>
 								</li>
+								<li data-src="<?php echo url('site');?>" class="selected">
+									<span class="glyphicon glyphicon-certificate"></span>
+									<span class="ml6">站点设置</span>
+									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('site');?>"></a>
+								</li>
 							</ul>
 						</div>
 						<div class="item" data-for="product">

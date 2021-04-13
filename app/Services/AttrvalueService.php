@@ -31,8 +31,6 @@ class AttrvalueService extends BaseService
             'sort' => 0,
         ];
         $attvId = make('App\Models\Attrvalue')->create($data);
-        $data['attv_id'] = $attvId;
-        $data['name_zh'] = $nameZh;
         //设置多语言
         $attrLanModel = make('App\Models\AttrvalueLanguage');
         $lanList = make('App\Services\LanguageService')->getInfoCache();
@@ -50,7 +48,7 @@ class AttrvalueService extends BaseService
             ];
             $attrLanModel->create($insert);
         }
-        return $data;
+        return true;
     }
 
     public function getInfoByName($name)

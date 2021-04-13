@@ -17,5 +17,6 @@ if (isCli()) {
 	App::init();
 } else {
 	@session_start();
+	define('APP_IS_MOBILE', isMobile());
 	App::run()->send();
 }

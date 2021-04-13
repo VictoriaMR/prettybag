@@ -28,7 +28,7 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 .left{float:left}
 .hide,.hidden{display:none}
 .right{float:right}
-.w30{widows:30%}
+.w30{width:30%}
 .w35{width:35%}
 .w50{width:50% !important}
 .w65{width:65%}
@@ -63,6 +63,7 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 .switch_status.on{left:-3px}
 .switch_status.off{left:-36px}
 .glyphicon:hover{color:#e7502b}
+.glyphicon.disabled{color:#ccc;cursor:not-allowed}
 .avatar-hover{position:relative;height:36px;cursor:pointer}
 .avatar-hover img{margin:0px;padding:0px;vertical-align:top;height:36px;width:36px;border-radius:50%;box-sizing:border-box;position:absolute;left:0px;bottom:0px;transition:700ms;max-width:unset;max-height:unset}
 .avatar-hover:hover img{width:120px;height:120px;transition:700ms}
@@ -81,3 +82,4 @@ body{SCROLLBAR-ARROW-COLOR:#2c5784;SCROLLBAR-FACE-COLOR:#D1E2EF;SCROLLBAR-DARKSH
 #header-nav .nav{border-left-width:2px;border-left-style:solid;border-left-color:#e7502b;line-height:20px;padding-left:10px}
 #header-nav .nav a{display:none}
 #header-nav .nav:hover a{display:inline-block}
+#confirm-pop .content{background:#fff;padding:20px;width:350px;position:fixed;top:calc(50% - 70px);left:calc(50% - 175px);z-index:99}

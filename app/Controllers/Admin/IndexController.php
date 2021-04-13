@@ -83,7 +83,7 @@ class IndexController extends Controller
         $returnData['disk_used_space'] = sprintf('%.2f', $returnData['disk_total_space'] - $returnData['disk_free_space']).'M';
         $returnData['disk_total_space'] .= 'M';
         $returnData['disk_free_space'] .= 'M';
-        $this->success($returnData);
+        $this->success($returnData, '');
     }
 
     protected function sys_windows()

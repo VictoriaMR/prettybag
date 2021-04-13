@@ -1,9 +1,9 @@
 <?php $this->load('common/header');?>
-<div class="container-fluid">
+<div class="container-fluid" id="category-list">
 	<div class="row-item">
 		<div class="right">
-            <button class="btn btn-info" type="button" style="width: 200px; margin-right: 20px;"><i class="glyphicon glyphicon-asterisk"></i> 显示统计数据</button>
-            <button class="btn btn-success modify" data-id="0" type="button" style="width: 200px;"><i class="glyphicon glyphicon-plus"></i> 添加子类目</button>
+            <button class="btn btn-info sort-btn disabled" type="button" style="width: 150px; margin-right: 20px;"><i class="glyphicon glyphicon-asterisk"></i> 保存排序</button>
+            <button class="btn btn-success modify" data-id="0" type="button" style="width: 150px;"><i class="glyphicon glyphicon-plus"></i> 添加子类目</button>
         </div>
         <div class="clear"></div>
 	</div>
@@ -17,26 +17,26 @@
 	        </tr>
 	        <?php if (empty($list)){ ?>
         	<tr>
-        		<td colspan="10">
+        		<td colspan="8">
         			<div class="tc orange">暂无数据</div>
         		</td>
         	</tr>
         	<?php } else {?>
         	<?php foreach ($list as $key => $value) { ?>
-        	<tr>
+        	<tr class="item<?php echo $value['level']==0 ? ' info' : '';?>" data-lev="<?php echo $value['level'];?>" data-id="<?php echo $value['cate_id'];?>">
         		<td class="col-md-1"><?php echo $value['cate_id'];?></td>
 	            <td class="col-md-3">
 	            	<div <?php echo $value['level'] ? 'style="padding-left:'.($value['level']*20).'px;"' : '';?>><span class="glyphicon glyphicon-globe" data-id="<?php echo $value['cate_id'];?>"></span>&nbsp;<?php echo $value['name'];?></div>
 	            </td>
 	            <td class="col-md-2 f16 sort-btn-content">
-	            	<span class="glyphicon glyphicon-arrow-up"></span>
-	            	<span class="glyphicon glyphicon-chevron-up ml10"></span>
-	            	<span class="glyphicon glyphicon-chevron-down ml10"></span>
-	            	<span class="glyphicon glyphicon-arrow-down ml10"></span>
+	            	<span class="glyphicon glyphicon-arrow-up" data-sort="top"></span>
+	            	<span class="glyphicon glyphicon-chevron-up ml10" data-sort="up"></span>
+	            	<span class="glyphicon glyphicon-chevron-down ml10" data-sort="down"></span>
+	            	<span class="glyphicon glyphicon-arrow-down ml10" data-sort="bottom"></span>
 	            </td>
 	            <td class="col-md-2">
 	            	<button class="btn btn-primary btn-xs ml4 modify" data-id="<?php echo $value['cate_id'];?>"><span class="glyphicon glyphicon-edit"></span>&nbsp;修改</button>
-	            	<button class="btn btn-success btn-xs ml4 add" data-id="<?php echo $value['parent_id'];?>"><span class="glyphicon glyphicon-plus"></span>&nbsp;增加</button>
+	            	<button class="btn btn-success btn-xs ml4 add" data-id="<?php echo $value['cate_id'];?>"><span class="glyphicon glyphicon-plus"></span>&nbsp;增加</button>
 	            	<button class="btn btn-danger btn-xs ml4 delete" data-id="<?php echo $value['cate_id'];?>"><span class="glyphicon glyphicon-trash"></span>&nbsp;删除</button>
 	            </td>
         	</tr>
@@ -53,6 +53,7 @@
 	        <button type="button" class="close" aria-hidden="true">&times;</button>
 	        <div class="f24 dealbox-title">品类管理</div>
 	        <input type="hidden" name="cate_id" value="0">
+	        <input type="hidden" name="parent_id" value="0">
 	        <input type="hidden" name="opn" value="editInfo">
 	        <div class="input-group">
 	            <div class="input-group-addon"><span>名称：</span></div>

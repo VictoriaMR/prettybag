@@ -28,6 +28,11 @@ class App
         $info = Router::$_route;
         //中间件
         \App\Middleware\VerifyToken::handle($info);
+        //静态js,css
+        if ($info['class'] == 'Admin') {
+            \frame\Html::buildJs(['jquery', 'common', 'bootstrap', 'bootstrap-plugin']);
+            \frame\Html::buildCss(['computer/common', 'computer/bootstrap', 'computer/space', 'icon']);
+        }
         //执行方法
         $class = 'App\\Controllers\\'.$info['class'].'\\'.$info['path'].'Controller';
         if (is_callable([self::autoload($class), $info['func']])) {

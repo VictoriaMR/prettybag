@@ -29,7 +29,7 @@ class CategoryService extends BaseService
         $translateService = make('App\Services\TranslateService');
         $lanList = make('App\Services\LanguageService')->getInfo();
         foreach ($lanList as $key => $value) {
-            if ($value['lan_id'] == env('DEFAULT_LANGUAGE_ID')) {
+            if ($value['code'] == 'zh') {
                 $tempName = $name;
             } else {
                 $tempName = $translateService->getTranslate($name, $value['tr_code']);
@@ -119,11 +119,16 @@ class CategoryService extends BaseService
         }
         $model = make('App\Models\CategoryLanguage');
         $where = ['cate_id'=>$cateId, 'lan_id'=>$lanId];
-        if ($model->getCount()) {
+        if ($model->getCount($where)) {
             return $model->where($where)->update(['name' => $name]);
         } else {
             $where['name'] = $name;
             return $model->insert($where);
         }
+    }
+
+    public function updateData($id, array $data)
+    {
+        return make('App\Models\Category')->updateDataById($id, $data);
     }
 }

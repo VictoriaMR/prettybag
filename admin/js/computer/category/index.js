@@ -1,7 +1,5 @@
 var CATEGORYLIST = {
 	init: function() {
-		$('#dealbox').offsetCenter();
-		$('#dealbox-language').offsetCenter();
 		$('#dealbox .switch_botton').on('click', function(){
 	    	var status = $(this).data('status');
 	    	status = status == 0 ? 1 : 0;
@@ -18,6 +16,14 @@ var CATEGORYLIST = {
 	    		$('#dealbox').dealboxShow();
 	    		btnobj.button('reset');
 	    	});
+	    });
+	    //新增子分类
+	    $('.btn.add').on('click', function(){
+	    	var btnobj = $(this);
+	    	var id = btnobj.data('id');
+	    	var data = {parent_id: id};
+    		CATEGORYLIST.initData(data);
+    		$('#dealbox').dealboxShow();
 	    });
 	    //多语言配置
 	    $('.glyphicon-globe').on('click', function(){
@@ -44,7 +50,6 @@ var CATEGORYLIST = {
 	    	post(URI+'category', $('#dealbox form').serializeArray(), function(){
 	    		window.location.reload();
 	    	});
-	    	obj.button('reset');
 	    });
 	    //保存语言
 	    $('#dealbox-language .save-btn').on('click', function(){
@@ -55,6 +60,30 @@ var CATEGORYLIST = {
 	    		$('#dealbox-language').dealboxHide();
 	    	});
 	    	return false;
+	    });
+	    this.sortInit();
+	    this.sortClick();
+	    //保存排序
+	    $('.btn.sort-btn').on('click', function(){
+	    	var data = {};
+	    	var pid;
+	    	var obj = $(this);
+	    	obj.button('loading');
+	    	$('#category-list table tr.item').each(function(){
+	    		var lev = $(this).data('lev');
+	    		var id = $(this).data('id');
+	    		if (lev == 0) {
+	    			pid = id+'-pid';
+	    			if (!data[pid]) {
+	    				data[pid] = new Array();
+	    			}
+	    		} else {
+	    			data[pid].push(id);
+	    		}
+	    	});
+	    	post(URI+'category', {opn: 'sortCategory', data: data}, function(){
+	    		obj.button('reset').addClass('disabled');
+	    	});
 	    });
 	},
 	loadData: function(id, callback) {
@@ -70,14 +99,74 @@ var CATEGORYLIST = {
 		var obj = $('#dealbox');
 		if (data) {
 			obj.find('input[name="cate_id"]').val(data.cate_id);
+			obj.find('input[name="parent_id"]').val(data.parent_id);
 			obj.find('input[name="name"]').val(data.name);
 			obj.find('input[name="image"]').val(data.avatar);
 			obj.find('.form-category-img img').attr('src', data.avatar_format);
 		} else {
 			obj.find('input[name="cate_id"]').val(0);
+			obj.find('input[name="parent_id"]').val(0);
 			obj.find('input[name="name"]').val('');
 			obj.find('input[name="image"]').val('');
 		}
 		return true;
+	},
+	sortInit: function() {
+		var trobj = $('#category-list table tr.item');
+		trobj.find('.glyphicon').removeClass('disabled');
+		$('#category-list table tr.item').each(function(index, item) {
+			var obj = $(this);
+			var lev = obj.data('lev');
+			if (lev == 0) {
+				if (obj.prevAll('[data-lev="0"]').length == 0) {
+					obj.find('.glyphicon-arrow-up,.glyphicon-chevron-up').addClass('disabled');
+				}
+				if (obj.nextAll('[data-lev="0"]').length == 0) {
+					obj.find('.glyphicon-arrow-down,.glyphicon-chevron-down').addClass('disabled');
+				}
+			} else {
+				var prevLev = obj.prev().data('lev');
+				var nextLev = obj.next().data('lev');
+				if (lev !== prevLev) {
+					obj.find('.glyphicon-arrow-up,.glyphicon-chevron-up').addClass('disabled');
+				}
+				if (lev !== nextLev) {
+					obj.find('.glyphicon-arrow-down,.glyphicon-chevron-down').addClass('disabled');
+				}
+			}
+		});
+	},
+	sortClick: function() {
+		$('.sort-btn-content .glyphicon').on('click', function(){
+			if ($(this).hasClass('disabled')) return false;
+			$('.btn.sort-btn').removeClass('disabled');
+			var obj = $(this).parents('tr');
+			var sort = $(this).data('sort');
+			var lev = obj.data('lev');
+			if (lev == 0) {
+				var removeObj = obj.nextUntil('[data-lev="'+lev+'"]');
+				if (sort == 'top') {
+					$('[data-lev="0"]:first').before(obj);
+				} else if (sort == 'up') {
+					obj.prevAll('[data-lev="0"]').eq(0).before(obj);
+				} else if (sort == 'down') {
+					obj.nextAll('[data-lev="0"]').eq(0).nextUntil('[data-lev="0"]').eq(-1).after(obj);
+				} else if (sort == 'bottom') {
+					$('[data-lev="0"]:last').nextUntil('[data-lev="0"]').eq('-1').after(obj);
+				}
+				obj.after(removeObj);
+			} else {
+				if (sort == 'top') {
+					obj.prevAll('[data-lev="'+lev+'"]').eq(-1).before(obj);
+				} else if (sort == 'up') {
+					obj.prev().before(obj);
+				} else if (sort == 'down') {
+					obj.next().after(obj);
+				} else if (sort == 'bottom') {
+					obj.nextUntil('[data-lev="0"]').eq(-1).after(obj);
+				}
+			}
+			CATEGORYLIST.sortInit();
+		});
 	},
 };

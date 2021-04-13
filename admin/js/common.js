@@ -21,6 +21,30 @@ var VERIFY = {
 		return reg.test(input);
 	}
 };
+function confirm(msg, callbck) {
+	if ($('#confirm-pop').length == 0) {
+		var html = '<div id="confirm-pop">\
+						<div class="mask"></div>\
+						<div class="content">\
+							<div class="message f18 tc"></div>\
+							<div class="mt20">\
+								<button class="btn cancel left w30">取消</button>\
+								<button class="btn btn-primary right confirm w30">确定</button>\
+								<div class="clear"></div>\
+							</div>\
+						</div>\
+					</div>';
+		$('body').append(html);
+	}
+	$('#confirm-pop').find('.message').text(msg);
+	$('#confirm-pop').show();
+	$('#confirm-pop').on('click', '.btn.cancel, .mask', function(){
+		$('#confirm-pop').hide();
+	});
+	$('#confirm-pop').on('click', '.btn.confirm', function(){
+		callbck();
+	});
+}
 function post(uri, param, callbck) {
 	$.post(uri, param, function(res) {
 		if (res.code == 200) {
@@ -95,6 +119,7 @@ function isScroll() {
 	};
 	$.fn.dealboxShow = function(width, height) {
 		var obj = $(this);
+		obj.offsetCenter();
 		$('body').css({'overflow': 'hidden'});
 		if (isScroll()) {
 			$('body').css({'padding-right': '6.5px'});
@@ -134,7 +159,6 @@ function isScroll() {
 	};
 }(jQuery));
 $(function(){
-	//选择按钮组点击
 	$('form .btn-group .btn').on('click', function(){
 		var obj = $(this).parents('.row-item').find('input[type="hidden"]');
 		if (obj.length > 0) {
@@ -142,7 +166,6 @@ $(function(){
 			obj.parents('form').eq(0).submit();
 		}
 	});
-	//时间选择插件
     $('.form_datetime').datetimepicker({
         language: 'zh-CN',
         format: 'yyyy-mm-dd',

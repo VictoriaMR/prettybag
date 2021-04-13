@@ -33,7 +33,7 @@ class View
         $_route = \Router::$_route;
         if ($match) {
             if (env('APP_VIEW_MATCH')) {
-                $matchPath = (isMobile() ? 'mobile' : 'computer') . DS;
+                $matchPath = (APP_IS_MOBILE ? 'mobile' : 'computer') . DS;
             }
             if (empty($template)) {
                 $template = implode(DS, array_map('lcfirst', $_route));
