@@ -87,7 +87,7 @@ class Html
             mkdir($dir, 0750, true);
         }
         file_put_contents($dir.$file, $data);
-        return [env('APP_DOMAIN').'static'.$file];
+        return ['static'.$file];
     }
 
     public static function buildJs($data)
