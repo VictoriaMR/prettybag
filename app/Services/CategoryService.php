@@ -3,13 +3,21 @@
 namespace App\Services;
 
 use App\Services\Base as BaseService;
+use App\Models\Category;
 
 /**
  * 	分类类
  */
 class CategoryService extends BaseService
 {
-	const CACHE_KEY = 'CATEGORY_CACHE';
+    protected static $constantMap = [
+        'base' => Category::class,
+    ];
+
+    public function __construct(Category $model)
+    {
+        $this->baseModel = $model;
+    }
 
 	public function create(array $data)
 	{
@@ -23,7 +31,7 @@ class CategoryService extends BaseService
             'avatar' => $data['avatar'] ?? '',
             'sort' => $data['sort'] ?? 0,
         ];
-        $cateId = make('App\Models\Category')->create($insert);
+        $cateId = $this->baseModel->create($insert);
         //设置多语言
         $cateLanModel = make('App\Models\CategoryLanguage');
         $translateService = make('App\Services\TranslateService');
@@ -51,7 +59,7 @@ class CategoryService extends BaseService
         if (empty($cateId)) {
             return [];
         }
-        $info = make('App\Models\Category')->loadData($cateId);
+        $info = $this->baseModel->loadData($cateId);
         if (empty($info)) {
             return [];
         }
@@ -70,7 +78,7 @@ class CategoryService extends BaseService
 
     public function getList()
     {
-        return make('App\Models\Category')->orderBy('sort', 'asc')->get();
+        return $this->baseModel->orderBy('sort', 'asc')->get();
     }
 
     public function getListFormat()
@@ -127,8 +135,21 @@ class CategoryService extends BaseService
         }
     }
 
-    public function updateData($id, array $data)
+    public function hasChildren($id)
     {
-        return make('App\Models\Category')->updateDataById($id, $data);
+        return $this->baseModel->where('parent_id', $id)->count() > 0;
+    }
+
+    public function hasProduct($id)
+    {
+        return make('App\Models\ProductCategoryRelation')->where('cate_id', $id)->count() > 0;
+    }
+
+    protected function deleteDataById($cateId)
+    {
+        $result = $this->baseModel->deleteById($cateId);
+        if ($result) {
+            $result = make('App\Models\CategoryLanguage')->where('cate_id', $cateId)->delete();
+        }
     }
 }

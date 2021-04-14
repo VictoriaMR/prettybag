@@ -42,20 +42,23 @@ function confirm(msg, callbck) {
 		$('#confirm-pop').hide();
 	});
 	$('#confirm-pop').on('click', '.btn.confirm', function(){
-		callbck();
+		callbck($(this));
 	});
 }
-function post(uri, param, callbck) {
+function post(uri, param, success, error) {
 	$.post(uri, param, function(res) {
 		if (res.code == 200) {
 			if (res.message) {
 				successTips(res.message)
 			}
-			if (callbck) {
-				callbck(res.data);
+			if (success) {
+				success(res.data);
 			}
 		} else {
 			errorTips(res.message);
+			if (error) {
+				error();
+			}
 		}
 	});
 }

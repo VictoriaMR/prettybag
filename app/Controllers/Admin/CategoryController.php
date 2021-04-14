@@ -20,7 +20,7 @@ class CategoryController extends Controller
 	{	
 		if (isPost()) {
 			$opn = ipost('opn');
-			if (in_array($opn, ['getCateInfo', 'getCateLanguage', 'editInfo', 'editLanguage', 'sortCategory'])) {
+			if (in_array($opn, ['getCateInfo', 'getCateLanguage', 'editInfo', 'editLanguage', 'sortCategory', 'deleteCategory'])) {
 				$this->$opn();
 			}
 			$this->error('非法请求');
@@ -112,6 +112,27 @@ class CategoryController extends Controller
 			$this->success('操作成功');
 		} else {
 			$this->error('操作失败');
+		}
+	}
+
+	protected function deleteCategory()
+	{
+		$cateId = (int) ipost('cate_id');
+		if (empty($cateId)) {
+			$this->error('ID值不正确');
+		}
+		$services = make('App\Services\CategoryService');
+		if ($services->hasChildren($cateId)) {
+			$this->error('该分类有子分类, 不能删除');
+		}
+		if ($services->hasProduct($cateId)) {
+			$this->error('该分类有产品, 不能删除');
+		}
+		$result = $services->deleteDataById($cateId);
+		if ($result) {
+			$this->success('删除成功');
+		} else {
+			$this->error('删除失败');
 		}
 	}
 }

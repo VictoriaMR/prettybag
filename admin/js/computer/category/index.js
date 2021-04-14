@@ -61,8 +61,6 @@ var CATEGORYLIST = {
 	    	});
 	    	return false;
 	    });
-	    this.sortInit();
-	    this.sortClick();
 	    //保存排序
 	    $('.btn.sort-btn').on('click', function(){
 	    	var data = {};
@@ -85,6 +83,23 @@ var CATEGORYLIST = {
 	    		obj.button('reset').addClass('disabled');
 	    	});
 	    });
+	    //删除子分类
+	    $('.btn.delete').on('click', function(){
+	    	var btnobj = $(this);
+	    	var id = btnobj.data('id');
+	    	confirm('确定要删除吗?', function(obj){
+	    		obj.button('loading');
+	    		post(URI+'category', {opn: 'deleteCategory', cate_id: id}, function(){
+	    			obj.button('reset');
+	    			btnobj.parents('tr').remove();
+	    			CATEGORYLIST.sortInit();
+	    		}, function(){
+	    			obj.button('reset');
+	    		});
+	    	});
+	    });
+	    this.sortInit();
+	    this.sortClick();
 	},
 	loadData: function(id, callback) {
 		if (id) {
