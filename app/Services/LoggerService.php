@@ -44,6 +44,6 @@ class LoggerService extends BaseService
 	public function getIpDateStat($limit = 14)
 	{
 		$sql = 'SELECT COUNT(*) AS count, a.`format_date` FROM (SELECT `ip`, DATE_FORMAT(`create_at`,"%Y-%m-%d") AS `format_date` FROM `visitor_log` GROUP BY `ip`,`format_date`) a GROUP BY a.`format_date` ORDER BY a.`format_date` DESC LIMIT '.$limit;
-		return $this->baseModel->setSql($sql)->get();
+		return $this->baseModel->getQuery($sql);
 	}
 }

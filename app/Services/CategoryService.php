@@ -152,4 +152,17 @@ class CategoryService extends BaseService
             $result = make('App\Models\CategoryLanguage')->where('cate_id', $cateId)->delete();
         }
     }
+
+    public function addCateProRelation($spuId, array $cateIds)
+    {
+        if (empty($spuId) || empty($cateIds)) return false;
+        $insert = [];
+        foreach ($cateIds as $key => $value) {
+            $insert[] = [
+                'cate_id' => $value,
+                'spu_id' => $spuId,
+            ];
+        }
+        return make('App\Models\ProductCategoryRelation')->insert($insert);
+    }
 }

@@ -15,10 +15,9 @@ Class Query
 	private $_offset;
 	private $_limit=1;
 
-	public function __construct($connect, $table) 
+	public function __construct($connect) 
 	{
 		$this->_connect = $connect;
-		$this->_table = $table;
 	}
 
 	public function table($table = '')
@@ -58,7 +57,11 @@ Class Query
 		if (empty($columns)) return $this;
 		if (is_array($columns)) {
 			foreach ($columns as $key => $value) {
-				$this->_orderBy .= '`'.$key.'` '.strtoupper($value).',';
+				if (stripos($key, ' as ') === false) {
+					$this->_orderBy .= $key.' '.strtoupper($value).',';
+				} else {
+					$this->_orderBy .= '`'.$key.'` '.strtoupper($value).',';
+				}
 			}
 		} else {
 			$this->_orderBy .= '`'.$columns.'` '.strtoupper($operator).',';
@@ -69,18 +72,33 @@ Class Query
 	public function groupBy($columns)
 	{
 		if (empty($columns)) return $this;
-		$columns = array_map('trim', explode(',', $columns));
-		$this->_groupBy .= '`'.implode(',`', $columns).'`,';
+		if (!is_array($columns)) {
+			$columns = explode(',', $columns);
+		}
+		foreach ($columns as $value) {
+			$value = trim($value);
+			if (stripos($value, ' as ') === false) {
+				$this->_groupBy .= $value.',';
+			} else {
+				$this->_groupBy .= '`'.$value.'`,';
+			}
+		}
 		return $this;
 	}
 
 	public function field($columns)
 	{
 		if (empty($columns)) return $this;
-		if (is_array($columns)) {
-			$this->_columns = '`'.implode(',`', $columns).'`';
-		} else {
-			$this->_columns = '`'.$columns.'`';
+		if (!is_array($columns)) {
+			$columns = explode(',', $columns);
+		}
+		foreach ($columns as $value) {
+			$value = trim($value);
+			if (stripos($value, ' as ') === false) {
+				$this->_columns .= '`'.$value.'`,';
+			} else {
+				$this->_columns .= $value.',';
+			}
 		}
         return $this;
 	}
@@ -108,7 +126,7 @@ Class Query
 
 	public function count()
 	{
-		$this->_columns = ['COUNT(*) as count'];
+		$this->_columns = 'COUNT(*) AS count';
 		$this->_offset = 0;
 		$this->_limit = 1;
 		$result = $this->get();
@@ -117,17 +135,20 @@ Class Query
 
 	public function insert(array $data = [])
 	{
-		if (empty($data)) return false;
+		if (empty($this->_table)) {
+			throw new \Exception('MySQL Error, no found table', 1);
+		}
 		if (empty($data[0])) $data = [$data];
-
 		$fields = array_keys($data[0]);
 		$data = array_map(function($value){
 			foreach ($value as $k => $v) {
-				if (!is_numeric($v) && is_string($v)) {
-					$value[$k] = addslashes($v);
+				if (is_string($v)) {
+					$value[$k] = "'".addslashes($v)."'";
+				} else {
+					$value[$k] = (int) $v;
 				}
 			}
-			return "'".implode("', '", $value)."'";
+			return implode(', ', $value);
 		}, $data);
 		$sql = sprintf('INSERT INTO %s (`%s`) VALUES %s', $this->_table, implode('`, `', $fields), '(' . implode('), (', $data).')');
 		return $this->getQuery($sql);
@@ -180,7 +201,7 @@ Class Query
 			throw new \Exception('MySQL Error, table not exist!', 1);
 		}
 		$this->analyzeWhere();
-		$sql = sprintf('SELECT %s FROM `%s`', empty($this->_columns) ? '*' : $this->_columns, $this->_table);
+		$sql = sprintf('SELECT %s FROM `%s`', empty($this->_columns) ? '*' : rtrim($this->_columns, ','), $this->_table);
 		if (!empty($this->_whereString)) {
 			$sql .= ' WHERE ' . $this->_whereString;
 		}
@@ -219,9 +240,20 @@ Class Query
 			foreach ($fields as $fk => $fv) {
 				$fv = trim($fv);
 				if ($operator == 'IN') {
-					$tempStr .= sprintf('%s `%s` %s (%s)', $fk == 0 ? '' : $type, $fv, $operator, addslashes(implode(',', $value)));
+					$valueStr = '';
+					foreach ($value as $v) {
+						if (is_string($v)) {
+							$valueStr .= "'".addslashes($value)."',";
+						} else {
+							$valueStr .= (int) $value;
+							$valueStr .= ',';
+						}
+					}
+
+					$tempStr .= sprintf('%s `%s` %s (%s)', $fk == 0 ? '' : $type, $fv, $operator, rtrim($valueStr, ','));
 				} else {
-					$tempStr .= sprintf('%s `%s` %s %s', $fk == 0 ? '' : $type, $fv, $operator, addslashes($value));
+					$value = is_string($value) ? "'".addslashes($value)."'" : (int) $value;
+					$tempStr .= sprintf('%s `%s` %s %s', $fk == 0 ? '' : $type, $fv, $operator, $value);
 				}
 			}
 			$this->_whereString .= $start.$tempStr.$end;
@@ -237,12 +269,15 @@ Class Query
 		}
 		$conn = \frame\Connection::getInstance($this->_connect, $this->_database);
 		if ($stmt = $conn->query($sql)) {
+			if (is_bool($stmt)) {
+				return $stmt;
+			}
 			while ($row = $stmt->fetch_assoc()){
 			 	$returnData[] = $row;
 			}
 			$stmt->free();
 		} else {
-			throw new \Exception($conn->error, 1);
+			throw new \Exception($sql.' '.$conn->error, 1);
 		}
 		$this->clear();
 		return $returnData ?? null;
@@ -260,4 +295,19 @@ Class Query
 		$this->_limit = 1;
 		return true;
 	}
+
+	public function start() 
+    {
+        return $this->getQuery('START TRANSACTION');
+    }
+
+    public function rollback()
+    {
+        return $this->getQuery('ROLLBACK');
+    }
+
+    public function commit()
+    {
+        return $this->getQuery('commit');
+    }
 }

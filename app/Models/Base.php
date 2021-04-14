@@ -12,8 +12,9 @@ class Base
     protected function getInstance()
     {
         if (is_null($this->_instance)) {
-            $this->_instance = new \frame\Query($this->_connect, $this->_table);
+            $this->_instance = new \frame\Query($this->_connect);
         }
+        $this->_instance->table($this->_table);
         return $this->_instance;
     }
 

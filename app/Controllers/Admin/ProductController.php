@@ -26,10 +26,15 @@ class ProductController extends Controller
 	{
 		$data = ipost();
 		if (empty($data['form_crawer'])) {
-			$this->error('no data to create!');
+			$this->error('没有产品数据!');
+		}
+		$cateArr = array_filter(explode(',', $data['form_page']['bc_product_category']));
+		if (empty($cateArr)) {
+			$this->error('产品分类必选!');
 		}
 		//查询产品是否入库
 		$spuDataService = make('App\Services\ProductSpuDataService');
+		$spuDataService->start();
 		$siteId = $this->getSiteId($data['form_page']['bc_site_id']);
 		if ($spuDataService->isExist($siteId, $data['form_crawer']['item_id'])) {
 			$this->error('product already exist!');
@@ -68,6 +73,8 @@ class ProductController extends Controller
 		if (empty($spuId)) {
 			$this->error('product spu create failed!');
 		}
+		//产品分类关联
+		make('App\Services\CategoryService')->addCateProRelation($spuId, $cateArr);
 		//多语言配置 默认en
 		$lanArr = make('App\Services\LanguageService')->getInfo();
 		$productLanguageService = make('App\Services\ProductLanguageService');

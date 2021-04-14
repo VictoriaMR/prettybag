@@ -30,7 +30,6 @@ class IndexController extends Controller
 	{
         Html::addCss();
         Html::addJs();
-        Html::addJs('echarts');
         if (isPost()) {
             $opn = ipost('opn');
             if (in_array($opn, ['getSystemInfo'])) {

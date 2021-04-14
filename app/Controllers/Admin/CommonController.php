@@ -13,6 +13,10 @@ class CommonController extends Controller
 
 	public function getCrawerData()
 	{
-		$this->success(['version' => '1.0.0']);
+		$data = [
+			'version' => '1.0.0',
+			'category' => make('App\Services\CategoryService')->getListFormat(),
+		];
+		$this->success($data);
 	}
 }

@@ -103,4 +103,19 @@ class Base
     {
         return date('Y-m-d H:i:s');
     }
+
+    public function start() 
+    {
+        return make('App\Models\Base')->start();
+    }
+
+    public function rollback()
+    {
+        return make('App\Models\Base')->rollback();
+    }
+
+    public function commit()
+    {
+        return make('App\Models\Base')->commit();
+    }
 }
