@@ -10,11 +10,11 @@ class IndexController extends Controller
 {
 	public function __construct()
 	{
-        $arr = [
-            'index' => '首页',
+        $this->_arr = [
             'statInfo' => '统计信息',
         ];
-		$this->_nav = array_merge(['default' => '概览'], $arr);
+        $this->_tagShow = false;
+        $this->_default = '概览';
 	}
 
 	public function index()

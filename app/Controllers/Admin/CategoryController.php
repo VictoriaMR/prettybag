@@ -9,10 +9,10 @@ class CategoryController extends Controller
 {
 	public function __construct()
 	{
-        $arr = [
+        $this->_arr = [
             'index' => '分类列表',
         ];
-		$this->_nav = array_merge(['default' => '分类管理'], $arr);
+		$this->_default = '分类管理';
 		$this->_init();
 	}
 

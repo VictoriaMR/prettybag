@@ -6,6 +6,9 @@ class Controller
 {
     protected $_nav;
     protected $_tag;
+    protected $_arr;
+    protected $_default;
+    protected $_tagShow=true;
     
 	protected function result($code, $data=[], $options=[])
     {
@@ -23,14 +26,14 @@ class Controller
     {
         if (is_array($data)) {
             if (is_null($options)) {
-                $options = ['message' => 'success'];
-            } else {
-                $options = ['message' => $options];
+                $options = 'success';
             }
         } else {
-            $options = ['message' => $data];
-            $data = [];
+            if (is_null($options)) {
+                $options = $data;
+            }
         }
+        $options = ['message' => $options];
         $this->result('200', $data, $options);
     }
 
@@ -54,8 +57,15 @@ class Controller
 
     protected function _init()
     {
+        $this->_tag = $this->_arr;
+        if (empty($this->_default)) {
+            $this->_nav = $this->_arr;
+        } else {
+            $this->_nav = array_merge(['default' => $this->_default], $this->_arr);
+        }
         $this->assign('_tag', $this->_tag);
         $this->assign('_nav', $this->_nav);
+        $this->assign('_tagShow', $this->_tagShow);
         $this->assign('_path', \Router::$_route['path']);
         $this->assign('_func', \Router::$_route['func']);
         $this->assign('_title', $this->_tag[\Router::$_route['func']] ?? '');

@@ -27,6 +27,7 @@
         		<td class="col-md-1"><?php echo sprintf('%.2f', $value['size'] / 1024).' Kbs';?></td>
         		<td class="col-md-2"><?php echo $value['c_time'];?></td>
         		<td class="col-md-2">
+        			<a href="<?php echo url('site/logDetail', ['name'=>$value['name']]);?>" class="btn btn-primary btn-sm mt2"><i class="glyphicon glyphicon-eye-open"></i> 查看</a>
                     <button class="btn btn-danger btn-sm delete mt2" type="button" data-id="<?php echo $value['name'];?>"><i class="glyphicon glyphicon-trash"></i> 删除</button>
         		</td>
         	</tr>
@@ -37,7 +38,7 @@
 </div>
 <script type="text/javascript">
 $(function(){
-	SITECACHE.init();
+	SITELOG.init();
 });
 </script>
 <?php $this->load('common/footer');?>

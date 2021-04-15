@@ -9,14 +9,13 @@ class SystemInfoController extends Controller
 	//初始化
     public function __construct()
     {
-    	$arr = [
+    	$this->_arr = [
     		'index'=>'组件安装状态',
     		'mysql' => 'MySQL信息',
     		'redis' => 'Redis信息',
     		'phpinfo' => 'PHP信息',
     	];
-		$this->_nav = array_merge(['default' => '服务器信息'], $arr);
-        $this->_tag = $arr;
+		$this->_default = '服务器信息';
         $this->_init();
     }
 

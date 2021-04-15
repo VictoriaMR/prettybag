@@ -44,7 +44,7 @@ class LogService extends BaseService
 
     public function getList(array $where, $page=1, $size=20)
     {
-        $list = $this->baseModel->where($where)->orderBy('create_at', 'desc')->get();
+        $list = $this->baseModel->where($where)->orderBy('create_at', 'desc')->page($page, $size)->get();
         if (!empty($list)) {
             $memIdArr = array_unique(array_column($list, 'mem_id'));
             $memData = make('App/Services/Admin/MemberService')->getList(['mem_id'=>['in', $memIdArr]], 0);

@@ -29,20 +29,18 @@ class View
 
     private function getTemplate($template, $match = true) 
     {
-        $matchPath = '';
-        $_route = \Router::$_route;
         if ($match) {
+            $matchPath = '';
             if (env('APP_VIEW_MATCH')) {
-                $matchPath = (APP_IS_MOBILE ? 'mobile' : 'computer') . DS;
+                $matchPath = (APP_IS_MOBILE ? 'mobile' : 'computer').DS;
             }
             if (empty($template)) {
-                $template = implode(DS, array_map('lcfirst', $_route));
-            } else {
-                $template = lcfirst($_route['class']) . DS . $template;
+                $_route = \Router::$_route;
+                $template = lcfirst($_route['path']).DS.lcfirst($_route['func']);
             }
-            $template = 'view' . DS . $matchPath . $template;
+            $template = APP_TEMPLATE_TYPE.DS.'view'.DS.$matchPath.$template;
         }
-        return ROOT_PATH . $template . '.php';
+        return ROOT_PATH.$template.'.php';
     }
 
     public function assign($name, $value = null)

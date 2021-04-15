@@ -9,12 +9,11 @@ class MemberController extends Controller
 {
 	public function __construct()
 	{
-        $arr = [
+        $this->_arr = [
             'index' => '人员列表',
             'loginLog' => '日志',
         ];
-        $this->_tag = $arr;
-		$this->_nav = array_merge(['default' => '管理人员'], $arr);
+        $this->_default = '管理人员';
 		$this->_init();
 	}
 

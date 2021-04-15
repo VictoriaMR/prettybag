@@ -97,7 +97,7 @@ class Html
         }
         $path = ROOT_PATH.APP_TEMPLATE_TYPE.DS;
         $dir = $path.'static';
-        $file = DS.'common.js';
+        $file = DS.(isMobile() ? 'm_' : 'c_').'common.js';
         if (APP_STATIC && is_file($dir.$file)) {
             return true;
         }
@@ -125,7 +125,7 @@ class Html
         }
         $path = ROOT_PATH.APP_TEMPLATE_TYPE.DS;
         $dir = $path.'static';
-        $file = DS.'common.css';
+        $file = DS.(isMobile() ? 'm_' : 'c_').'common.css';
         if (APP_STATIC && is_file($dir.$file)) {
             return true;
         }

@@ -69,7 +69,7 @@ class Debug
         }
         // 获取基本信息
         if (isset($_SERVER['HTTP_HOST'])) {
-            $current_uri = ' uri:' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            $current_uri = ' uri:' . $_SERVER['HTTP_HOST'] . urldecode($_SERVER['REQUEST_URI']);
         } else {
             $current_uri = ' cmd:' . implode(' ', $_SERVER['argv']);
         }

@@ -7,12 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('static/common.css');?>">
-    <?php foreach (\frame\Html::getCss() as $value) { ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo env('APP_DOMAIN').$value;?>">
-    <?php }?>
-    <script type="text/javascript" src="<?php echo staticUrl('static/common.js');?>"></script>
-    <?php foreach (\frame\Html::getJs() as $value) { ?>
+    <link rel="stylesheet" type="text/css" href="<?php echo staticUrl('static/c_common.css');?>">
+    <script type="text/javascript" src="<?php echo staticUrl('static/c_common.js');?>"></script>
+    <?php foreach (\frame\Html::getCss() as $value) {?>
+    <link rel="stylesheet" type="text/css" href="<?php echo env('APP_DOMAIN').$value;?>"><?php }?>
+    <?php foreach (\frame\Html::getJs() as $value) {?>
     <script type="text/javascript" src="<?php echo env('APP_DOMAIN').$value;?>"></script>
     <?php }?>
 </head>
@@ -20,29 +19,6 @@
 <div id="progressing"></div>
 <script type="text/javascript">
 var URI = "<?php echo env('APP_DOMAIN');?>";
-function progressing(val) {
-    if (document.readyState == 'complete') {
-        val = val + 50;
-        val = val > 100 ? 100 : val;
-    } else {
-        if (val < 80) {
-            val = val + 20;
-        }
-    }
-    $('#progressing').stop(true,true).animate({'width':val+'%'}, 100, function(){
-        if (val >= 100) {
-            $('#progressing').fadeOut(150);
-        } else {
-            progressing(val);
-        }
-    });
-    return true;
-} 
-$(function(){
-    $('#progressing').show();
-    progressing(20);
-    var progressingTimeHandle = null;
-});
 </script>
 <?php if (!empty($_nav)) {?>
 <div id="header-nav" class="container-fluid">
@@ -56,13 +32,13 @@ $(function(){
     </div>
 </div>
 <?php } ?>
-<?php if (!empty($_tag)) {?>
+<?php if (!empty($_tagShow) && !empty($_tag)) {?>
 <div class="container-fluid" style="margin-bottom: 15px;">
     <ul class="nav nav-tabs">
         <?php foreach ($_tag as $key => $value) {?>
-            <li<?php if($_func == $key) echo ' class="active"';?>>
-                <a href="<?php echo url($_path.'/'.$key);?>"><?php echo $value;?></a>
-            </li>
+        <li<?php if($_func == $key) echo ' class="active"';?>>
+            <a href="<?php echo url($_path.'/'.$key);?>"><?php echo $value;?></a>
+        </li>
         <?php } ?>
     </ul>
     <div class="clear"></div>

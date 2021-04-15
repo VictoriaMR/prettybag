@@ -78,7 +78,7 @@
 								</li>
 								<li data-src="<?php echo url('site');?>" class="selected">
 									<span class="glyphicon glyphicon-certificate"></span>
-									<span class="ml6">站点设置</span>
+									<span class="ml6">站点管理</span>
 									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('site');?>"></a>
 								</li>
 							</ul>
@@ -86,9 +86,14 @@
 						<div class="item" data-for="product">
 							<ul>
 								<li data-src="<?php echo url('category');?>" class="selected">
-									<span class="glyphicon glyphicon-th-list"></span>
+									<span class="glyphicon glyphicon-sort-by-attributes"></span>
 									<span class="ml6">产品分类</span>
 									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('category');?>"></a>
+								</li>
+								<li data-src="<?php echo url('product');?>" class="selected">
+									<span class="glyphicon glyphicon-th-list"></span>
+									<span class="ml6">产品列表</span>
+									<a class="glyphicon glyphicon-link right" title="新窗口打开" target="_blank" href="<?php echo url('product');?>"></a>
 								</li>
 							</ul>
 						</div>

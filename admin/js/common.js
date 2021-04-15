@@ -89,6 +89,24 @@ function errorTips(msg) {
 function isScroll() {
     return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
 }
+function progressing(val) {
+    if (document.readyState == 'complete') {
+        val = val + 50;
+        val = val > 100 ? 100 : val;
+    } else {
+        if (val < 80) {
+            val = val + 20;
+        }
+    }
+    $('#progressing').stop(true,true).animate({'width':val+'%'}, 100, function(){
+        if (val >= 100) {
+            $('#progressing').fadeOut(150);
+        } else {
+            progressing(val);
+        }
+    });
+    return true;
+}
 (function($){
 	$.fn.offsetCenter = function(width, height) {
 	    var obj = $(this).find('.centerShow');
@@ -120,12 +138,15 @@ function isScroll() {
 	        });
 	    }
 	};
-	$.fn.dealboxShow = function(width, height) {
+	$.fn.dealboxShow = function(title, width, height) {
 		var obj = $(this);
 		obj.offsetCenter();
 		$('body').css({'overflow': 'hidden'});
 		if (isScroll()) {
 			$('body').css({'padding-right': '6.5px'});
+		}
+		if (title) {
+			obj.find('.dealbox-title').text(title);
 		}
 		obj.show();
 		return obj;
@@ -181,4 +202,7 @@ $(function(){
         clearBtn: 1,
         minView: 'month'
     });
+    $('#progressing').show();
+    progressing(20);
+    var progressingTimeHandle = null;
 });

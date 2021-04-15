@@ -7,18 +7,11 @@ final class Router
 	{
 		$pathInfo = trim($_SERVER['REQUEST_URI'], DS);
 		self::$_route['class'] = ucfirst(APP_TEMPLATE_TYPE);
-		$_GET = [];
 		if (empty($pathInfo)) {
 			self::$_route['path'] = 'Index';
 			self::$_route['func'] = 'index';
 		} else {
 			$pathInfo = parse_url($pathInfo);
-			if (!empty($pathInfo['query'])) {
-				foreach (explode('&', $pathInfo['query']) as $chunk) {
-    				$param = explode('=', $chunk);
-    				$_GET[$param[0]] = $param[1] ?? '';
-    			}
-			}
 			if (empty($pathInfo)) {
 				self::$_route['path'] = 'Index';
 				self::$_route['func'] = 'index';
@@ -72,6 +65,7 @@ final class Router
 				}
 			}
 		}
+		array_shift($_GET);
 		if (!in_array(self::$_route['class'], config('router'))) {
 			throw new \Exception(self::$_route['class'] ?? 'no class' . ' was a illegal routing', 1);
 		}

@@ -105,7 +105,7 @@ Class Query
 
 	public function page($page, $size)
 	{
-		if ($page > 1) {
+		if ($page >= 1) {
 			$this->_offset = ($page - 1) * $size;
 			$this->_limit = (int) $size;
 		}
@@ -243,7 +243,7 @@ Class Query
 					$valueStr = '';
 					foreach ($value as $v) {
 						if (is_string($v)) {
-							$valueStr .= "'".addslashes($value)."',";
+							$valueStr .= "'".addslashes($v)."',";
 						} else {
 							$valueStr .= (int) $value;
 							$valueStr .= ',';
