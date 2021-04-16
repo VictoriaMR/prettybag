@@ -75,9 +75,9 @@ final class Router
 		return true;
 	}
 
-	public static function buildUrl($url = '', $param = [])
+	public static function buildUrl($url = null, $param = null)
 	{
-		if (empty($url)) {
+		if (is_null($url)) {
 			$url = lcfirst(self::$_route['path']) . DS . lcfirst(self::$_route['func']);
 		}
 		if (empty($param)) {

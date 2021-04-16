@@ -84,7 +84,7 @@ function view($template = '', $match = true)
 {
     return \frame\View::getInstance()->display($template, $match);
 }
-function url($url = '', $param = []) 
+function url($url = null, $param = null) 
 {
     return \Router::buildUrl($url, $param);
 }
