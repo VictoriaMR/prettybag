@@ -25,6 +25,7 @@ class CategoryController extends Controller
 			}
 			$this->error('非法请求');
 		}
+		Html::addCss();
 		Html::addJs();
 		$list = make('App\Services\CategoryService')->getListFormat();
 		//语言列表

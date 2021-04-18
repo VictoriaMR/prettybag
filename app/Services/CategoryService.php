@@ -78,7 +78,18 @@ class CategoryService extends BaseService
 
     public function getList()
     {
-        return $this->baseModel->orderBy('sort', 'asc')->get();
+        $list = $this->baseModel->orderBy('sort', 'asc')->get();
+        if (!empty($list)) {
+            foreach ($list as $key => $value) {
+                if (empty($value['avatar'])) {
+                    $value['avatar'] = staticUrl('image/common/noimg.png');
+                } else {
+                    $value['avatar'] = mediaUrl($value['avatar']);
+                }
+                $list[$key] = $value;
+            }
+        }
+        return $list;
     }
 
     public function getListFormat()

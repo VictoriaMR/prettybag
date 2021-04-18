@@ -100,6 +100,10 @@ var CATEGORYLIST = {
 	    });
 	    this.sortInit();
 	    this.sortClick();
+	    //点击查看大图
+	    $('.big-image').bigImage();
+	    //图片上传
+	    $('.form-category-img img').imageUpload('avatar', 50, 50);
 	},
 	loadData: function(id, callback) {
 		if (id) {

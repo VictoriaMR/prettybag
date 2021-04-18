@@ -26,7 +26,13 @@
         	<tr class="item<?php echo $value['level']==0 ? ' info' : '';?>" data-lev="<?php echo $value['level'];?>" data-id="<?php echo $value['cate_id'];?>">
         		<td class="col-md-1"><?php echo $value['cate_id'];?></td>
 	            <td class="col-md-3">
-	            	<div <?php echo $value['level'] ? 'style="padding-left:'.($value['level']*20).'px;"' : '';?>><span class="glyphicon glyphicon-globe" data-id="<?php echo $value['cate_id'];?>"></span>&nbsp;<?php echo $value['name'];?></div>
+	            	<div class="left text-content" <?php echo $value['level'] ? 'style="padding-left:'.($value['level']*20).'px;"' : '';?>>
+	            		<span class="glyphicon glyphicon-globe" data-id="<?php echo $value['cate_id'];?>"></span>
+	            		<span>&nbsp;<?php echo $value['name'];?></span>
+	            	</div>
+	            	<div class="left image-content">
+	            		<img class="big-image" src="<?php echo $value['avatar'];?>">
+	            	</div>
 	            </td>
 	            <td class="col-md-2 f16 sort-btn-content">
 	            	<span class="glyphicon glyphicon-arrow-up" data-sort="top"></span>
@@ -61,10 +67,9 @@
 	        </div>
 	        <div class="input-group">
 	            <div class="input-group-addon"><span>图片：</span></div>
-	            <div class="form-category-img" title="点击修改" onclick="document.getElementById('uploadImg').click();">
-	                <img src="<?php echo staticUrl('image/common/noimg.png');?>" height="50" width="50" alt="" id="preview_pic">
+	            <div class="form-category-img">
+	                <img src="<?php echo staticUrl('image/common/noimg.png');?>" height="50" width="50">
 	            </div>
-	            <input type="file" name="image" style="display: none" id="uploadImg">
 	        </div>
 	        <button type="button" class="btn btn-primary btn-lg w100 save-btn">确认</button>
 	    </form>

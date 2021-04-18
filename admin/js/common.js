@@ -107,6 +107,12 @@ function progressing(val) {
     });
     return true;
 }
+function S4() {
+   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+}
+function guid() {
+   return (S4()+S4()+'-'+S4()+'-'+S4()+'-'+S4()+'-'+S4()+S4()+S4());
+}
 (function($){
 	$.fn.offsetCenter = function(width, height) {
 	    var obj = $(this).find('.centerShow');
@@ -137,6 +143,7 @@ function progressing(val) {
 	            obj.parent().dealboxHide();
 	        });
 	    }
+	    return $(this);
 	};
 	$.fn.dealboxShow = function(title, width, height) {
 		var obj = $(this);
@@ -180,6 +187,48 @@ function progressing(val) {
 			}
 		});
 		return status;
+	};
+	$.fn.bigImage = function(){
+		var obj = $(this);
+		obj.css({cursor: 'pointer'});
+		obj.attr('title', '点击查看大图');
+		obj.on('click', function(){
+			var bigImageObj = $('#dealbox-bigimage');
+			if (bigImageObj.length == 0) {
+				var html = '<div id="dealbox-bigimage">\
+								<div class="mask"></div>\
+								<div class="centerShow">\
+									<img src="'+URI+'image/common/noimg.png">\
+								</div>\
+							</div>';
+				$('body').append(html);
+				bigImageObj = $('#dealbox-bigimage');
+			}
+			bigImageObj.find('.centerShow img').attr('src', obj.attr('src'));
+			bigImageObj.offsetCenter().dealboxShow();
+		});
+	};
+	$.fn.imageUpload = function(name, width, height) {
+		var obj = $(this);
+		obj.each(function(){
+			if (typeof width !== 'undefined') {
+				$(this).attr('width', width)
+			}
+			if (typeof height !== 'undefined') {
+				$(this).attr('height', height)
+			}
+			var name = guid();
+			$(this).data('file', name);
+			$(this).parent().append('<input name="'+name+'" type="file" accept=".bmp,.jpg,.png,.jpeg,image/bmp,image/jpg,image/png,image/jpeg" class="hide" />');
+			$(this).on('click', function(){
+				var file = $(this).data('file');
+				console.log(123123, file)
+				$('[name="'+file+'"]').click();
+			});
+			$('[name="'+name+'"]').on('change', function (e) {
+				console.log('选择文件')
+			});
+		});
 	};
 }(jQuery));
 $(function(){
