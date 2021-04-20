@@ -106,9 +106,10 @@ class ImageService
 		$new_w = $srcImageWidth * $percent;
 		$new_h = $srcImageHeight * $percent;
 		$returnPic = imagecreatetruecolor($new_w, $new_h);
-		$white = imagecolorallocate($returnPic, 255, 255, 255);//白色
-	 	//图片填充白色背景
-	 	imagecolortransparent($returnPic, $white);
+
+		imagealphablending($returnPic, true);
+	    imagesavealpha($returnPic, true);
+		$white = imagecolorallocatealpha($returnPic, 255, 255, 255, 127);//白色
 		imagefill($returnPic, 0, 0, $white);
 
 		imagecopyresampled($returnPic, $srcImage, 0, 0, 0, 0, $new_w, $new_h, $srcImageWidth, $srcImageHeight);
@@ -202,8 +203,9 @@ class ImageService
 		//左右留白
 		$diff_x = ($outputWidth - $real_w) / 2;
 
-		// imagecopy($img, $srcImage, 0, 0, 0, 0, $srcImageWidth, $srcImageHeight);
-		$white = imagecolorallocate($returnPic, 255, 255, 255);//白色
+		imagealphablending($returnPic, true);
+	    imagesavealpha($returnPic, true);
+		$white = imagecolorallocatealpha($returnPic, 255, 255, 255, 127);//白色
 		imagefill($returnPic, 0, 0, $white);
 
 		imagecopyresampled($returnPic, $srcImage, $dst_x + $diff_x, $dst_y + $diff_y, $src_x, $src_y, $real_w, $real_h, $src_w, $src_h);

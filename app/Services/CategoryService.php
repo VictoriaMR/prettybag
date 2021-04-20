@@ -84,7 +84,7 @@ class CategoryService extends BaseService
                 if (empty($value['avatar'])) {
                     $value['avatar'] = staticUrl('image/common/noimg.png');
                 } else {
-                    $value['avatar'] = mediaUrl($value['avatar']);
+                    $value['avatar'] = mediaUrl($value['avatar'], 200);
                 }
                 $list[$key] = $value;
             }

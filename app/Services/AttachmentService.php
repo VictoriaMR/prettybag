@@ -47,11 +47,11 @@ class AttachmentService extends BaseService
     	return $this->baseModel->isExist($name);
     }
 
-    public function getAttachmentByName($name)
+    public function getAttachmentByName($name, $width='')
     {
         if (empty($name)) return [];
     	$info = $this->baseModel->getAttachmentByName($name);
-        return $this->urlInfo($info);;
+        return $this->urlInfo($info, $width);;
     }
 
     public function getAttachmentById($attachId)
@@ -74,10 +74,10 @@ class AttachmentService extends BaseService
         return $list;
     }
 
-    protected function urlInfo($info)
+    public function urlInfo($info, $width='')
     {
         if (!empty($info)) {
-            $info['url'] = env('FILE_CENTER_DOMAIN').$info['cate'].DS.$info['name'].'.'.$info['type'];
+            $info['url'] = env('FILE_CENTER_DOMAIN').$info['cate'].DS.$info['name'].(empty($width) ? '' : DS.$width).'.'.$info['type'];
         }
         return $info;
     }

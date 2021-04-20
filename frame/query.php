@@ -239,7 +239,7 @@ Class Query
 			$tempStr = '';
 			foreach ($fields as $fk => $fv) {
 				$fv = trim($fv);
-				if ($operator == 'IN') {
+				if ($operator == 'IN' || $operator == 'NOT IN') {
 					$valueStr = '';
 					foreach ($value as $v) {
 						if (is_string($v)) {

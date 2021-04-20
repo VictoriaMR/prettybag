@@ -11,7 +11,9 @@ class VerifyToken
             'login' => true,
             'common' => true,
             'product' => true,
+            'api' => true,
         ],
+        'upload' => true,
     ];
 
     public static function handle($request)

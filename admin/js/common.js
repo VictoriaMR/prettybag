@@ -204,29 +204,60 @@ function guid() {
 				$('body').append(html);
 				bigImageObj = $('#dealbox-bigimage');
 			}
-			bigImageObj.find('.centerShow img').attr('src', obj.attr('src'));
-			bigImageObj.offsetCenter().dealboxShow();
+			var src = obj.attr('src').replace('/200', '').replace('/400', '').replace('/600', '');
+			console.log(src, 'src')
+			bigImageObj.find('.centerShow img').attr('src', src);
+			bigImageObj.find('.centerShow img').on('load', function(){
+				bigImageObj.offsetCenter().dealboxShow();
+			});
 		});
 	};
-	$.fn.imageUpload = function(name, width, height) {
+	$.fn.imageUpload = function(name, cate, width, height) {
 		var obj = $(this);
 		obj.each(function(){
+			var thisobj = $(this);
 			if (typeof width !== 'undefined') {
-				$(this).attr('width', width)
+				thisobj.attr('width', width)
 			}
 			if (typeof height !== 'undefined') {
-				$(this).attr('height', height)
+				thisobj.attr('height', height)
 			}
-			var name = guid();
-			$(this).data('file', name);
-			$(this).parent().append('<input name="'+name+'" type="file" accept=".bmp,.jpg,.png,.jpeg,image/bmp,image/jpg,image/png,image/jpeg" class="hide" />');
-			$(this).on('click', function(){
+			var guid_name = guid();
+			thisobj.data('file', guid_name);
+			thisobj.parent().append('<input name="'+guid_name+'" type="file" accept=".bmp,.jpg,.png,.jpeg,image/bmp,image/jpg,image/png,image/jpeg" class="hide" readonly="readonly"/>');
+			thisobj.on('click', function(){
 				var file = $(this).data('file');
-				console.log(123123, file)
 				$('[name="'+file+'"]').click();
 			});
-			$('[name="'+name+'"]').on('change', function (e) {
-				console.log('选择文件')
+			$('[name="'+guid_name+'"]').on('change', function (e) {
+				var files = $(this).prop('files');
+				var data = new FormData();
+            	data.append('file', files[0]);
+            	data.append('cate', cate);
+  				$.ajax({
+					url: URI+'api/upload',
+					type: 'POST',
+					data: data,
+					cache: false,
+					processData: false,
+					contentType: false,
+					success: function(res) {
+	                    if (res.code == 200) {
+	                    	thisobj.attr('src', res.data.url);
+	                    	obj = thisobj.parent().find('[name="'+name+'"]');
+	                    	if (obj.length == 0) {
+	                    		thisobj.parent().append('<input name="'+name+'" value="'+(res.data.cate+'/'+res.data.name+'.'+res.data.type)+'" class="hide" />');
+	                    	} else {
+	                    		obj.val(res.data.cate+'/'+res.data.name+'.'+res.data.type);
+	                    	}
+	                    } else {
+	                    	errorTips(res.message);
+	                    }
+	                },
+	                error: function(res) {
+	                	errorTips('网络错误, 上传失败');
+	                }
+				});
 			});
 		});
 	};
