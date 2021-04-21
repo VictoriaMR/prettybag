@@ -204,6 +204,10 @@ function getSystem($agent = '')
     } else {
         if (preg_match('/win/i', $agent)) {
             return 'Windows';
+        } elseif (preg_match('/iphone/i', $agent)) {
+            return 'iPhone';
+        } elseif (preg_match('/android/i', $agent)) {
+            return 'Android';
         } elseif (preg_match('/mac/i', $agent)) {
             return 'MAC';
         } elseif (preg_match('/linux/i', $agent)) {
@@ -220,4 +224,19 @@ function getSystem($agent = '')
 function page($size=null, $total=null)
 {
     return \frame\Paginator::getInstance()->make($size, $total);
+}
+function now()
+{
+    return date('Y-m-d H:i:s');
+}
+function dist($name)
+{
+    if (empty($name)) {
+        return '';
+    }
+    $trCode = \frame\Session::get('language_tr_code');
+    if (empty($trCode) || in_array($trCode, ['zh', 'cht'])) {
+        return $name;
+    }
+    return make('App/Services/TranslateService')->getText($name, $trCode);
 }

@@ -12,7 +12,7 @@ final class Router
 			self::$_route['func'] = 'index';
 		} else {
 			$pathInfo = parse_url($pathInfo);
-			if (empty($pathInfo)) {
+			if (empty($pathInfo['path'])) {
 				self::$_route['path'] = 'Index';
 				self::$_route['func'] = 'index';
 			} else {

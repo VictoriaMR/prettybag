@@ -1,6 +1,9 @@
 <?php $this->load('common/header');?>
 <div class="container-fluid" id="category-list">
 	<div class="row-item">
+		<div class="left">
+			<button class="btn btn-primary update-btn" type="button" style="width: 100px; margin-right: 20px;"><i class="glyphicon glyphicon-asterisk"></i> 更新数据</button>
+		</div>
 		<div class="right">
             <button class="btn btn-info sort-btn disabled" type="button" style="width: 150px; margin-right: 20px;"><i class="glyphicon glyphicon-asterisk"></i> 保存排序</button>
             <button class="btn btn-success modify" data-id="0" type="button" style="width: 150px;"><i class="glyphicon glyphicon-plus"></i> 添加子类目</button>
@@ -12,6 +15,8 @@
 	        <tr>
 	            <th class="col-md-1">ID</th>
 	            <th class="col-md-3">名称</th>
+	            <th class="col-md-1">销量</th>
+	            <th class="col-md-1">热度</th>
 	            <th class="col-md-2">排序</th>
 	            <th class="col-md-2">操作</th>
 	        </tr>
@@ -34,6 +39,8 @@
 	            		<img class="big-image" src="<?php echo $value['avatar'];?>">
 	            	</div>
 	            </td>
+	            <td class="col-md-1"><?php echo $value['sale_total'] ?? '';?></td>
+	            <td class="col-md-1"><?php echo $value['visit_total'] ?? '';?></td>
 	            <td class="col-md-2 f16 sort-btn-content">
 	            	<span class="glyphicon glyphicon-arrow-up" data-sort="top"></span>
 	            	<span class="glyphicon glyphicon-chevron-up ml10" data-sort="up"></span>
@@ -67,8 +74,8 @@
 	        </div>
 	        <div class="input-group">
 	            <div class="input-group-addon"><span>图片：</span></div>
-	            <div class="form-category-img">
-	                <img src="<?php echo staticUrl('image/common/noimg.png');?>" height="50" width="50">
+	            <div class="form-category-img" style="margin-left:12px;height:50px;width:50px;vertical-align:middle;text-align:center;">
+	                <img src="<?php echo staticUrl('image/common/noimg.png');?>">
 	            </div>
 	        </div>
 	        <button type="button" class="btn btn-primary btn-lg w100 save-btn">确认</button>

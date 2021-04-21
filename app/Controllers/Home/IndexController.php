@@ -11,6 +11,11 @@ class IndexController extends Controller
 	{	
 		Html::addCss();
 		Html::addJs();
+
+		//分类列表
+		$hotCategory = make('App\Services\CategoryService')->getHotCategory();
+
+		$this->assign('hot_category', $hotCategory);
 		return view();
 	}
 }

@@ -107,7 +107,9 @@ class Html
         $jsStr = '';
         foreach ($data as $key => $value) {
             $source = $path.'js'.DS.$value.'.js';
-            $jsStr .= trim(file_get_contents($source));
+            if (is_file($source)) {
+                $jsStr .= trim(file_get_contents($source));
+            }
         }
         if (empty($jsStr)) {
             return false;
@@ -135,7 +137,9 @@ class Html
         $cssStr = '';
         foreach ($data as $key => $value) {
             $source = $path.'css'.DS.$value.'.css';
-            $cssStr .= trim(file_get_contents($source));
+            if (is_file($source)) {
+                $cssStr .= trim(file_get_contents($source));
+            }
         }
         if (empty($cssStr)) {
             return false;

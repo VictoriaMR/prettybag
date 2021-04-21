@@ -52,19 +52,21 @@ Class Query
 		return $this->where($column, 'IN', $value);
 	}
 
+	public function leftJoin($table, $linkForm, $linkTo)
+	{
+		$this->_table = sprintf('%s LEFT JOIN %s ON %s = %s', $this->_table, $table, $linkForm, $linkTo);
+		return $this;
+	}
+
 	public function orderBy($columns, $operator = null)
 	{
 		if (empty($columns)) return $this;
 		if (is_array($columns)) {
 			foreach ($columns as $key => $value) {
-				if (stripos($key, ' as ') === false) {
-					$this->_orderBy .= $key.' '.strtoupper($value).',';
-				} else {
-					$this->_orderBy .= '`'.$key.'` '.strtoupper($value).',';
-				}
+				$this->_orderBy .= $key.' '.strtoupper($value).',';
 			}
 		} else {
-			$this->_orderBy .= '`'.$columns.'` '.strtoupper($operator).',';
+			$this->_orderBy .= $columns.' '.strtoupper($operator).',';
 		}
 		return $this;
 	}
@@ -76,12 +78,7 @@ Class Query
 			$columns = explode(',', $columns);
 		}
 		foreach ($columns as $value) {
-			$value = trim($value);
-			if (stripos($value, ' as ') === false) {
-				$this->_groupBy .= $value.',';
-			} else {
-				$this->_groupBy .= '`'.$value.'`,';
-			}
+			$this->_groupBy .= trim($value).',';
 		}
 		return $this;
 	}
@@ -93,12 +90,7 @@ Class Query
 			$columns = explode(',', $columns);
 		}
 		foreach ($columns as $value) {
-			$value = trim($value);
-			if (stripos($value, ' as ') === false) {
-				$this->_columns .= '`'.$value.'`,';
-			} else {
-				$this->_columns .= $value.',';
-			}
+			$this->_columns .= trim($value).',';
 		}
         return $this;
 	}
@@ -150,7 +142,7 @@ Class Query
 			}
 			return implode(', ', $value);
 		}, $data);
-		$sql = sprintf('INSERT INTO %s (`%s`) VALUES %s', $this->_table, implode('`, `', $fields), '(' . implode('), (', $data).')');
+		$sql = sprintf('INSERT INTO %s (%s) VALUES %s', $this->_table, implode(',', $fields), '(' . implode('), (', $data).')');
 		return $this->getQuery($sql);
 	}
 
@@ -159,15 +151,31 @@ Class Query
 		if (empty($data)) return false;
 		$tempArr = [];
 		foreach ($data as $key => $value) {
-			$tempArr[] = "`".$key."`="."'".addslashes($value)."'";
+			$tempArr[] = $key.'='."'".addslashes($value)."'";
 		}
 		$this->analyzeWhere();
 		if (!empty($this->_whereString)){
-			$sql = sprintf('UPDATE `%s` SET %s WHERE %s', $this->_table, implode(', ', $tempArr), $this->_whereString);
+			$sql = sprintf('UPDATE %s SET %s WHERE %s', $this->_table, implode(', ', $tempArr), $this->_whereString);
 		} else{
-			$sql = sprintf('UPDATE `%s` SET %s', $this->_table, implode(', ', $tempArr));
+			$sql = sprintf('UPDATE %s SET %s', $this->_table, implode(', ', $tempArr));
 		}
 		return $this->getQuery($sql);
+	}
+
+	public function increment($value, $num = 1) 
+	{
+		$this->analyzeWhere();
+		if (empty($this->_whereString)) return false;
+		$sql = sprintf('UPDATE %s SET %s WHERE %s', $this->_table, $value.'='.$value.' + '.$num, $this->_whereString);
+		return $this->getQuery($sql);
+	}
+
+	public function decrement($value, $num = 1) 
+	{
+		$this->analyzeWhere();
+		if (empty($this->_whereString)) return false;
+		$sql = sprintf('UPDATE %s SET %s WHERE %s', $this->_table, $value.'='.$value.' - '.$num, $this->_whereString);
+		return $this->getQuery($sql, $this->_param);
 	}
 
 	public function insertGetId($data)
@@ -183,9 +191,9 @@ Class Query
 	{
 		$this->analyzeWhere();
 		if (!empty($this->_whereString)){
-			$sql = sprintf('DELETE FROM `%s` WHERE %s', $this->_table, $this->_whereString);
+			$sql = sprintf('DELETE FROM %s WHERE %s', $this->_table, $this->_whereString);
 		} else{
-			$sql = sprintf('TRUNCATE TABLE `%s`', $this->_table);
+			$sql = sprintf('TRUNCATE TABLE %s', $this->_table);
 		}
 		return $this->getQuery($sql);
 	}
@@ -201,7 +209,7 @@ Class Query
 			throw new \Exception('MySQL Error, table not exist!', 1);
 		}
 		$this->analyzeWhere();
-		$sql = sprintf('SELECT %s FROM `%s`', empty($this->_columns) ? '*' : rtrim($this->_columns, ','), $this->_table);
+		$sql = sprintf('SELECT %s FROM %s', empty($this->_columns) ? '*' : rtrim($this->_columns, ','), $this->_table);
 		if (!empty($this->_whereString)) {
 			$sql .= ' WHERE ' . $this->_whereString;
 		}
@@ -250,10 +258,10 @@ Class Query
 						}
 					}
 
-					$tempStr .= sprintf('%s `%s` %s (%s)', $fk == 0 ? '' : $type, $fv, $operator, rtrim($valueStr, ','));
+					$tempStr .= sprintf('%s %s %s (%s)', $fk == 0 ? '' : $type, $fv, $operator, rtrim($valueStr, ','));
 				} else {
 					$value = is_string($value) ? "'".addslashes($value)."'" : (int) $value;
-					$tempStr .= sprintf('%s `%s` %s %s', $fk == 0 ? '' : $type, $fv, $operator, $value);
+					$tempStr .= sprintf('%s %s %s %s', $fk == 0 ? '' : $type, $fv, $operator, $value);
 				}
 			}
 			$this->_whereString .= $start.$tempStr.$end;
@@ -264,6 +272,7 @@ Class Query
 
 	public function getQuery($sql)
 	{
+		$this->clear();
 		if (env('APP_DEBUG')) {
 			$GLOBALS['exec_sql'][] = $sql;
 		}
@@ -279,7 +288,6 @@ Class Query
 		} else {
 			throw new \Exception($sql.' '.$conn->error, 1);
 		}
-		$this->clear();
 		return $returnData ?? null;
 	}
 

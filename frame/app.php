@@ -91,10 +91,6 @@ class App
             \frame\Debug::runlog();
             \frame\Debug::init();
         }
-        //记录浏览日志
-        if (Router::$_route['class'] == 'Home') {
-            make('App\Services\LoggerService')->addLog();
-        }
         exit();
     }
 }

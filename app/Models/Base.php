@@ -67,11 +67,6 @@ class Base
         ];
     }
 
-    public function getTime()
-    {
-        return date('Y-m-d H:i:s');
-    }
-
     public function __call($func, $arg)
     {
         return $this->getInstance()->$func(...$arg);

@@ -20,7 +20,7 @@ class CategoryController extends Controller
 	{	
 		if (isPost()) {
 			$opn = ipost('opn');
-			if (in_array($opn, ['getCateInfo', 'getCateLanguage', 'editInfo', 'editLanguage', 'sortCategory', 'deleteCategory'])) {
+			if (in_array($opn, ['getCateInfo', 'getCateLanguage', 'editInfo', 'editLanguage', 'sortCategory', 'deleteCategory', 'updateStat'])) {
 				$this->$opn();
 			}
 			$this->error('非法请求');
@@ -134,6 +134,16 @@ class CategoryController extends Controller
 			$this->success('删除成功');
 		} else {
 			$this->error('删除失败');
+		}
+	}
+
+	protected function updateStat()
+	{
+		$result = make('App\Services\CategoryService')->updateStat();
+		if ($result) {
+			$this->success('更新成功');
+		} else {
+			$this->error('更新失败');
 		}
 	}
 }

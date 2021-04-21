@@ -25,6 +25,14 @@ var CATEGORYLIST = {
     		CATEGORYLIST.initData(data);
     		$('#dealbox').dealboxShow();
 	    });
+	    //更新数据
+	    $('.btn.update-btn').on('click', function(){
+	    	var obj = $(this);
+	    	obj.button('loading');
+	    	post(URI+'category', {opn:'updateStat'}, function(){
+	    		obj.button('reset');
+	    	});
+	    });
 	    //多语言配置
 	    $('.glyphicon-globe').on('click', function(){
 	    	var id = $(this).data('id');

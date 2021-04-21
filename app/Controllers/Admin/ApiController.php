@@ -7,6 +7,7 @@ use App\Controllers\Controller;
 class ApiController extends Controller
 {
 	protected $_cateArr = ['category'];
+
 	public function upload()
 	{	
 		$file = $_FILES['file'] ?? [];
@@ -23,5 +24,11 @@ class ApiController extends Controller
 			$this->error('上传失败');
 		}
 		$this->success($result);
+	}
+
+	public function stat()
+	{
+		
+		make('App\Services\LoggerService')->addLog();
 	}
 }

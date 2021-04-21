@@ -66,7 +66,7 @@ class ProductController extends Controller
 			'avatar' => $firstImage['cate'].DS.$firstImage['name'].'.'.$firstImage['type'],
 			'min_price' => min($priceArr),
 			'name' => $data['form_crawer']['name'],
-			'add_time' => $this->getTime(),
+			'add_time' => now(),
 		];
 		$spuService = make('App\Services\ProductSpuService');
 		$spuId = $spuService->create($insert);
@@ -160,7 +160,7 @@ class ProductController extends Controller
 				'price' => $value['price'],
 				'name' => $name,
 				'origin_price' => round($value['price'] / ((10 - rand(5, 9)) / 10), 2),
-				'add_time' => $this->getTime(),
+				'add_time' => now(),
 			];
 			$skuId = $skuService->create($insert);
 			//多语言

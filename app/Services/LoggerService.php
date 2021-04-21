@@ -20,20 +20,21 @@ class LoggerService extends BaseService
         $this->baseModel = $model;
     }
 
-	public function addLog()
+	public function addLog(array $data = [])
 	{
-		$data = [
-			'mem_id' => (int)Session::get(strtolower(\Router::$_route['class']).'_mem_id'),
-			'language' => Session::get('site_language_name'),
+		$insert = [
+			'mem_id' => (int)Session::get(APP_TEMPLATE_TYPE.'_mem_id'),
+			'lan_id' => (int)Session::get('site_language_id'),
 			'is_moblie' => APP_IS_MOBILE ? 1 : 0,
 			'ip' => getIp(),
 			'path' => $_SERVER['REQUEST_URI'] ?? '',
 			'system' => getSystem(),
 			'browser' => getBrowser(),
 			'agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-			'create_at' => $this->getTime(),
+			'create_at' => now(),
 		];
-		return $this->baseModel->insert($data);
+		$insert = array_merge($insert, $data);
+		return $this->baseModel->insert($insert);
 	}
 
 	public function getStats($field)

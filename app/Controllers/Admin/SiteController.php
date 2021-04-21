@@ -12,7 +12,7 @@ class SiteController extends Controller
         $this->_arr = [
             'index' => '站点配置',
             'staticCache' => 'CSS/JS缓存',
-            'siteLog' => '站点日志'
+            'siteLog' => '站点日志',
         ];
         $this->_default = '站点管理';
         $this->siteId = 1;

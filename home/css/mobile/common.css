@@ -4,5 +4,6 @@ a{color:#333;text-decoration-line:none;}
 .container {padding: 0 0.16rem;}
 #pb-footbar{position: fixed;bottom: 0;width: 100%;background:#ffffff;z-index:1001;padding-top: 0.01rem;}
 #pb-footbar .tab{width:20%;display:block;text-align:center;float:left;color: #5d656b;}
+#pb-footbar .tab.active{color: #e7502b}
 #pb-footbar .tab .iconfont{font-size: 0.22rem}
 #pb-footbar .tab .text{white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}

@@ -21,3 +21,8 @@ var VERIFY = {
 		return reg.test(input);
 	}
 };
+$(function(){
+	$.post(URI+'api/stat', {url: window.location.href}, function(res){
+
+	});
+});

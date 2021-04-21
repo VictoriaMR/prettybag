@@ -2,5 +2,4 @@
 return [
 	'Home',
 	'Admin',
-	'Upload',
 ];

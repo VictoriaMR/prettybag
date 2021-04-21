@@ -20,7 +20,7 @@ class Attachment extends BaseModel
 		  	'type' => $data['type'],
 		  	'cate' => $data['cate'],
             'size' => $data['size'] ?? 0,
-            'add_time' => $this->getTime(),
+            'add_time' => now(),
     	];
     	return $this->insertGetId($insert);
     }

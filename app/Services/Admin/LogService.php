@@ -23,7 +23,7 @@ class LogService extends BaseService
             'browser' => getBrowser(),
             'system' => getSystem(),
             'agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-            'create_at' => $this->getTime(),
+            'create_at' => now(),
         ];
     	$data = array_merge($temp, $data);
     	return $this->baseModel->insert($data);

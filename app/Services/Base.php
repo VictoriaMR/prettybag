@@ -99,11 +99,6 @@ class Base
         return $password;
     }
 
-    public function getTime()
-    {
-        return date('Y-m-d H:i:s');
-    }
-
     public function start() 
     {
         return make('App\Models\Base')->start();

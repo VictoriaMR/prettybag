@@ -13,7 +13,11 @@ class VerifyToken
             'product' => true,
             'api' => true,
         ],
-        'upload' => true,
+        'home' => [
+            'index' => true,
+            'api' => true,
+            'login' => true,
+        ],
     ];
 
     public static function handle($request)
@@ -25,10 +29,13 @@ class VerifyToken
             case 'Admin':
                 $loginKey = 'admin_mem_id';
                 break;
+            case 'Home':
+                $loginKey = 'home_mem_id';
+                break;
         }
         //检查登录状态
         if (!empty($loginKey) && empty(Session::get($loginKey))) {
-            Session::set('admin_callback_url', rtrim($_SERVER['REQUEST_URI'].'?'.$_SERVER['QUERY_STRING']), '?');
+            Session::set('callback_url', rtrim($_SERVER['REQUEST_URI'].'?'.$_SERVER['QUERY_STRING']), '?');
             redirect(url('login'));
         }
         return true;
@@ -36,14 +43,18 @@ class VerifyToken
 
     private static function inExceptArray($route)
     {
+        //没有在排除的都要求登录
         $class = strtolower($route['class']);
         if (empty(self::$except[$class])) {
-            return true;
+            return false;
         }
         $path = strtolower($route['path']);
-        if ((self::$except[$class][$path] ?? false)) {
+        if (!empty(self::$except[$class][$path])) {
             return true;
         }
-        return self::$except[$class][$path.'/'.$route['func']] ?? false;
+        if (!empty(self::$except[$class][$path.'/'.$route['func']])) {
+            return true;
+        }
+        return false;
     }
 }

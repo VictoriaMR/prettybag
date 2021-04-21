@@ -222,6 +222,7 @@ function guid() {
 			if (typeof height !== 'undefined') {
 				thisobj.attr('height', height)
 			}
+			thisobj.css({cursor: 'pointer'});
 			var guid_name = guid();
 			thisobj.data('file', guid_name);
 			thisobj.parent().append('<input name="'+guid_name+'" type="file" accept=".bmp,.jpg,.png,.jpeg,image/bmp,image/jpg,image/png,image/jpeg" class="hide" readonly="readonly"/>');
@@ -230,6 +231,9 @@ function guid() {
 				$('[name="'+file+'"]').click();
 			});
 			$('[name="'+guid_name+'"]').on('change', function (e) {
+	            var thissrc = thisobj.attr('src');
+	            thisobj.data('src', thissrc);
+	            thisobj.attr('src', URI+'image/common/loading.png').addClass('loading');
 				var files = $(this).prop('files');
 				var data = new FormData();
             	data.append('file', files[0]);
@@ -243,7 +247,7 @@ function guid() {
 					contentType: false,
 					success: function(res) {
 	                    if (res.code == 200) {
-	                    	thisobj.attr('src', res.data.url);
+	                    	thisobj.removeClass('loading').attr('src', res.data.url);
 	                    	obj = thisobj.parent().find('[name="'+name+'"]');
 	                    	if (obj.length == 0) {
 	                    		thisobj.parent().append('<input name="'+name+'" value="'+(res.data.cate+'/'+res.data.name+'.'+res.data.type)+'" class="hide" />');
@@ -252,10 +256,12 @@ function guid() {
 	                    	}
 	                    } else {
 	                    	errorTips(res.message);
+	                    	thisobj.removeClass('loading').attr('src', thisobj.data('src'));
 	                    }
 	                },
 	                error: function(res) {
 	                	errorTips('网络错误, 上传失败');
+	                	thisobj.removeClass('loading').attr('src', thisobj.data('src'));
 	                }
 				});
 			});

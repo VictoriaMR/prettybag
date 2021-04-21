@@ -63,7 +63,7 @@ class CategoryService extends BaseService
         if (empty($info)) {
             return [];
         }
-        $info['avatar_format'] = empty($info['avatar']) ? staticUrl('image/common/noimg.png') : mediaUrl($info['avatar']);
+        $info['avatar_format'] = empty($info['avatar']) ? staticUrl('image/common/noimg.png') : mediaUrl($info['avatar'], 200);
         return $info;
     }
 
@@ -175,5 +175,55 @@ class CategoryService extends BaseService
             ];
         }
         return make('App\Models\ProductCategoryRelation')->insert($insert);
+    }
+
+    public function updateStat()
+    {
+        $result = $this->baseModel->table('product_category_relation a')->leftJoin('product_spu b', 'a.spu_id', 'b.spu_id')->field('a.cate_id, SUM(b.sale_total) AS sale_total, SUM(b.visit_total) AS visit_total')->where('b.status', 1)->groupBy('a.cate_id')->get();
+        if (!empty($result)) {
+            $result = array_column($result, null, 'cate_id');
+            foreach ($result as $key => $value) {
+                $data = [];
+                if (isset($value['sale_total'])) {
+                    $data['sale_total'] = (int) $value['sale_total'];
+                }
+                if (isset($value['visit_total'])) {
+                    $data['visit_total'] = (int) $value['visit_total'];
+                }
+                if (empty($data)) continue;
+                $this->baseModel->updateDataById($key, $data);
+            }
+            //更新父类数据
+            $result = $this->baseModel->where('parent_id', '>', 0)->field('parent_id,SUM(sale_total) AS sale_total, SUM(visit_total) AS visit_total')->groupBy('parent_id')->get();
+            if (!empty($result)) {
+                $result = array_column($result, null, 'parent_id');
+                foreach ($result as $key => $value) {
+                    $data = [];
+                    if (isset($value['sale_total'])) {
+                        $data['sale_total'] = (int) $value['sale_total'];
+                    }
+                    if (isset($value['visit_total'])) {
+                        $data['visit_total'] = (int) $value['visit_total'];
+                    }
+                    if (empty($data)) continue;
+                    $this->baseModel->updateDataById($key, $data);
+                }
+            }
+        }
+        return true;
+    }
+
+    public function getHotCategory($size=8)
+    {
+        $list = $this->baseModel->field('(sale_total+visit_total) AS sort_number, cate_id, name, avatar')->where('parent_id', '>', 0)->orderBy(['sort_number'=>'desc', 'sort' => 'asc'])->page(1, $size)->get();
+        foreach ($list as $key => $value) {
+            if (empty($value['avatar'])) {
+                $value['avatar'] = staticUrl('image/common/noimg.png');
+            } else {
+                $value['avatar'] = mediaUrl($value['avatar'], 200);
+            }
+            $list[$key] = $value;
+        }
+        return $list;
     }
 }
